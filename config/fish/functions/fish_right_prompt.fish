@@ -1,1 +1,0 @@
-/Users/dreikanter/.config/fisherman/simple/functions/fish_right_prompt.fish

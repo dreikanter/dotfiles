@@ -1,1 +1,1 @@
-/Users/dreikanter/.config/fisherman/simple/functions/fish_prompt.fish
+/Users/dreikanter/.local/share/omf/themes/clearance/fish_prompt.fish

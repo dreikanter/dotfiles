@@ -1,1 +1,0 @@
-/Users/dreikanter/.config/fisherman/pwd_info/pwd_info.fish
