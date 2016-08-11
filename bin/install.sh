@@ -1,15 +1,14 @@
 #!/usr/bin/sh
 
-echo --> Install dotfiles to user directory
+echo Install dotfiles to user directory
 
-for symlink in {aliases,editorconfig,exports,gitconfig,zshrc,vimrc,vimrc.bundles,gitignore_global}
+for symlink in {aliases,editorconfig,exports,config,gitconfig,zshrc,vimrc,vimrc.bundles,gitignore_global}
 do
   echo Linking ~/.$symlink
-  rm ~/.$symlink
-  ln -s $PWD/$symlink ~/.$symlink
+  ln -sf $PWD/$symlink ~/.$symlink
 done
 
-echo --> Install Sublime Text settings
+echo Install Sublime Text settings
 
 USER_DIR=~/Library/Application\ Support/Sublime\ Text\ 3/Packages/User
 
