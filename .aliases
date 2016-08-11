@@ -1,0 +1,11 @@
+# Core tools
+alias cl=clear
+alias ll='ls -al'
+alias cll='clear; ls -al'
+alias h='history'
+
+# Other
+alias c='pygmentize'
+alias z='~/bin/z.sh'
+
+alias play=ansible-playbook

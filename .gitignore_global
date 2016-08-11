@@ -1,0 +1,9 @@
+*.log
+*.retry
+*.pyc
+*.sqlite3
+.bundle
+.DS_Store
+.ctags
+/log
+/tmp

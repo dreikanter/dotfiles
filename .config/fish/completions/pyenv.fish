@@ -1,0 +1,1 @@
+/Users/dreikanter/.config/fisherman/pyenv/completions/pyenv.fish

@@ -1,0 +1,14 @@
+*.py[co]
+*.bak
+*.log
+*.last-run
+*.cache
+.DS_Store
+.SublimeREPLHistory
+"Package Control.ca-bundle"
+"Package Control.ca-list"
+"Package Control.system-ca-bundle"
+.config/fish/fishd.*
+sublime/User/GoSublime/osx-x64
+fish_history
+fish_read_history

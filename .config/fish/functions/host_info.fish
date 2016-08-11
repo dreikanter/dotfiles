@@ -1,0 +1,1 @@
+/Users/dreikanter/.config/fisherman/host_info/host_info.fish

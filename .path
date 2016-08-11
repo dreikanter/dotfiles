@@ -1,0 +1,6 @@
+$HOME/bin
+/usr/local/bin
+$HOME/.rbenv/shims
+$HOME/.rbenv/bin
+$HOME/sbt/bin
+$HOME/scala/bin
