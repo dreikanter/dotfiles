@@ -1,8 +1,0 @@
-# This is a Brewfile for phinze/homebrew-cask
-# Run `brew bundle Caskfile`
-
-# Install cask
-install phinze/cask/brew-cask
-
-cask install qlcolorcode
-cask install quicklook-json

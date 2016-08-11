@@ -1,1 +1,0 @@
-/Users/dreikanter/.config/fisherman/pyenv/functions/pyenv.fish

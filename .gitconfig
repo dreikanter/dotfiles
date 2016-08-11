@@ -1,6 +1,6 @@
 [user]
-	name = Alex Musayev
-	email = alex.musayev@gmail.com
+    name = Alex Musayev
+    email = alex.musayev@gmail.com
 [color]
     ui = auto
 [color "branch"]
@@ -22,11 +22,9 @@
     whitespace = red reverse
 [core]
     whitespace=fix,-indent-with-non-tab,trailing-space,cr-at-eol
-	excludesfile = ~/.gitignore_global
 [alias]
     st = status
     ci = commit
-    cm = commit -m
     br = branch
     co = checkout
     df = diff
@@ -40,22 +38,13 @@
     # Show files ignored by git:
     ign = ls-files -o -i --exclude-standard
 [diff]
-    # tool = winmerge
+    tool = winmerge
+[difftool "winmerge"]
+    cmd = "winmerge.sh \"$LOCAL\" \"$REMOTE\""
+    cmd = "\"C:/Program Files (x86)/WinMerge/WinMergeU.exe\" \"$LOCAL\" \"$REMOTE\""
 [difftool]
-	prompt = false
+    prompt = false
 [push]
     default = matching
 [credential]
-    helper = osxkeychain
-[difftool "sourcetree"]
-	cmd = /usr/local/bin/bcomp \"$LOCAL\" \"$REMOTE\"
-	path =
-[mergetool "sourcetree"]
-	cmd = /usr/local/bin/bcomp \"$LOCAL\" \"$REMOTE\" \"$BASE\" \"$MERGED\"
-	trustExitCode = true
-[diff]
-	tool = bc3
-[mergetool]
-	prompt = false
-[merge]
-	tool = bc3
+    helper = !'D:\\bin\\git-credential-winstore.exe'

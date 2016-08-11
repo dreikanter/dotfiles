@@ -3,7 +3,7 @@
 	{ "keys": ["ctrl+shift+u"], "command": "upper_case" },
 	{ "keys": ["alt+ctrl+u"], "command": "swap_case" },
 	{ "keys": ["alt+ctrl+t"], "command": "insert_date" },
-	{ "keys": ["alt+ctrl+shift+t"], "command": "insert_timestamp" },
+	{ "keys": ["alt+ctrl+d"], "command": "insert_timestamp" },
 	{ "keys": ["alt+ctrl+shift+e"], "command": "insert_line_numbers" },
 	{ "keys": ["ctrl+shift+h"], "command": "goto_documentation" },
 	{ "keys": ["ctrl+j"], "command": "join_lines" },

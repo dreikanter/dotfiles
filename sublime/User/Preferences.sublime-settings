@@ -20,18 +20,11 @@
 		"*.pdf",
 		"*.swf",
 		"*.jar",
-		"*.zip",
-		"*.erbc",
-		"*.scssc",
-		"*.otf",
-		"*.ttw",
-		"*.woff*"
+		"*.zip"
 	],
 	"bold_folder_labels": true,
-	"caret_extra_width": 1,
 	"caret_style": "phase",
-	"close_sidebar_if_opened": false,
-	"color_scheme": "Packages/User/Solarized-Custom (SL).tmTheme",
+	"color_scheme": "Packages/User/Solarized-Custom.tmTheme",
 	"detect_slow_plugins": 0,
 	"ensure_newline_at_eof_on_save": true,
 	"file_exclude_patterns":
@@ -54,9 +47,7 @@
 		".DS_Store",
 		"*.class",
 		"*.psd",
-		"*.db",
-		"public/assets",
-		"tmp/*"
+		"*.db"
 	],
 	"filename_syntax_settings":
 	[
@@ -79,52 +70,36 @@
 	[
 		"subpixel_antialias"
 	],
-	"font_size": 15,
+	"font_size": 14,
 	"gutter": true,
 	"highlight_line": true,
 	"highlight_modified_tabs": false,
 	"ignored_packages":
 	[
-		"Markdown",
+		"ApplySyntax",
+		"SublimeBlockCursor",
+		"SublimeLinter",
+		"Vintage",
+		"Anaconda",
 		"Python Flake8 Lint",
-		"PyV8",
-		"RuboCop",
-		"RubyTest",
-		"Solarized Color Scheme",
-		"StyleToken",
-		"Sublime Files",
-		"SublimeLinter-annotations",
-		"SublimeREPL",
-		"Termninal",
-		"Vintage"
+		"BracketHighlighter",
+		"PlainTasks",
+		"Termninal"
 	],
-	"indent_guide_options":
-	[
-		"draw_normal",
-		"draw_active"
-	],
-	"line_padding_bottom": 2,
-	"line_padding_top": 2,
+	"line_padding_bottom": 1.5,
+	"line_padding_top": 1.5,
 	"margin": 10,
-	"match_brackets": true,
-	"match_brackets_angle": true,
-	"match_brackets_braces": true,
-	"match_brackets_content": true,
-	"match_brackets_square": true,
 	"rulers":
 	[
-		80
+		79
 	],
 	"scroll_speed": 0,
 	"shift_tab_unindent": true,
-	"show_encoding": true,
-	"show_full_path": true,
-	"show_line_endings": true,
 	"show_minimap": true,
 	"tab_size": 4,
-	"theme": "Soda Dark.sublime-theme",
-	"translate_tabs_to_spaces": true,
+	"theme": "Soda Dark 3.sublime-theme",
+	"translate_tabs_to_spaces": false,
 	"trim_trailing_white_space_on_save": true,
-	"word_wrap": false,
-	"wrap_width": 80
+	"word_wrap": "true",
+	"wrap_width": 79
 }
