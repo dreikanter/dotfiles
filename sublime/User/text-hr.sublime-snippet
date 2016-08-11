@@ -1,0 +1,11 @@
+<snippet>
+    <tabTrigger>***</tabTrigger>
+    <scope>text</scope>
+    <description>Horizontal rule</description>
+    <content><![CDATA[
+
+* * *
+
+
+]]></content>
+</snippet>

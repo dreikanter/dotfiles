@@ -1,0 +1,8 @@
+{
+	"extensions":
+	[
+		"sass",
+        "scss",
+        "scss.erb"
+	]
+}

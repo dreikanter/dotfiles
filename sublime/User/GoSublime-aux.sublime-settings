@@ -1,0 +1,18 @@
+{
+	"9o.hist./Users/dreikanter/Library/Application Support/Sublime Text 3/Packages/GoSublime":
+	[
+		"build",
+		"build hello",
+		"exit"
+	],
+	"9o.hist./Users/dreikanter/go/src/hello":
+	[
+		"go  run hello.go",
+		"go run hello.go",
+		"ls -al",
+		"help"
+	],
+	"ann": "a16.07.09-1",
+	"install_version": "r16.07.09-1",
+	"version": "r16.07.09-1"
+}

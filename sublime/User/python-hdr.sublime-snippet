@@ -1,0 +1,11 @@
+<!-- See http://www.sublimetext.com/docs/snippets for more information -->
+<snippet>
+    <tabTrigger>hdr</tabTrigger>
+    <scope>source.python</scope>
+    <description>Python generic header</description>
+    <content><![CDATA[
+#!/usr/bin/env python
+#-*- coding: utf-8 -*-
+
+]]></content>
+</snippet>

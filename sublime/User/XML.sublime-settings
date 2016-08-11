@@ -1,0 +1,16 @@
+{
+	"extensions":
+	[
+		"xml",
+		"xsd",
+		"xslt",
+		"svg",
+		"proj",
+		"targets",
+		"csproj",
+		"Config",
+		"xaml",
+		"resx",
+		"atom"
+	]
+}
