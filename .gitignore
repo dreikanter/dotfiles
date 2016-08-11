@@ -1,0 +1,10 @@
+*.py[co]
+*.bak
+*.log
+*.last-run
+*.cache
+.DS_Store
+.SublimeREPLHistory
+"Package Control.ca-bundle"
+"Package Control.ca-list"
+"Package Control.system-ca-bundle"

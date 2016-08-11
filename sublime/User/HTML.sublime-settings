@@ -1,8 +1,0 @@
-{
-	"extensions":
-	[
-		"mustache",
-		"erb"
-	],
-	"tab_size": 2
-}

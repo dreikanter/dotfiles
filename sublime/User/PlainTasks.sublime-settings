@@ -1,38 +1,40 @@
 {
-  "open_tasks_bullet": "[ ]", // options: - | ❍ | ❑ | ■ | □ | ☐ | ▪ | ▫ | – | — | ≡ | → | › | [ ]
-  "done_tasks_bullet": "[x]", // options: + | ✓ | ✔ | √ | [x]
-  "cancelled_tasks_bullet": "[-]", // options: x | ✘ | [-]
-  "before_tasks_bullet_margin": 0,
-  "color_scheme": "Packages/User/Solarized-Custom.tmTheme",
-  // "date_format": "(%y-%m-%d %H:%M)",
-  "date_format": "",
-  "done_tag": false,
-  "draw_indent_guides": false,
-  "extensions":
-  [
-    "TODO",
-    "todo",
-    "todolist",
-    "taskpaper",
-    "tasks",
-    "list",
-    "project",
-    "things",
-    "notes"
-  ],
-  // "fade_fold_buttons": false,
-  // "fold_buttons": true,
-  // "gutter": true,
-  // "highlight_line": true,
-  // "line_numbers": false,
-  // "line_padding_bottom": 1.5,
-  // "line_padding_top": 1.5,
-  // "margin": 0,
-  // "match_brackets": false,
-  "tab_size": 2,
-  "translate_tabs_to_spaces": true,
-  "use_tab_stops": false,
+	"before_tasks_bullet_margin": 0,
+	"color_scheme": "Packages/User/Solarized-Custom.tmTheme",
+	"date_format": "(%y-%m-%d %H:%M)",
+	"done_tag": true,
+	"done_tasks_bullet": "+",
+	"draw_indent_guides": false,
+	"extensions":
+	[
+		"TODO",
+		"todo",
+		"todolist",
+		"taskpaper",
+		"tasks",
+		"list",
+		"project",
+		"things"
+	],
+	"fade_fold_buttons": false,
+	"fold_buttons": true,
+	"font_face": "PT Mono",
+	"font_size": 14,
+	"font_options":
+	[
+		"subpixel_antialias",
+		"no_round",
+		"directwrite"
+	],
+	"gutter": true,
+	"highlight_line": true,
+	"line_numbers": false,
+	"margin": 0,
+	"match_brackets": false,
+	"open_tasks_bullet": "-",
+	"tab_size": 2,
+	"translate_tabs_to_spaces": true,
+	"use_tab_stops": false,
     "rulers": [],
     "wrap_width": 79,
-  "word_wrap": true
 }
