@@ -4,21 +4,21 @@ set nocompatible              " be iMproved, required
 filetype off                  " required
 
 " set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
+" set rtp+=~/.vim/bundle/Vundle.vim
+" call vundle#begin()
 
 " let Vundle manage Vundle, required
-Plugin 'gmarik/Vundle.vim'
+" Plugin 'gmarik/Vundle.vim'
 
-Plugin 'tpope/vim-fugitive'
-Plugin 'chriskempson/base16-vim'
-Plugin 'scrooloose/nerdtree'
+" Plugin 'tpope/vim-fugitive'
+" Plugin 'chriskempson/base16-vim'
+" Plugin 'scrooloose/nerdtree'
 
 " All of your Plugins must be added before the following line
-call vundle#end()             " required
-filetype plugin indent on     " required
+" call vundle#end()             " required
+" filetype plugin indent on     " required
 
-colorscheme base16-default
+" colorscheme base16-default
 set background=dark
 set linespace=5
 

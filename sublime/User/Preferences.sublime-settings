@@ -56,7 +56,9 @@
 		"*.psd",
 		"*.db",
 		"public/assets",
-		"tmp/*"
+		"tmp/*",
+		".bundle",
+		".vagrant"
 	],
 	"filename_syntax_settings":
 	[
@@ -93,6 +95,7 @@
 		"Solarized Color Scheme",
 		"StyleToken",
 		"Sublime Files",
+		"SublimeLinter",
 		"SublimeLinter-annotations",
 		"SublimeREPL",
 		"Termninal",

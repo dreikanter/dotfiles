@@ -41,6 +41,7 @@
 		"SublimeLinter",
 		"SublimeLinter-annotations",
 		"SublimeLinter-contrib-eslint",
+		"SublimeLinter-contrib-scss-lint",
 		"SublimeLinter-rubocop",
 		"SublimeLinter-ruby",
 		"SublimeREPL",
