@@ -1,5 +1,5 @@
 {
-  "cmd": ["~/.rbenv/shims/ruby", "$file"],
+  "shell_cmd": "~/.rbenv/shims/ruby $file",
   "file_regex": "^(...*?):([0-9]*):?([0-9]*)",
   "selector": "source.ruby"
 }

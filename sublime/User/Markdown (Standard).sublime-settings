@@ -7,8 +7,8 @@
 	"draw_centered": false,
 	"extensions":
 	[
-		"md",
-		"txt"
+		"txt",
+		"md"
 	],
 	"highlight_line": true,
 	"line_numbers": false,
@@ -35,9 +35,7 @@
 	"mde.list_indent_auto_switch_bullet": true,
 	"mde.list_indent_bullets":
 	[
-		"*",
-		"-",
-		"+"
+		"-"
 	],
 	"mde.match_header_hashes": false,
 	"rulers":

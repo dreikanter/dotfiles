@@ -35,7 +35,7 @@
 			},
 			"eslint":
 			{
-				"@disable": false,
+				"@disable": true,
 				"args":
 				[
 				],
@@ -74,9 +74,19 @@
 				[
 				],
 				"include-linter": ""
+			},
+			"standard":
+			{
+				"@disable": false,
+				"args":
+				[
+				],
+				"excludes":
+				[
+				]
 			}
 		},
-		"mark_style": "outline",
+		"mark_style": "stippled underline",
 		"no_column_highlights_line": false,
 		"passive_warnings": false,
 		"paths":

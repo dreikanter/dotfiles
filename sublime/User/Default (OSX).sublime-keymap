@@ -13,15 +13,15 @@
   { "keys": ["ctrl+enter"], "command": "new","context": [{ "key": "selector", "operator": "equal", "operand": "text.todo" }] },
   { "keys": ["ctrl+i"], "command": "new","context": [{ "key": "selector", "operator": "equal", "operand": "text.todo" }] },
   { "keys": ["ctrl+shift+a"], "command": "archive","context": [{ "key": "selector", "operator": "equal", "operand": "text.todo" }] },
+
   { "keys": ["alt+enter"], "command": "plain_tasks_complete","context": [{ "key": "selector", "operator": "equal", "operand": "text.todo" }] },
   { "keys": ["ctrl+m"], "command": "plain_tasks_cancel", "context": [{"key": "selector", "operator": "equal", "operand": "text.todo" }] },
-
   { "keys": ["ctrl+enter"], "command": "plain_tasks_new","context": [{ "key": "selector", "operator": "equal", "operand": "text.todo" }] },
   { "keys": ["ctrl+i"], "command": "plain_tasks_new","context": [{ "key": "selector", "operator": "equal", "operand": "text.todo" }] },
-
   { "keys": ["ctrl+shift+a"], "command": "plain_tasks_archive","context": [{ "key": "selector", "operator": "equal", "operand": "text.todo" }] },
   { "keys": ["ctrl+shift+u"], "command": "plain_tasks_open_url","context": [{ "key": "selector", "operator": "equal", "operand": "text.todo" }] },
-  { "keys": ["ctrl+d"], "command": "find_under_expand" },
+
+  { "keys": ["super+d"], "command": "find_under_expand" },
   { "keys": ["ctrl+k", "ctrl+d"], "command": "find_under_expand_skip" },
   { "keys": ["ctrl+alt+w"], "command": "toggle_setting", "args": {"setting": "word_wrap"}},
   { "keys": ["ctrl+alt+l"], "command": "sublimelinter", "args": {"action": "lint"} },
@@ -50,9 +50,4 @@
   { "keys": ["super+ctrl+a"], "command": "alignment" },
 
   { "keys": ["super+0"], "command": "reset_font_size" },
-
-  // { "keys": ["home"], "command": "move_to", "args": {"to": "bol"} },
-  // { "keys": ["end"], "command": "move_to", "args": {"to": "eol"} },
-  // { "keys": ["shift+end"], "command": "move_to", "args": {"to": "eol", "extend": true} },
-  // { "keys": ["shift+home"], "command": "move_to", "args": {"to": "bol", "extend": true } }
 ]
