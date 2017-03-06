@@ -12,5 +12,7 @@
   "mde.list_indent_auto_switch_bullet": false,
 
   // List bullets to be used for automatically switching. In their order.
-  "mde.list_indent_bullets": ["-", "-", "-"]
+  "mde.list_indent_bullets": ["-", "-", "-"],
+
+  "color_scheme": "Packages/Predawn/predawn-markdown.tmTheme",
 }
