@@ -19,18 +19,18 @@ function get_pwd() {
 
 function git_info() {
    ref=$(git symbolic-ref HEAD 2> /dev/null) || return
-   echo " git:$(current_branch)"
+   echo " [$(current_branch)]"
 }
 
-function rbenv_ver() {
-  if which rbenv &> /dev/null; then
-    local ver=$(rbenv version-name)
-    [ "$(rbenv global)" != "$ver" ] && echo " ruby:$ver"
-  fi
-}
+# function rbenv_ver() {
+#   if which rbenv &> /dev/null; then
+#     local ver=$(rbenv version-name)
+#     [ "$(rbenv global)" != "$ver" ] && echo " ruby:$ver"
+#   fi
+# }
 
 PROMPT='
-%{$fg[cyan]%}%n@%{$fg[cyan]%}%m: %B%{$fg[yellow]%}$(get_pwd)%b%{$fg[green]%}$(git_info)%{$fg[red]%}$(rbenv_ver)
+%{$fg[cyan]%}%n@%{$fg[cyan]%}%m: %B%{$fg[yellow]%}$(get_pwd)%b%{$fg[green]%}$(git_info)
 %{$reset_color%}> '
 
 # Use Alt-Arrows to skip words
