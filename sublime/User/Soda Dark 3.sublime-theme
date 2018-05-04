@@ -1,0 +1,17 @@
+[
+  {
+    "class": "sidebar_tree",
+    "row_padding": [10, 5],
+    "indent": 15,
+    "indent_offset": 0,
+    "indent_top_level": true,
+    "layer0.tint": [30, 30, 26],
+    "layer0.opacity": 1.0,
+    "dark_content": false
+  },
+  {
+    "class": "sidebar_label",
+    "font.bold": false,
+    "font.size": 14
+  },
+]

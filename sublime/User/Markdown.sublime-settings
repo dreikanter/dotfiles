@@ -15,4 +15,5 @@
   "mde.list_indent_bullets": ["-", "-", "-"],
 
   "color_scheme": "Packages/Predawn/predawn-markdown.tmTheme",
+  "draw_centered": false
 }

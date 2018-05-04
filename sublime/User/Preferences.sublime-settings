@@ -25,13 +25,14 @@
 		"*.scssc",
 		"*.otf",
 		"*.ttw",
-		"*.woff*"
+		"*.woff*",
+		"*.svg"
 	],
 	"bold_folder_labels": true,
 	"caret_extra_width": 1,
 	"caret_style": "phase",
 	"close_sidebar_if_opened": false,
-	"color_scheme": "Packages/ayu/ayu-mirage.tmTheme",
+	"color_scheme": "Packages/User/SublimeLinter/Monokai (SL).tmTheme",
 	"detect_slow_plugins": 0,
 	"ensure_newline_at_eof_on_save": true,
 	"extra_file_exclude_patterns":
@@ -56,9 +57,11 @@
 		"*.psd",
 		"*.db",
 		"public/assets",
+		"public/packs",
 		"tmp/*",
 		".bundle",
-		".vagrant"
+		".vagrant",
+		".js.map"
 	],
 	"extra_folder_exclude_patterns":
 	[
@@ -66,7 +69,8 @@
 		".git",
 		".hg",
 		"CVS",
-		"__pycache__"
+		"__pycache__",
+		"node_modules"
 	],
 	"file_exclude_patterns":
 	[
@@ -89,11 +93,12 @@
 		"*.class",
 		"*.psd",
 		"*.db",
-		"public/assets",
 		"tmp/*",
 		".bundle",
 		".vagrant",
-		".DS_Store"
+		".DS_Store",
+		"*app/assets/fonts*",
+		"*.log"
 	],
 	"filename_syntax_settings":
 	[
@@ -113,17 +118,19 @@
 		"tmp",
 		"node_modules",
 		"public/assets",
+		"public/packs",
 		"public/uploads",
 		".bundle",
 		".vagrant",
-		"node_modules/*"
+		"node_modules/*",
+		"coverage"
 	],
 	"font_face": "Hack",
 	"font_options":
 	[
 		"subpixel_antialias"
 	],
-	"font_size": 15,
+	"font_size": 14,
 	"gutter": true,
 	"highlight_line": true,
 	"highlight_modified_tabs": true,
@@ -135,25 +142,28 @@
 		"Color Highlighter",
 		"ColorHelper",
 		"D",
+		"DashDoc",
 		"FileBrowser",
-		"fish-shell",
 		"Gitignored File Excluder",
 		"GoOracle",
 		"GoSublime",
 		"Graphviz",
 		"Groovy",
+		"HTMLBeautify",
+		"Inc-Dec-Value",
 		"LaTeX",
 		"Markdown",
 		"Matlab",
 		"Python Flake8 Lint",
 		"PyV8",
+		"RSense",
 		"RuboCop",
 		"RubyTest",
 		"StyleToken",
 		"Sublime Files",
 		"SublimeLinter-annotations",
-		"SublimeLinter-contrib-eslint",
 		"SublimeLinter-contrib-standard",
+		"SublimeLinter_CatGutterTheme",
 		"SublimeREPL",
 		"Termninal",
 		"Vintage"
@@ -162,6 +172,11 @@
 	[
 		"draw_normal",
 		"draw_active"
+	],
+	"index_exclude_patterns":
+	[
+		"*.log",
+		"node_modules"
 	],
 	"line_padding_bottom": 2,
 	"line_padding_top": 2,
@@ -175,6 +190,8 @@
 	"predawn_tabs_active_underline": true,
 	"predawn_tabs_large": true,
 	"predawn_tabs_small": true,
+	"rubocop_path": "/Users/dreikanter/.rbenv/shims/rubocop",
+	"ruby_path": "/Users/dreikanter/.rbenv/shims/ruby",
 	"rulers":
 	[
 		80
@@ -186,7 +203,7 @@
 	"show_line_endings": true,
 	"show_minimap": false,
 	"tab_size": 4,
-	"theme": "ayu-mirage.sublime-theme",
+	"theme": "Soda Dark 3.sublime-theme",
 	"translate_tabs_to_spaces": true,
 	"trim_trailing_white_space_on_save": true,
 	"ui_big_tabs": true,
