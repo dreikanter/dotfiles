@@ -1,0 +1,12 @@
+{
+  "window.zoomLevel": 2,
+  "editor.rulers": [80],
+  "editor.wordWrap": "bounded",
+  "[markdown]": {
+      "editor.wordWrap": "bounded",
+      "editor.quickSuggestions": false
+  },
+  "telemetry.enableTelemetry": false,
+  "telemetry.enableCrashReporter": false,
+  "editor.fontSize": 12
+}
