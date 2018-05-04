@@ -25,3 +25,4 @@ alias play=ansible-playbook
 
 alias ssh-ci="ssh -i ~/.ssh/passiondig_ci jenkins@ci.passiondig.com"
 alias ssh-st="ssh -i ~/.ssh/passiondig_staging deploy@dev.passiondig.com"
+alias sshi="ssh -i "
