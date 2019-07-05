@@ -21,5 +21,9 @@
     ".cache": true,
     ".vscode": true,
     "node_modules": true
-  }
+  },
+  "workbench.colorTheme": "Night Owl",
+  "editor.folding": false,
+  "breadcrumbs.enabled": true,
+  "extensions.autoUpdate": false
 }

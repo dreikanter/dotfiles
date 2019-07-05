@@ -32,7 +32,7 @@
 	"caret_extra_width": 1,
 	"caret_style": "phase",
 	"close_sidebar_if_opened": false,
-	"color_scheme": "Packages/User/SublimeLinter/Monokai (SL).tmTheme",
+	"color_scheme": "Packages/Base16 Color Schemes/Themes/base16-oceanicnext.tmTheme",
 	"detect_slow_plugins": 0,
 	"ensure_newline_at_eof_on_save": true,
 	"extra_file_exclude_patterns":
@@ -98,7 +98,8 @@
 		".vagrant",
 		".DS_Store",
 		"*app/assets/fonts*",
-		"*.log"
+		"*.log",
+		"webpack-stats.json"
 	],
 	"filename_syntax_settings":
 	[
@@ -130,7 +131,7 @@
 	[
 		"subpixel_antialias"
 	],
-	"font_size": 14,
+	"font_size": 16,
 	"gutter": true,
 	"highlight_line": true,
 	"highlight_modified_tabs": true,
@@ -138,12 +139,14 @@
 	[
 		"ActionScript",
 		"ASP",
+		"BracketHighlighter",
 		"Clojure",
 		"Color Highlighter",
 		"ColorHelper",
 		"D",
 		"DashDoc",
 		"FileBrowser",
+		"Git Formats",
 		"Gitignored File Excluder",
 		"GoOracle",
 		"GoSublime",
@@ -154,8 +157,10 @@
 		"LaTeX",
 		"Markdown",
 		"Matlab",
+		"ProductiveSnippetsERB",
 		"Python Flake8 Lint",
 		"PyV8",
+		"RemoteSubl",
 		"RSense",
 		"RuboCop",
 		"RubyTest",
@@ -202,8 +207,10 @@
 	"show_full_path": true,
 	"show_line_endings": true,
 	"show_minimap": false,
+	"spacegray_sidebar_font_xlarge": true,
+	"spacegray_sidebar_tree_xlarge": true,
 	"tab_size": 4,
-	"theme": "Soda Dark 3.sublime-theme",
+	"theme": "Spacegray Oceanic.sublime-theme",
 	"translate_tabs_to_spaces": true,
 	"trim_trailing_white_space_on_save": true,
 	"ui_big_tabs": true,
