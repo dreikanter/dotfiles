@@ -29,9 +29,7 @@ function git_info() {
 #   fi
 # }
 
-PROMPT='
-%{$fg[cyan]%}%n@%{$fg[cyan]%}%m: %B%{$fg[yellow]%}$(get_pwd)%b%{$fg[green]%}$(git_info)
-%{$reset_color%}> '
+PROMPT='%{$fg[cyan]%}%n@%{$fg[cyan]%}%m: %B%{$fg[yellow]%}$(get_pwd)%b%{$fg[green]%}$(git_info)%{$reset_color%} > '
 
 # Use Alt-Arrows to skip words
 bindkey -e
@@ -52,3 +50,7 @@ if which pyenv > /dev/null; then eval "$(pyenv init -)"; fi
 
 # Aliases
 source ~/.aliases
+
+# fzf config
+export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git --exclude node_modules'
+export FZF_DEFAULT_OPTS="--reverse --multi --preview 'bat --wrap {}'"
