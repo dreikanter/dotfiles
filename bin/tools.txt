@@ -1,0 +1,15 @@
+ansible
+bat
+cowsay
+exa
+fd
+fzf
+go
+htop
+micro
+rbenv
+rclone
+tig
+tree
+wget
+yarn

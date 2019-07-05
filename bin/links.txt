@@ -1,0 +1,9 @@
+aliases
+editorconfig
+exports
+config
+gitconfig
+zshrc
+vimrc
+vimrc.bundles
+gitignore_global
