@@ -1,8 +1,6 @@
 # Alex's dotfiles
 
 ``` bash
-cd
-git clone git@github.com:dreikanter/dotfiles.git .dotfiles
-cd .dotfiles
-sh bin/install.sh
+git clone git@github.com:dreikanter/dotfiles.git ~/.dotfiles
+bash ~/.dotfiles/bin/install.sh
 ```
