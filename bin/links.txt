@@ -1,9 +1,10 @@
 aliases
+config
 editorconfig
 exports
-config
 gitconfig
-zshrc
+gitignore_global
+scripts
 vimrc
 vimrc.bundles
-gitignore_global
+zshrc
