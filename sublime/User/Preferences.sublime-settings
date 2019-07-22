@@ -167,6 +167,7 @@
 		"StyleToken",
 		"Sublime Files",
 		"SublimeLinter-annotations",
+		"SublimeLinter-contrib-reek",
 		"SublimeLinter-contrib-standard",
 		"SublimeLinter_CatGutterTheme",
 		"SublimeREPL",

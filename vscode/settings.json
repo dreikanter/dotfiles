@@ -25,5 +25,6 @@
   "workbench.colorTheme": "Night Owl",
   "editor.folding": false,
   "breadcrumbs.enabled": true,
-  "extensions.autoUpdate": false
+  "extensions.autoUpdate": false,
+  "workbench.statusBar.feedback.visible": false
 }
