@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 
-set -x
+SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
 
-for symlink in $(cat ./links.txt)
+for symlink in $(cat $SCRIPTPATH/links.txt)
 do
-  ln -sf $PWD/../$symlink ~/.$symlink
+  echo $symlink
+  ln -sf $SCRIPTPATH/../$symlink ~/.$symlink
 done
