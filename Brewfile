@@ -1,33 +1,71 @@
 # Install command-line tools using Homebrew
-# Usage: `brew bundle Brewfile`
+#
+#   brew bundle --file=~/.dotfiles/Brewfile
 
+tap 'homebrew/cask'
+tap 'homebrew/cask-drivers'
+tap 'homebrew/cask-fonts'
+tap 'homebrew/cask-versions'
+tap 'homebrew/core'
+tap 'homebrew/bundle'
+tap 'homebrew/services'
 
-# Make sure we’re using the latest Homebrew
-update
+brew 'ansible'
+brew 'bat'
+brew 'boot2docker'
+brew 'cowsay'
+brew 'docker'
+brew 'docker-compose'
+brew 'docker-machine'
+brew 'exa'
+brew 'fd'
+brew 'figlet'
+brew 'fzf'
+brew 'git'
+brew 'go'
+brew 'htop'
+brew 'httpie'
+brew 'jq'
+brew 'lame'
+brew 'micro'
+brew 'neovim'
+brew 'nnn'
+brew 'node'
+brew 'pow'
+brew 'pyenv'
+brew 'rbenv'
+brew 'rclone'
+brew 'ripgrep'
+brew 'rsync'
+brew 'ruby-build'
+brew 'ruby-install'
+brew 'tig'
+brew 'tree'
+brew 'wget'
+brew 'yarn'
+brew 'zsh'
 
-# Upgrade any already-installed formulae
-upgrade
+# Desktop apps
+cask 'dropbox'
+cask 'firefox'
+cask 'google-chrome'
+cask 'iterm2'
+cask 'marta'
+cask 'midi-monitor'
+cask 'ngrok'
+cask 'qlcolorcode'
+cask 'quicklook-json'
+cask 'sublime-text'
+cask 'vagrant'
+cask 'virtualbox'
 
-# Install more recent versions of some OS X tools
-install vim --override-system-vi
-install homebrew/dupes/grep
-
-# Install other useful binaries
-install git
-install zsh
-install rbenv
-install ruby-build
-install pyenv
-install zeromq
-install pow
-install wget
-
-# Install PostgreSQL
-
-# brew install postgresql
-# initdb /usr/local/var/postgres
-# cp /usr/local/Cellar/postgresql/9.2.4/org.postgresql.postgres.plist ~/Library/LaunchAgents/
-# launchctl load -w ~/Library/LaunchAgents/org.postgresql.postgres.plist
-
-# Remove outdated versions from the cellar
-cleanup
+# Fonts
+cask 'font-anonymous-pro'
+cask 'font-droid-sans'
+cask 'font-droid-sans-mono'
+cask 'font-inconsolata'
+cask 'font-pt-mono'
+cask 'font-pt-sans'
+cask 'font-pt-serif'
+cask 'font-roboto'
+cask 'font-roboto-mono'
