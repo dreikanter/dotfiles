@@ -1,10 +1,14 @@
 # Core tools
 alias l="exa --all --long --group-directories-first"
 alias c="clear"
-alias h="history"
-alias hgr="history | grep"
+alias hi="history"
+alias h="history | grep"
+alias e="$EDITOR"
+alias p="ps aux | grep"
 
 # Git
-alias g="git"
-alias gs="git status"
+alias g="git status"
 alias gl="git log --graph --decorate --pretty=oneline --abbrev-commit -n 10"
+
+alias zconf="$EDITOR ~/.zshrc"
+alias zreload="source ~/.zshrc"
