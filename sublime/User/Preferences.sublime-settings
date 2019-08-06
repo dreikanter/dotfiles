@@ -100,12 +100,6 @@
 		"*.log",
 		"webpack-stats.json"
 	],
-	"filename_syntax_settings":
-	[
-		"TODO",
-		"Tasks",
-		"i"
-	],
 	"find_selected_text": true,
 	"fold_buttons": false,
 	"folder_exclude_patterns":
