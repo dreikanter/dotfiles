@@ -1,28 +1,10 @@
-#
 # Core tools
-#
+alias l="exa --all --long --group-directories-first"
+alias c="clear"
+alias h="history"
+alias hgr="history | grep"
 
-alias cl=clear
-alias ll='ls -al'
-alias cll='clear; ls -al'
-alias h='history'
-
-#
 # Git
-#
-
-alias gs=git status
-
-#
-# Ansible
-#
-
-alias play=ansible-playbook
-
-#
-# SSH connections
-#
-
-alias ssh-ci="ssh -i ~/.ssh/passiondig_ci jenkins@ci.passiondig.com"
-alias ssh-st="ssh -i ~/.ssh/passiondig_staging deploy@dev.passiondig.com"
-alias sshi="ssh -i "
+alias g="git"
+alias gs="git status"
+alias gl="git log --graph --decorate --pretty=oneline --abbrev-commit -n 10"

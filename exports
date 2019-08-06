@@ -4,3 +4,31 @@ export LANG11=en_US.UTF-8
 export EDITOR=subl
 export RBENV_ROOT=~/.rbenv
 export PYENV_ROOT=~/.pyenv
+export GOPATH=$HOME/go
+
+# fzf config
+export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git --exclude node_modules'
+export FZF_DEFAULT_OPTS="--reverse --multi --preview 'bat --wrap {}'"
+
+# Spacehip
+# SEE: https://github.com/denysdovhan/spaceship-prompt/blob/master/docs/Options.md
+export SPACESHIP_DIR_COLOR=green
+export SPACESHIP_PROMPT_ADD_NEWLINE=false
+export SPACESHIP_PROMPT_SEPARATE_LINE=false
+export SPACESHIP_GIT_PREFIX=""
+export SPACESHIP_GIT_BRANCH_COLOR="yellow"
+export SPACESHIP_GIT_BRANCH_PREFIX="git:"
+export SPACESHIP_NODE_SYMBOL="nd:"
+export SPACESHIP_RUBY_SYMBOL="rb:"
+export SPACESHIP_RUBY_PREFIX=""
+export SPACESHIP_PROMPT_PREFIXES_SHOW=true
+export SPACESHIP_CHAR_SYMBOL="> "
+export SPACESHIP_GIT_STATUS_SHOW=false
+
+SPACESHIP_PROMPT_ORDER=(
+  dir
+  git
+  ruby
+  exit_code
+  char
+)
