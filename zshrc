@@ -24,7 +24,8 @@ export ZSH="/Users/dreikanter/.oh-my-zsh"
 # HYPHEN_INSENSITIVE="true"
 
 # Uncomment the following line to disable bi-weekly auto-update checks.
-# DISABLE_AUTO_UPDATE="true"
+# Disabled, because autoupdate is slo
+DISABLE_AUTO_UPDATE="true"
 
 # Uncomment the following line to automatically update without prompting.
 # DISABLE_UPDATE_PROMPT="true"
@@ -118,3 +119,7 @@ if which pyenv > /dev/null; then eval "$(pyenv init -)"; fi
 # Set Spaceship ZSH as a prompt
 autoload -U promptinit; promptinit
 prompt spaceship
+
+fh() {
+  eval $(history | fzf --no-sort --tac | awk '{$1="";print}')
+}
