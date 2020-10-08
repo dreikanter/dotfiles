@@ -11,8 +11,9 @@
 		"Guardfile",
 		"Rakefile",
 		"jbuilder",
-    "Gemfile",
-    "Vagrantfile"
+		"Gemfile",
+		"Vagrantfile",
+		".pryrc"
 	],
 	"tab_size": 2,
 	"translate_tabs_to_spaces": true,

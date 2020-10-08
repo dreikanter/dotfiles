@@ -10,10 +10,11 @@
 		"txt",
 		"md"
 	],
+  "font_size": 16,
 	"highlight_line": true,
 	"line_numbers": false,
-	"line_padding_bottom": 2,
-	"line_padding_top": 2,
+	"line_padding_bottom": 4,
+	"line_padding_top": 4,
 	"mde.distraction_free_mode":
 	{
 		"mde.keep_centered": true

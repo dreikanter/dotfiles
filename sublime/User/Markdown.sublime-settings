@@ -5,15 +5,9 @@
 		"markdown",
     "txt"
 	],
-	"tab_size": 4,
+	"tab_size": 2,
 	"trim_trailing_white_space_on_save": false,
-
-  // Automatically switches list bullet when indenting blank list item with <Tab>.
-  "mde.list_indent_auto_switch_bullet": false,
-
-  // List bullets to be used for automatically switching. In their order.
-  "mde.list_indent_bullets": ["-", "-", "-"],
-
-  "color_scheme": "Packages/Predawn/predawn-markdown.tmTheme",
+  "line_numbers": false,
+  "word_wrap": true,
   "draw_centered": false
 }

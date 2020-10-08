@@ -10,7 +10,7 @@
   },
   "linters": {
     "rubocop": {
-      "use_bundle_exec": true
+      // "use_bundle_exec": true
     }
   }
 }
