@@ -17,5 +17,6 @@
   { "keys": ["ctrl+super+l"], "command": "sublime_linter_lint" },
   { "keys": ["ctrl+super+e"], "command": "sublime_linter_goto_error", "args": { "direction": "next" } },
   { "keys": ["ctrl+super+shift+e"], "command": "sublime_linter_goto_error", "args": { "direction": "previous" } },
-  { "keys": ["ctrl+shift+r"], "command": "reveal_in_side_bar"}
+  { "keys": ["ctrl+shift+r"], "command": "reveal_in_side_bar"},
+  { "keys": ["super+alt+n"], "command": "advanced_new_file_new"}
 ]
