@@ -1,0 +1,43 @@
+AllCops:
+  NewCops: enable
+  TargetRubyVersion: 2.6
+  DisplayCopNames: true
+  Exclude:
+    - "bin/*"
+    - "db/**/*"
+    - "node_modules/**/*"
+    - "coverage"
+    - "tmp"
+
+Style/Documentation:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Style/DoubleNegation:
+  Enabled: false
+
+Metrics/MethodLength:
+  Max: 15
+
+Metrics/BlockLength:
+  Max: 15
+
+Metrics/ClassLength:
+  Max: 300
+
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: indented
+
+Layout/MultilineOperationIndentation:
+  EnforcedStyle: indented
+
+Layout/FirstArrayElementIndentation:
+  EnforcedStyle: consistent
+
+Layout/EmptyLineAfterGuardClause:
+  Enabled: false
+
+Layout/FirstHashElementIndentation:
+  EnforcedStyle: consistent
