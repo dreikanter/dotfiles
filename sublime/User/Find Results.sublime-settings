@@ -1,0 +1,4 @@
+// These settings override both User and Default settings for the Find Results syntax
+{
+  "color_scheme": "Packages/Base16 Color Schemes/Themes/base16-oceanicnext.tmTheme"
+}
