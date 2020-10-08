@@ -123,3 +123,5 @@ prompt spaceship
 fh() {
   eval $(history | fzf --no-sort --tac | awk '{$1="";print}')
 }
+
+export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
