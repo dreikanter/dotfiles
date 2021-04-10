@@ -26,5 +26,7 @@
   "editor.folding": false,
   "breadcrumbs.enabled": true,
   "extensions.autoUpdate": false,
-  "workbench.statusBar.feedback.visible": false
+  "workbench.statusBar.feedback.visible": false,
+  "editor.suggestSelection": "first",
+  "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue"
 }
