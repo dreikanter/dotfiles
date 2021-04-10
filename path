@@ -1,4 +1,5 @@
 $HOME/bin
 /usr/local/bin
+/usr/local/sbin
 $HOME/.rbenv/shims
 $HOME/.rbenv/bin
