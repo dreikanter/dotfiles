@@ -1,0 +1,43 @@
+# Spacehip
+# SEE: https://github.com/denysdovhan/spaceship-prompt/blob/master/docs/Options.md
+# export SPACESHIP_DIR_COLOR=gray
+export SPACESHIP_DIR_TRUNC=2
+export SPACESHIP_PROMPT_ADD_NEWLINE=false
+export SPACESHIP_PROMPT_SEPARATE_LINE=false
+
+export SPACESHIP_GIT_BRANCH_SHOW=true
+export SPACESHIP_GIT_BRANCH_PREFIX=""
+export SPACESHIP_GIT_BRANCH_SUFFIX=""
+export SPACESHIP_GIT_BRANCH_COLOR="green"
+
+export SPACESHIP_PROMPT_PREFIXES_SHOW=true
+export SPACESHIP_CHAR_SYMBOL="> "
+
+export SPACESHIP_CHAR_COLOR_SUCCESS=gray
+export SPACESHIP_CHAR_COLOR_FAILURE=gray
+export SPACESHIP_CHAR_COLOR_SECONDARY=gray
+
+export SPACESHIP_GIT_STATUS_PREFIX=" ("
+export SPACESHIP_GIT_STATUS_SUFFIX=")"
+export SPACESHIP_GIT_STATUS_COLOR="gray"
+export SPACESHIP_GIT_STATUS_UNTRACKED="?"
+export SPACESHIP_GIT_STATUS_ADDED="+"
+export SPACESHIP_GIT_STATUS_MODIFIED="*"
+export SPACESHIP_GIT_STATUS_RENAMED="~"
+export SPACESHIP_GIT_STATUS_DELETED="X"
+export SPACESHIP_GIT_STATUS_STASHED="$"
+export SPACESHIP_GIT_STATUS_UNMERGED="%"
+export SPACESHIP_GIT_STATUS_AHEAD=">>"
+export SPACESHIP_GIT_STATUS_BEHIND="<<"
+export SPACESHIP_GIT_STATUS_DIVERGED="<>"
+
+SPACESHIP_PROMPT_ORDER=(
+  dir
+  git_branch
+  git_status
+  exit_code
+  char
+)
+
+autoload -U promptinit; promptinit
+prompt spaceship
