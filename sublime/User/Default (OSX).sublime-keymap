@@ -1,22 +1,26 @@
 [
+  { "keys": ["super+n"], "command": "exec", "args": { "shell_cmd": "ruby ~/.dotfiles/scripts/create_note.rb" } },
+  { "keys": ["super+shift+t"], "command": "open_recent_file", "args": {"index": 0 } },
+
   { "keys": ["ctrl+u"], "command": "lower_case" },
   { "keys": ["ctrl+shift+u"], "command": "upper_case" },
+
   { "keys": ["super+alt+shift+t"], "command": "insert_timestamp" },
   { "keys": ["super+alt+t"], "command": "insert_date" },
-  { "keys": ["ctrl+j"], "command": "join_lines" },
+
   { "keys": ["super+d"], "command": "find_under_expand" },
-  { "keys": ["ctrl+k", "ctrl+d"], "command": "find_under_expand_skip" },
-  { "keys": ["super+alt+w"], "command": "toggle_setting", "args": {"setting": "word_wrap"}},
-  { "keys": ["super+alt+l"], "command": "sublimelinter", "args": {"action": "lint"} },
+
   { "keys": ["super+up"], "command": "move_to", "args": {"to": "bof", "extend": false } },
   { "keys": ["super+down"], "command": "move_to", "args": {"to": "eof", "extend": false } },
-  { "keys": ["super+ctrl+a"], "command": "alignment" },
+
   { "keys": ["super+0"], "command": "reset_font_size" },
-  { "keys": ["super+shift+t"], "command": "open_recent_file", "args": {"index": 0 } },
-  { "keys": ["ctrl+super+r"], "command": "sublime_linter_line_report" },
-  { "keys": ["ctrl+super+l"], "command": "sublime_linter_lint" },
-  { "keys": ["ctrl+super+e"], "command": "sublime_linter_goto_error", "args": { "direction": "next" } },
-  { "keys": ["ctrl+super+shift+e"], "command": "sublime_linter_goto_error", "args": { "direction": "previous" } },
-  { "keys": ["ctrl+shift+r"], "command": "reveal_in_side_bar"},
-  { "keys": ["super+alt+n"], "command": "advanced_new_file_new"}
+
+  { "keys": ["ctrl+k", "ctrl+d"], "command": "find_under_expand_skip" },
+
+  { "keys": ["ctrl+a"], "command": "alignment" },
+  { "keys": ["ctrl+j"], "command": "join_lines" },
+  { "keys": ["ctrl+w"], "command": "toggle_setting", "args": {"setting": "word_wrap"}},
+  { "keys": ["ctrl+l"], "command": "sublime_linter_lint" },
+  { "keys": ["ctrl+r"], "command": "reveal_in_side_bar"},
+  { "keys": ["ctrl+n"], "command": "advanced_new_file_new"}
 ]

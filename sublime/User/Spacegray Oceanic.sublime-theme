@@ -1,7 +1,7 @@
 [
   {
     "class": "tab_label",
-    "font.size": 16.0
+    "font.size": 16
   },
   {
     "class": "tabset_control",
@@ -18,14 +18,30 @@
     "fg": [160, 200, 255],
     "font.bold": true,
   },
+  // Sidebar
   {
     "class": "sidebar_label",
-    "color": [161, 175, 186]
+    "color": [161, 175, 186],
+    "font.size": 16,
+    "font.face": "JetBrains Mono"
   },
   {
     "class": "sidebar_tree",
     "row_padding": [10,8],
     "indent": 20
+  },
+  // Status bar
+  {
+    "class": "label_control",
+    "parents": [{"class": "status_bar"}],
+    "font.face": "JetBrains Mono",
+    "font.size": 16
+  },
+  // Cmd+P menu
+  {
+    "class": "quick_panel_label",
+    // "font.face": "JetBrains Mono",
+    "font.size": 18
   },
   {
     "class": "tab_control",

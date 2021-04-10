@@ -6,6 +6,7 @@
 		":",
 		"=>"
 	],
+	"animation_enabled": false,
 	"binary_file_patterns":
 	[
 		"*.jpg",
@@ -125,7 +126,7 @@
 		"no_calt",
 		"subpixel_antialias"
 	],
-	"font_size": 15,
+	"font_size": 17,
 	"gutter": true,
 	"highlight_line": true,
 	"highlight_modified_tabs": true,
@@ -133,13 +134,10 @@
 	[
 		"ActionScript",
 		"ASP",
-		"ayu",
 		"Batch File",
 		"Clojure",
 		"Color Highlighter",
-		"ColorHelper",
 		"D",
-		"fish",
 		"Git Formats",
 		"Gitignored File Excluder",
 		"GoOracle",
@@ -149,6 +147,7 @@
 		"HTMLBeautify",
 		"LaTeX",
 		"MarkdownEditing",
+		"Origami",
 		"ProductiveSnippetsERB",
 		"ProductiveSnippetsRuby",
 		"Python Flake8 Lint",
@@ -172,6 +171,7 @@
 		"*.log",
 		"node_modules"
 	],
+	"index_files": false,
 	"line_padding_bottom": 5,
 	"line_padding_top": 5,
 	"margin": 10,
@@ -197,11 +197,13 @@
 	"show_full_path": true,
 	"show_line_endings": true,
 	"show_minimap": false,
+	"show_panel_on_build": false,
 	"spacegray_sidebar_font_xlarge": true,
 	"spacegray_sidebar_tree_xlarge": true,
 	"tab_size": 2,
 	"theme": "Spacegray Oceanic.sublime-theme",
 	"translate_tabs_to_spaces": true,
+	"tree_animation_enabled": false,
 	"trim_trailing_white_space_on_save": true,
 	"ui_big_tabs": true,
 	"ui_fix_tab_labels": true,
