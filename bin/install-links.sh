@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
-SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
-
-for symlink in $(cat $SCRIPTPATH/links.txt)
-do
-  echo $symlink
-  ln -sf $SCRIPTPATH/../$symlink ~/.$symlink
-done
+ln -sf ~/.dotfiles/config ~/.config
+ln -sf ~/.dotfiles/editorconfig ~/.editorconfig
+ln -sf ~/.dotfiles/gitconfig ~/.gitconfig
+ln -sf ~/.dotfiles/gitignore_global ~/.gitignore_global
+ln -sf ~/.dotfiles/vimrc ~/.vimrc
+ln -sf ~/.dotfiles/vimrc.bundles ~/.vimrc.bundles
+ln -sf ~/.dotfiles/zshrc ~/.zshrc

@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
 USER_DIR=~/Library/Application\ Support/Sublime\ Text\ 3/Packages/User
 
 if [ -d "$USER_DIR" ]; then
@@ -13,4 +12,4 @@ if [ -d "$USER_DIR" ]; then
   fi
 fi
 
-ln -sf $SCRIPTPATH/../sublime/User "$USER_DIR"
+ln -sf ~/.dotfiles/sublime/User "$USER_DIR"
