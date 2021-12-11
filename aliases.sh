@@ -4,11 +4,13 @@ alias h="history"
 alias e="subl"
 alias p="ps aux"
 alias rr="clear && rg --color=always --ignore-case --context 1  --max-columns 100 --max-columns-preview"
+alias k=kubectl
+alias d=docker-compose
 
 # Git
 alias g="git status"
 alias gl="git log --graph --decorate --pretty=oneline --abbrev-commit -n 15"
-alias gb="git branch --sort=committerdate --format='%(color:red)%(objectname:short)%(color:reset) %(HEAD) %(color:yellow)%(refname:short)%(color:reset) (%(color:green)%(committerdate:relative)%(color:reset))'"
+alias gb="git branch --sort=committerdate --color --format=\"%(color:red)%(objectname:short)%(color:reset) %(HEAD) %(color:yellow)%(refname:short)%(color:reset) (%(color:green)%(committerdate:relative)%(color:reset))\" | tail -n 10"
 
 # Amplifr
 alias dcrun="docker-compose run runner bundle exec"

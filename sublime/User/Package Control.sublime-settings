@@ -8,7 +8,6 @@
 		"AdvancedNewFile",
 		"Alignment",
 		"AutoAligner",
-		"Babel",
 		"Base16 Color Schemes",
 		"BetterFindBuffer",
 		"BracketHighlighter",
@@ -24,6 +23,7 @@
 		"Gitignored File Excluder",
 		"GoOracle",
 		"GoSublime",
+		"HTML-CSS-JS Prettify",
 		"HTMLBeautify",
 		"JsPrettier",
 		"MarkdownEditing",
@@ -71,6 +71,6 @@
 		"Theme - Spacegray",
 		"Themes Menu Switcher",
 		"TodoReview",
-		"TOML"
-	]
+		"TOML",
+	],
 }
