@@ -2,4 +2,7 @@
 
 SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
 
-find ~/.dotfiles/install-*.sh -type f -exec bash {} \;
+~/.dotfiles/install-homebrew.sh
+~/.dotfiles/install-links.sh
+~/.dotfiles/install-sublime.sh
+~/.dotfiles/macos-defaults.sh
