@@ -13,7 +13,7 @@ sudo -v
 # defaults write com.apple.finder DisableAllAnimations -bool true
 
 # Enable subpixel font rendering on non-Apple LCDs
-defaults write NSGlobalDomain AppleFontSmoothing -int 2
+# defaults write NSGlobalDomain AppleFontSmoothing -int 2
 
 # Finder: show status bar
 defaults write com.apple.finder ShowStatusBar -bool true
