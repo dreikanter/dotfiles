@@ -31,78 +31,41 @@
   ],
   "bold_folder_labels": true,
   "caret_style": "phase",
-  "color_scheme": "Packages/Base16 Color Schemes/Themes/base16-oceanicnext.tmTheme",
+  // "color_scheme": "Packages/Base16 Color Schemes/Themes/base16-oceanicnext.tmTheme",
   "ensure_newline_at_eof_on_save": true,
   "file_exclude_patterns":
   [
-    "*.pyc",
-    "*.pyo",
-    "*.exe",
-    "*.dll",
-    "*.obj",
-    "*.o",
-    "*.a",
-    "*.lib",
-    "*.so",
-    "*.dylib",
-    "*.ncb",
-    "*.sdf",
-    "*.suo",
-    "*.pdb",
-    "*.idb",
-    ".DS_Store",
-    "*.class",
-    "*.psd",
-    "*.db",
-    "tmp/*",
-    ".bundle",
-    ".vagrant",
-    ".DS_Store",
-    "*app/assets/fonts*",
-    "*.log",
-    "webpack-stats.json"
+    ".DS_Store"
   ],
   "find_selected_text": true,
   "fold_buttons": false,
   "folder_exclude_patterns":
   [
-    ".svn",
-    ".git",
-    ".hg",
-    "CVS",
-    "__pycache__",
-    "tmp",
-    "node_modules",
-    "public/assets",
-    "public/packs",
-    "public/uploads",
+    "coverage",
+    "tmp/cache",
     ".bundle",
-    ".vagrant",
-    "node_modules/*",
-    "coverage"
+    ".git",
+    ".ncn"
   ],
   "font_face": "JetBrains Mono",
+  // "font_face": "Martian Mono",
   "font_options":
   [
     "no_calt",
     "subpixel_antialias"
   ],
-  /*"font_size": 16,*/
   "gutter": true,
   "highlight_line": true,
   "highlight_modified_tabs": true,
   "ignored_packages":
   [
     "ActionScript",
-    "app",
     "ASP",
     "Batch File",
     "Clojure",
     "Color Highlighter",
     "D",
     "Git Formats",
-    "Gitignored File Excluder",
-    "GoOracle",
     "GoSublime",
     "Graphviz",
     "Groovy",
@@ -121,10 +84,8 @@
     "SublimeLinter-contrib-reek",
     "SublimeLinter-contrib-standard",
     "SublimeREPL",
-    "Termninal",
     "Text Pastry",
     "Vintage",
-    "~",
   ],
   "indent_guide_options":
   [
@@ -146,8 +107,8 @@
   "match_brackets_content": true,
   "match_brackets_square": true,
   "mini_diff": "auto",
-  "rubocop_path": "/Users/dreikanter/.rbenv/shims/rubocop",
-  "ruby_path": "/Users/dreikanter/.rbenv/shims/ruby",
+  "rubocop_path": "/Users/alex/.rbenv/shims/rubocop",
+  "ruby_path": "/Users/alex/.rbenv/shims/ruby",
   "rulers":
   [
     80
@@ -166,4 +127,5 @@
   "word_wrap": false,
   "wrap_width": 80,
   "font_size": 16,
+  "color_scheme": "Packages/User/SublimeLinter/base16-solar-flare (SL).tmTheme",
 }

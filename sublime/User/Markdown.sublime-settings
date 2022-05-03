@@ -9,5 +9,6 @@
 	"trim_trailing_white_space_on_save": false,
   "line_numbers": false,
   "word_wrap": true,
-  "draw_centered": false
+  "draw_centered": false,
+  // "color_scheme": "Packages/Base16 Color Schemes/Themes/base16-zenburn.tmTheme"
 }
