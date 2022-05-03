@@ -3,3 +3,4 @@ $HOME/bin
 /usr/local/sbin
 $HOME/.rbenv/shims
 $HOME/.rbenv/bin
+$HOME/go/bin

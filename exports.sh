@@ -1,7 +1,7 @@
 export LC_CTYPE=en_US.UTF-8
 export LANG=en_US.UTF-8
 export LANG11=en_US.UTF-8
-export EDITOR=subl
+export EDITOR="subl --wait"
 export RBENV_ROOT=~/.rbenv
 export PYENV_ROOT=~/.pyenv
 export GOPATH=$HOME/go
