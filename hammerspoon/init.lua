@@ -1,11 +1,3 @@
--- hs.hotkey.bind({"cmd", "shift"}, "1", function()
---   hs.keycodes.setLayout("English - Ilya Birman Typography")
--- end)
-
--- hs.hotkey.bind({"cmd", "shift"}, "2", function()
---   hs.keycodes.setLayout("Russian - Ilya Birman Typography")
--- end)
-
 hs.hotkey.bind({"cmd", "alt"}, "1", function()
   hs.keycodes.setLayout("English - Ilya Birman Typography")
 end)
@@ -15,14 +7,11 @@ hs.hotkey.bind({"cmd", "alt"}, "2", function()
 end)
 
 hs.hotkey.bind({"ctrl", "shift"}, "n", function()
-  hs.execute("ruby ~/.dotfiles/scripts/create_note.rb")
+  hs.execute("~/.dotfiles/bin/create_note", true)
 end)
 
 hs.hotkey.bind({"ctrl", "shift"}, "l", function()
-  hs.execute("ruby ~/.dotfiles/scripts/open_last_note.rb")
+  hs.execute("~/.dotfiles/bin/open_last_note", true)
 end)
 
 hyper = {"ctrl", "alt", "cmd"}
-
--- require('watcher')
--- require('position')

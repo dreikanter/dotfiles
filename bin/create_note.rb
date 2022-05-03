@@ -1,7 +1,7 @@
 require 'fileutils'
 
 NOTES_PATH = File.join(Dir.home, 'Dropbox/Notes').freeze
-EDITOR_PATH = '/usr/local/bin/subl'.freeze
+EDITOR_PATH = '/opt/homebrew/bin/subl'.freeze
 
 def new_note_name(time, uniq_index)
   suffix = uniq_index.positive? ? "_#{uniq_index}" : ''
