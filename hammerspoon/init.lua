@@ -6,10 +6,6 @@ hs.hotkey.bind({"cmd", "alt"}, "2", function()
   hs.keycodes.setLayout("Russian - Ilya Birman Typography")
 end)
 
-hs.hotkey.bind({"cmd", "alt"}, "\\", function()
-  hs.eventtap.keyStroke({}, "`")
-end)
-
 -- function os.capture(cmd)
 --   local handle = assert(io.popen(cmd, 'r'))
 --   local output = assert(handle:read('*a'))
