@@ -9,7 +9,9 @@
 "Package Control.ca-bundle"
 "Package Control.ca-list"
 "Package Control.system-ca-bundle"
-.config/fish/fishd.*
+config
+!config/fish
+!config/nvim
 sublime/User/GoSublime/osx-x64
 fish_history
 fish_read_history
