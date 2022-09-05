@@ -44,8 +44,7 @@
     "coverage",
     "tmp/cache",
     ".bundle",
-    ".git",
-    ".ncn"
+    ".git"
   ],
   "font_face": "JetBrains Mono",
   // "font_face": "Martian Mono",
