@@ -29,6 +29,8 @@ return packer.startup(function(use)
   use("folke/tokyonight.nvim")
   use("lunarvim/darkplus.nvim")
   use("feline-nvim/feline.nvim")
+  use("sheerun/vim-polyglot")
+
   use {
     'nvim-lualine/lualine.nvim',
     requires = { 'kyazdani42/nvim-web-devicons', opt = true }
