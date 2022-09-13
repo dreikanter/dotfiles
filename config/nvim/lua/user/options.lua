@@ -36,4 +36,13 @@ vim.opt.writebackup = false                   -- if a file is being edited by an
 vim.opt.shortmess:append "c"
 vim.opt.iskeyword:append "-"
 vim.opt.whichwrap:append "<,>,[,],h,l"
+vim.opt.list = true
 
+vim.opt.listchars = {
+  eol = '↵',
+  space = ' ',
+  trail = '·',
+  extends = '<',
+  precedes = '>',
+  tab = " >",
+}
