@@ -24,15 +24,39 @@ packer.init({
 -- Install your plugins here
 return packer.startup(function(use)
   use("wbthomason/packer.nvim") -- Have packer manage itself
-  use("kyazdani42/nvim-web-devicons")
+
+  use("airblade/vim-gitgutter")
+  use("akinsho/bufferline.nvim")
+  use("ctrlpvim/ctrlp.vim")
+  use("editorconfig/editorconfig-vim")
+  use("folke/which-key.nvim")
+  use("jeffkreeftmeijer/vim-numbertoggle")
   use("kyazdani42/nvim-tree.lua")
+  use("kyazdani42/nvim-web-devicons")
+  use("sheerun/vim-polyglot")
+  use("tpope/vim-surround")
+  use("ibhagwan/fzf-lua")
+  use("ntpeters/vim-better-whitespace")
+  use("tpope/vim-commentary")
+
+  -- Themes
   use("folke/tokyonight.nvim")
   use("lunarvim/darkplus.nvim")
-  use("feline-nvim/feline.nvim")
-  use("sheerun/vim-polyglot")
 
   use {
+    "vimwiki/vimwiki",
+    config = function()
+      vim.g.vimwiki_list = {{
+        path = "~/wiki/",
+        syntax = "markdown",
+        ext = ".md"
+      }}
+    end
+  }
+
+  use({
     'nvim-lualine/lualine.nvim',
     requires = { 'kyazdani42/nvim-web-devicons', opt = true }
-  }
+  })
 end)
+
