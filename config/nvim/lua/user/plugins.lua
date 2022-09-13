@@ -9,16 +9,16 @@ vim.cmd([[
 -- Use a protected call so we don't error out on first use
 local status_ok, packer = pcall(require, "packer")
 if not status_ok then
-	return
+  return
 end
 
 -- Have packer use a popup window
 packer.init({
-	display = {
-		open_fn = function()
-			return require("packer.util").float({ border = "rounded" })
-		end,
-	},
+  display = {
+    open_fn = function()
+      return require("packer.util").float({ border = "rounded" })
+    end,
+  },
 })
 
 -- Install your plugins here
@@ -26,7 +26,14 @@ return packer.startup(function(use)
   use("wbthomason/packer.nvim") -- Have packer manage itself
 
   use("airblade/vim-gitgutter")
-  use("akinsho/bufferline.nvim")
+
+  -- use({
+  --     "akinsho/bufferline.nvim",
+  --     config = function()
+  --       require "user.bufferline"
+  --     end
+  --   })
+
   use("ctrlpvim/ctrlp.vim")
   use("editorconfig/editorconfig-vim")
   use("folke/which-key.nvim")
@@ -40,8 +47,14 @@ return packer.startup(function(use)
   use("tpope/vim-commentary")
 
   -- Themes
-  use("folke/tokyonight.nvim")
-  use("lunarvim/darkplus.nvim")
+  use({
+    "folke/tokyonight.nvim",
+    config = function()
+      vim.cmd("colorscheme tokyonight-night")
+    end
+  })
+
+  -- use("lunarvim/darkplus.nvim")
 
   use {
     "vimwiki/vimwiki",

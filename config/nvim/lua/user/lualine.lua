@@ -7,7 +7,7 @@ end
 -- Themes: https://github.com/nvim-lualine/lualine.nvim/blob/master/THEMES.md
 require('lualine').setup({
   options = {
-    theme = "gruvbox_dark",
+    theme = "tokyonight",
     icons_enabled = false,
     component_separators = '|',
     section_separators = '',
