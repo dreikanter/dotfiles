@@ -1,30 +1,17 @@
 local mappings = {
-  c = {
-    name = "comment",
-    c = { "<cmd>Commentary<cr>", "comment selection" },
-    -- u = { "", "uncomment selection" }
-  },
-  t = { "<cmd>NvimTreeToggle<cr>", "toggle file tree" },
-  f = {
-    name = "file",
-    p = { "<cmd>CtrlP<cr>", "Ctrl+P" },
-    f = { "<cmd>FzfLua files .<cr>", "fzf" },
+  t = {
+    name = "toggle",
+    t = { "<cmd>NvimTreeToggle<cr>", "toggle file tree" },
+    w = { "<cmd>set wrap! linebreak textwidth=80<cr>", "word wrap" },
+    h = { "<cmd>set hlsearch!<cr>", "highlight search" },
   },
   s = {
     name = "search",
     n = { "<cmd>noh<cr>", "no highlight" },
-    f = { "<cmd>FzfLua files<cr>", "all files" }
   },
-  ["1"] = { "<cmd>b1<cr>", "buffer 1" },
-  ["2"] = { "<cmd>b2<cr>", "buffer 2" },
-  ["3"] = { "<cmd>b3<cr>", "buffer 3" },
-  ["4"] = { "<cmd>b4<cr>", "buffer 4" },
-  ["5"] = { "<cmd>b5<cr>", "buffer 5" },
-  ["6"] = { "<cmd>b6<cr>", "buffer 6" },
-  ["7"] = { "<cmd>b7<cr>", "buffer 7" },
-  ["8"] = { "<cmd>b8<cr>", "buffer 8" },
-  ["9"] = { "<cmd>b9<cr>", "buffer 9" },
-  ["0"] = { "<cmd>b0<cr>", "buffer 10" },
+  f = { "<cmd>FzfLua files<cr>", "files" },
+  g = { "<cmd>FzfLua git_files<cr>", "git files" },
+  b = { "<cmd>FzfLua buffers .<cr>", "buffers" },
 }
 
 local options = {
@@ -39,8 +26,7 @@ local options = {
     -- the presets plugin, adds help for a bunch of default keybindings in Neovim
     -- No actual key bindings are created
     presets = {
-      operators = true, -- adds help for operators like d, y, ... and registers them for motion / text object completion
-      motions = true, -- adds help for motions
+      operators = true, -- adds help for operators like d, y, ... and registers them for motion / text object completion motions = true, -- adds help for motions
       text_objects = true, -- help for text objects triggered after entering an operator
       windows = true, -- default bindings on <c-w>
       nav = true, -- misc bindings to work with windows
@@ -59,7 +45,7 @@ local options = {
     -- ["<tab>"] = "TAB",
   },
   icons = {
-    breadcrumb = "»", -- symbol used in the command line area that shows your active key combo
+    breadcrumb = "»", -- symbol used in the command line area that shows your active key combo:set colorcolumn=80
     separator = "➜", -- symbol used between a key and it's label
     group = "+", -- symbol prepended to a group
   },
