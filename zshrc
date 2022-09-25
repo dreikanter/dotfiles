@@ -51,6 +51,12 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 eval "$(starship init zsh)"
 
 #
+# Base16 color scheme (Works with iTerm2)
+#
+
+. $HOME/.config/base16-shell/scripts/base16-3024.sh
+
+#
 # asdf
 #
 
@@ -73,3 +79,4 @@ if [ -f '/Users/alex/yandex-cloud/path.bash.inc' ]; then source '/Users/alex/yan
 . ~/.profile
 . ~/.dotfiles/exports.sh
 . ~/.dotfiles/aliases.sh
+
