@@ -14,6 +14,10 @@ brew 'ansible'
 brew 'bat'
 # brew 'cowsay'
 brew 'docker-compose'
+
+# disk usage
+brew 'dua-cli'
+
 brew 'exa'
 brew 'fd'
 # brew 'fzf'
@@ -22,6 +26,10 @@ brew 'go'
 brew 'htop'
 brew 'httpie'
 brew 'jq'
+
+# disk usage
+brew 'ncdu'
+
 brew 'node'
 brew 'postgresql'
 brew 'ripgrep'
