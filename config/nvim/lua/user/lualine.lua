@@ -1,12 +1,25 @@
 local status_ok, lualine = pcall(require, "lualine")
+
 if not status_ok then
 	return
+end
+
+local wordCount = function()
+  local filetype = vim.bo.filetype
+
+  if filetype == "markdown" or filetype == "text" then
+    return tostring(vim.fn.wordcount().words) .. " words"
+  end
+
+  return ""
 end
 
 -- Default config: https://github.com/nvim-lualine/lualine.nvim#default-configuration
 -- Themes: https://github.com/nvim-lualine/lualine.nvim/blob/master/THEMES.md
 require('lualine').setup({
   options = {
+    path = 3,
+    shorting_target = 40,
     theme = "tokyonight",
     icons_enabled = false,
     component_separators = '|',
@@ -18,8 +31,9 @@ require('lualine').setup({
       {
         "diff",
         colored = false,
-        symbols = {added = '+', modified = '~', removed = '-'},
+        symbols = { added = '+', modified = '~', removed = '-' },
       },
+      { wordCount },
     },
   },
 })
