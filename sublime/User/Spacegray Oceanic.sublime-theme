@@ -1,7 +1,7 @@
 [
   {
     "class": "tab_label",
-    "font.size": 16
+    "font.size": 18
   },
   {
     "class": "tabset_control",
@@ -40,8 +40,19 @@
   // Cmd+P menu
   {
     "class": "quick_panel_label",
-    // "font.face": "JetBrains Mono",
+    "fg": [239, 241, 245, 255], // 07
+    "match_fg": [240, 140, 50, 255], // highlight
+    "selected_match_fg": [240, 140, 50, 255], // highlight
+    "font.face": "JetBrains Mono",
     "font.size": 18
+  },
+  {
+    "class": "quick_panel_path_label",
+    "font.face": "JetBrains Mono",
+    "fg": [192, 197, 206, 255], // 05
+    "match_fg": [240, 140, 50, 255], // highlight
+    "selected_match_fg": [240, 140, 50, 255], // highlight
+    "font.size": 14
   },
   {
     "class": "tab_control",

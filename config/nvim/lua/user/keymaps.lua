@@ -21,9 +21,6 @@ keymap("n", "<C-j>", "<C-w>j", opts)
 keymap("n", "<C-k>", "<C-w>k", opts)
 keymap("n", "<C-l>", "<C-w>l", opts)
 
--- Toggle NvimTree
--- keymap("n", "<leader>t", ":NvimTreeToggle<cr>", opts)
-
 -- Restore selection after indentation
 keymap("v", "<", "<gv", opts)
 keymap("v", ">", ">gv", opts)

@@ -16,7 +16,6 @@ vim.opt.pumheight = 10
 vim.opt.relativenumber = false
 vim.opt.scrolloff = 8
 vim.opt.shiftwidth = 2
-vim.opt.showtabline = 2
 vim.opt.sidescrolloff = 8
 vim.opt.signcolumn = "yes"
 vim.opt.smartcase = true

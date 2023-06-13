@@ -31,7 +31,7 @@
   ],
   "bold_folder_labels": true,
   "caret_style": "phase",
-  // "color_scheme": "Packages/Base16 Color Schemes/Themes/base16-oceanicnext.tmTheme",
+  "color_scheme": "Packages/User/SublimeLinter/base16-solar-flare (SL).tmTheme",
   "ensure_newline_at_eof_on_save": true,
   "file_exclude_patterns":
   [
@@ -77,13 +77,11 @@
     "Python Flake8 Lint",
     "PyV8",
     "RemoteSubl",
-    "Ruby Slim",
     "Sublime Files",
     "SublimeLinter-annotations",
     "SublimeLinter-contrib-reek",
     "SublimeLinter-contrib-standard",
     "SublimeREPL",
-    "Text Pastry",
     "Vintage",
   ],
   "indent_guide_options":
@@ -125,6 +123,5 @@
   "trim_trailing_white_space_on_save": true,
   "word_wrap": false,
   "wrap_width": 80,
-  "font_size": 16,
-  "color_scheme": "Packages/User/SublimeLinter/base16-solar-flare (SL).tmTheme",
+  "font_size": 17,
 }
