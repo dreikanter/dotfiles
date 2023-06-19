@@ -2,8 +2,9 @@ local mappings = {
   t = {
     name = "toggle",
     t = { "<cmd>NvimTreeToggle<cr>", "toggle file tree" },
-    w = { "<cmd>set wrap! linebreak textwidth=80<cr>", "word wrap" },
-    h = { "<cmd>set hlsearch!<cr>", "highlight search" },
+    w = { "<cmd>set wrap! linebreak textwidth=80<cr>", "toggle word wrap" },
+    h = { "<cmd>set hlsearch!<cr>", "toggle highlight search" },
+    d = { "<cmd>lua require('toggle-checkbox').toggle()<cr>", "toggle checkbox" }
   },
   s = {
     name = "search",
@@ -12,6 +13,9 @@ local mappings = {
   f = { "<cmd>FzfLua files<cr>", "files" },
   g = { "<cmd>FzfLua git_files<cr>", "git files" },
   b = { "<cmd>FzfLua buffers .<cr>", "buffers" },
+  h = { "<cmd>HopWord<cr>", "hop to word" },
+  q = { "<cmd>q<cr>", "close buffer" },
+  d = { "<cmd>put =system('date +%F')<CR>", "current date" },
 }
 
 local options = {

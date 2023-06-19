@@ -21,20 +21,29 @@ packer.init({
   },
 })
 
--- Install your plugins here
 return packer.startup(function(use)
   use("wbthomason/packer.nvim") -- Have packer manage itself
-  use("airblade/vim-gitgutter")
 
   use({
-    "akinsho/bufferline.nvim",
+    "airblade/vim-gitgutter",
     config = function()
-      require "user.bufferline"
+      vim.g.gitgutter_map_keys = 0
     end
   })
 
-  -- Removed in favor of fzf
-  -- use("ctrlpvim/ctrlp.vim")
+  -- use({
+  --   "romgrk/barbar.nvim",
+  --   config = function()
+  --     require("bufferline").setup()
+  --   end
+  -- })
+
+  -- use({
+  --   "akinsho/bufferline.nvim",
+  --   config = function()
+  --     require "user.bufferline"
+  --   end
+  -- })
 
   use("editorconfig/editorconfig-vim")
   use("folke/which-key.nvim")
@@ -56,29 +65,17 @@ return packer.startup(function(use)
 
   use({
     'goolord/alpha-nvim',
-    config = function ()
-      require'alpha'.setup(require'alpha.themes.startify'.config)
+    config = function()
+      require('alpha').setup(require('alpha.themes.startify').config)
     end
   })
 
--- Themes
   use({
     "folke/tokyonight.nvim",
     config = function()
       vim.cmd("colorscheme tokyonight-night")
     end
   })
-
-  -- use({
-  --   "vimwiki/vimwiki",
-  --   config = function()
-  --     vim.g.vimwiki_list = {{
-  --       path = "~/wiki/",
-  --       syntax = "markdown",
-  --       ext = ".md"
-  --     }}
-  --   end
-  -- })
 
   use({
     'nvim-lualine/lualine.nvim',
@@ -89,9 +86,7 @@ return packer.startup(function(use)
     "preservim/vim-markdown",
     requires = { "godlygeek/tabular", opt = true },
     config = function()
-      -- vim.g.vim_markdown_folding_disabled = 1
-      -- vim.g.vim_markdown_conceal = 0
-      -- vim.g.vim_markdown_conceal_code_blocks = 0
+      vim.g.vim_markdown_conceal = 2
     end
   })
 
@@ -101,7 +96,9 @@ return packer.startup(function(use)
   -- use("hrsh7th/cmp-path")
   -- use("hrsh7th/cmp-cmdline")
   -- use("hrsh7th/nvim-cmp")
-  -- use("L3MON4D3/LuaSnip")
+
+  use("L3MON4D3/LuaSnip")
+
   -- use("saadparwaiz1/cmp_luasnip")
 
   use({
@@ -111,16 +108,72 @@ return packer.startup(function(use)
     end
   })
 
-  -- use({ "xolox/vim-notes" })
-
   use({
     "lervag/wiki.vim",
-    -- config = function()
-    --   vim.g.wiki_root = "~/wiki"
-    --   vim.g.wiki_filetypes = "md"
-    -- end
+    config = function()
+      vim.g.wiki_root = "~/wiki"
+      vim.g.wiki_filetypes = { 'md' }
+      vim.g.wiki_link_extension = '.md'
+    end
   })
 
-  use("lervag/lists.vim")
+  -- use({
+  --   "vimwiki/vimwiki",
+  --   config = function()
+  --     vim.g.vimwiki_list = {
+  --       {
+  --         path = "~/wiki",
+  --         syntax = "markdown",
+  --         ext = ".md",
+  --       }
+  --     }
+  --   end
+  -- })
+
+  use({
+    "nvim-treesitter/nvim-treesitter",
+    config = function()
+      require("user.treesitter")
+    end
+  })
+
+  use({
+    "lukas-reineke/indent-blankline.nvim",
+    config = function()
+      require("indent_blankline").setup({
+        -- show_current_context = true,
+        show_current_context_start = true,
+      })
+    end
+  })
+
+  use({
+    "phaazon/hop.nvim",
+    branch = "v2",
+    config = function()
+      require("hop").setup()
+    end
+  })
+
+  use("opdavies/toggle-checkbox.nvim")
+
+  use({
+    "ellisonleao/glow.nvim",
+    config = function()
+      -- require("glow").setup({
+      --   width = 80,
+      --   style = "light",
+      -- })
+    end
+  })
+
+  use({"junegunn/goyo.vim"})
+
+  -- use({
+  --   "lyokha/vim-xkbswitch",
+  --   config = function()
+  --     vim.g.XkbSwitchEnabled = 1
+  --   end
+  -- })
 end)
 

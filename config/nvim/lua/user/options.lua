@@ -2,7 +2,7 @@ vim.opt.backup = false
 vim.opt.clipboard = "unnamedplus"
 vim.opt.cmdheight = 2
 vim.opt.completeopt = { "menuone", "noselect" }
-vim.opt.conceallevel = 0
+vim.opt.conceallevel = 2
 vim.opt.cursorline = true
 vim.opt.expandtab = true
 vim.opt.fileencoding = "utf-8"
@@ -35,6 +35,12 @@ vim.opt.showmode = false
 vim.opt.linebreak = true
 vim.opt.foldmethod = "syntax"
 vim.opt.foldlevelstart = 99
+
+vim.opt.keymap = "russian-jcukenmac"
+vim.opt.iminsert = 0
+vim.opt.imsearch = 0
+
+-- vim.opt.langmap = "ФИСВУАПРШОЛДЬТЩЗЙКЫЕГМЦЧНЯ;ABCDEFGHIJKLMNOPQRSTUVWXYZ,фисвуапршолдьтщзйкыегмцчня;abcdefghijklmnopqrstuvwxyz,[!\"№%:,.;()_+[]\\;',./{}||:\"<>?;~!@#$%^&*()_+[]\\;',./{}|:\"<>?"
 
 vim.opt.shortmess:append "c"
 vim.opt.iskeyword:append "-"

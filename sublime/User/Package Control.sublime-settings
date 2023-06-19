@@ -29,28 +29,18 @@
 		"nginx",
 		"Origami",
 		"Package Control",
-		"PackageDev",
-		"PackageResourceViewer",
 		"Pretty JSON",
-		"Pretty Ruby",
-		"Python Flake8 Lint",
-		"SCSS",
-		"Search in Project",
+		"Ruby Slim",
 		"SideBarEnhancements",
-		"SublimeLinter",
-		"SublimeLinter-contrib-scss-lint",
-		"SublimeLinter-csslint",
-		"SublimeLinter-eslint",
-		"SublimeLinter-rubocop",
-		"SublimeLinter-ruby",
-		"SublimeLinter-stylelint",
-		"SublimeLinter_CatGutterTheme",
-		"SublimeREPL",
-		"SyncedSideBar",
-		"Terraform",
-		"Text Pastry",
+		"SqlBeautifier",
 		"Theme - Spacegray",
-		"Themes Menu Switcher",
-		"TOML",
 	],
-}
+}//{
+	//"bootstrapped": true,
+	//"in_process_packages":
+	//[
+	//],
+	//"installed_packages":
+	//[
+	//],
+//}

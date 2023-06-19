@@ -10,3 +10,6 @@ export GOPATH=$HOME/go
 export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git --exclude node_modules'
 export FZF_DEFAULT_OPTS="--reverse --multi"
 # --preview 'bat --wrap {}'
+
+export JAVA_HOME=$(/usr/libexec/java_home)
+export ES_JAVA_HOME=$JAVA_HOME

@@ -6,21 +6,6 @@ hs.hotkey.bind({"cmd", "alt"}, "2", function()
   hs.keycodes.setLayout("Russian - Ilya Birman Typography")
 end)
 
--- function os.capture(cmd)
---   local handle = assert(io.popen(cmd, 'r'))
---   local output = assert(handle:read('*a'))
---   handle:close()
---   return string.gsub(string.gsub(string.gsub(output, '^%s+', ''), '%s+$', ''), '[\n\r]+', ' ')
--- end
-
-hs.hotkey.bind({"ctrl", "alt", "shift"}, "n", function()
-  os.execute("nohup ~/.dotfiles/bin/create_note &")
-end)
-
-hs.hotkey.bind({"ctrl", "alt", "shift"}, "l", function()
-  os.execute("nohup ~/.dotfiles/bin/open_last_note &", true)
-end)
-
 hs.hotkey.bind({"ctrl", "shift"}, "n", function()
   hs.execute("~/.dotfiles/bin/create_note.rb", true)
 end)
@@ -29,4 +14,37 @@ hs.hotkey.bind({"ctrl", "shift"}, "l", function()
   hs.execute("~/.dotfiles/bin/open_last_note.rb", true)
 end)
 
--- hyper = {"ctrl", "alt", "cmd"}
+hs.hotkey.bind({"ctrl", "shift"}, "j", function()
+  -- hs.execute("alacritty --working-directory ~/ -e $SHELL -lc 'nvim +WikiJournal && exit' &", true)
+
+  local log = require("hs.logger").new("test", "debug")
+  log.i("starting a task")
+
+  hs.task.new(
+    "/opt/homebrew/bin/alacritty",
+    function(exitCode, stdOut, stdErr)
+      log.df("exitCode: %s", exitCode)
+      log.df("stdOut: %s", stdOut)
+      log.df("stdErr: %s", stdErr)
+      return true
+    end,
+    {"-e", "/Users/alex/.dotfiles/bin/journal"}
+  ):start()
+
+  -- local test =  hs.task.new(
+  --   "/bin/zsh",
+  --   function(exitCode, stdOut, stdErr)
+  --     log.df("exitCode: %s", exitCode)
+  --     log.df("stdOut: %s", stdOut)
+  --     log.df("stdErr: %s", stdErr)
+  --     return true
+  --   end,
+  --   function(task, stdOut, stdErr)
+  --     log.df("task: %s", task)
+  --     log.df("stdOut: %s", stdOut)
+  --     log.df("stdErr: %s", stdErr)
+  --     return true
+  --   end,
+  --   { "-lc", "alacritty --working-directory ~/ -e $SHELL -lc 'nvim +WikiJournal && exit'" }
+  -- ):start()
+end)
