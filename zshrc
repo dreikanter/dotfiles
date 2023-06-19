@@ -40,9 +40,11 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 # cd /usr/local/share
 # git clone https://github.com/zsh-users/zsh-autosuggestions.git
 # git clone https://github.com/zsh-users/zsh-syntax-highlighting.git
+# git clone git@github.com:agkozak/zsh-z.git
 
 . /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 . /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+. /usr/local/share/zsh-z/zsh-z.plugin.zsh
 
 #
 # Starship
@@ -67,7 +69,7 @@ eval "$(starship init zsh)"
 #
 
 # The next line updates PATH for Yandex Cloud CLI.
-if [ -f '/Users/alex/yandex-cloud/path.bash.inc' ]; then source '/Users/alex/yandex-cloud/path.bash.inc'; fi
+# if [ -f '/Users/alex/yandex-cloud/path.bash.inc' ]; then source '/Users/alex/yandex-cloud/path.bash.inc'; fi
 
 # The next line enables shell command completion for yc.
 # if [ -f '/Users/alex/yandex-cloud/completion.zsh.inc' ]; then source '/Users/alex/yandex-cloud/completion.zsh.inc'; fi
@@ -80,3 +82,4 @@ if [ -f '/Users/alex/yandex-cloud/path.bash.inc' ]; then source '/Users/alex/yan
 . ~/.dotfiles/exports.sh
 . ~/.dotfiles/aliases.sh
 
+# eval "$(rbenv init - zsh)"
