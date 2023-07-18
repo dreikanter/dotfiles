@@ -39,4 +39,10 @@ Dir.chdir(File.expand_path(dest_dir)) do
   system("git add .")
   system("git", "commit", "-m", "Update published files")
   system("git", "push", "origin", "main")
+
+  commit_id = `echo $(git -C ~/public_notes rev-parse HEAD)`.strip
+
+  puts
+  puts "Most recent commit:"
+  puts "https://github.com/dreikanter/notes/commit/#{commit_id}"
 end
