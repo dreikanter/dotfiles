@@ -1,0 +1,61 @@
+#!/usr/bin/env ruby
+
+require "yaml"
+require "fileutils"
+require "pathname"
+
+CLEAR = "\e[0m"
+BOLD = "\e[1m"
+
+BLACK = "\e[30m"
+RED = "\e[31m"
+GREEN = "\e[32m"
+
+def extract_slug(file_name)
+  YAML.safe_load(File.read(file_name)).fetch("slug")
+rescue StandardError
+  ""
+end
+
+def slugify(string)
+  string.strip.downcase.gsub(/[^a-z0-9_]+/i, "-")
+end
+
+def extract_uid(file_name)
+  File.basename(file_name, ".*").match(/^(\d+_\d+)/).captures.first
+rescue StandardError
+  nil
+end
+
+def update_file_names(src_dir)
+  src_dir = File.expand_path(src_dir)
+
+  Dir.glob("#{src_dir}/**/*.md") do |file_name|
+    uid = extract_uid(file_name)
+
+    puts file_name if File.size(file_name) < 20
+
+    next unless uid
+    slug = extract_slug(file_name)
+    new_file_name = File.join(File.dirname(file_name), "#{uid}#{"_" unless slug.empty?}#{slugify(slug)}#{File.extname(file_name)}")
+
+    if new_file_name != file_name
+      FileUtils.mv(file_name, new_file_name)
+
+      diff_after = File.join(Pathname.new(file_name).relative_path_from(src_dir).dirname, "#{uid}_#{GREEN}#{slugify(slug)}#{CLEAR}#{File.extname(file_name)}")
+
+      puts "- #{Pathname.new(file_name).relative_path_from(src_dir)}"
+      puts "+ #{diff_after}"
+      puts
+    end
+  end
+end
+
+src_dir = ENV["PUBLISH_NOTES_SOURCE_PATH"] || "~/Dropbox/Notes"
+
+if src_dir.nil?
+  puts "Missing PUBLISH_NOTES_SOURCE_PATH environment variable"
+  exit 1
+end
+
+update_file_names(src_dir)

@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-NOTES_PATH = File.join(Dir.home, 'Dropbox/Notes').freeze
+NOTES_PATH = ENV["NOTES_PATH"]
 
 wildcard = File.join(NOTES_PATH, '**', '*.md')
 last_note_path = Dir.glob(wildcard).grep(%r{\d+/\d{2}/.*\.md}).max

@@ -1,4 +1,0 @@
-#!/usr/bin/env bash
-
-. ~/.zshrc
-ncn create 2>&1

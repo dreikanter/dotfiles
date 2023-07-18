@@ -15,6 +15,7 @@ alias railstb="rails test $(git diff HEAD main --name-only | grep _test)"
 alias g="git status"
 # alias gl="git log --graph --decorate --pretty=oneline --abbrev-commit -n 15"
 alias gl="git log --pretty=format:\"%C(yellow)%h%Creset %ad | %Cgreen%s%Creset %Cred%d%Creset %Cblue[%an]\" --date=short -n 20"
+alias gbl="git log --no-merges HEAD ^master --reverse --pretty=\"format:* %s\" --abbrev-commit"
 alias gbr="git branch --sort=committerdate --color --format=\"%(color:red)%(objectname:short)%(color:reset) %(HEAD) %(color:yellow)%(refname:short)%(color:reset) (%(color:green)%(committerdate:relative)%(color:reset))\" | tail -n 10"
 
 function gb() {

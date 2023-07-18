@@ -7,11 +7,11 @@ hs.hotkey.bind({"cmd", "alt"}, "2", function()
 end)
 
 hs.hotkey.bind({"ctrl", "shift"}, "n", function()
-  hs.execute("~/.dotfiles/bin/create_note.rb", true)
+  hs.execute("~/.dotfiles/bin/newnote", true)
 end)
 
 hs.hotkey.bind({"ctrl", "shift"}, "l", function()
-  hs.execute("~/.dotfiles/bin/open_last_note.rb", true)
+  hs.execute("~/.dotfiles/bin/lastnote", true)
 end)
 
 hs.hotkey.bind({"ctrl", "shift"}, "j", function()
