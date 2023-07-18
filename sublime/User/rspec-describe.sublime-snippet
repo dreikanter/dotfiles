@@ -1,0 +1,9 @@
+<snippet>
+  <content><![CDATA[
+RSpec.describe ${1:subject_class} do
+  subject(:${2:subject_name}) { described_class }
+end
+]]></content>
+  <tabTrigger>spec</tabTrigger>
+  <scope>source.ruby</scope>
+</snippet>

@@ -122,7 +122,7 @@
 				//
 				// is functionally equivalent to
 				//
-				//		{"first_line": "^#\\!(?:.+)ruby"}
+				{"first_line": "^#\\!.*ruby"},
 				//
 				{"binary": "ruby"}
 			]
