@@ -4,7 +4,7 @@
 ${2:code}
 ```
 ]]></content>
-  <tabTrigger>ttt</tabTrigger>
+  <tabTrigger>fff</tabTrigger>
   <!-- Optional: Set a scope to limit where the snippet will trigger -->
   <!-- <scope>source.python</scope> -->
 </snippet>

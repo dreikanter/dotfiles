@@ -1,5 +1,5 @@
 // These settings override both User and Default settings for the Find Results syntax
 {
-  "color_scheme": "Packages/User/SublimeLinter/base16-solar-flare (SL).tmTheme",
+  "color_scheme": "Packages/User/base16-solar-flare (SL).tmTheme",
   "word_wrap": false
 }

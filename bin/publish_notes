@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+NOTES_CONFIGURATION_PATH=~/src/notes/configuration.yml ~/src/notes/bin/build &&
+cp -r ~/src/notes/dist/ ~/src/notes.musayev.com &&
+cd ~/src/notes.musayev.com &&
+git add . &&
+git commit -m "Autocommit pages update" &&
+git push origin main &&
+echo &&
+echo https://github.com/dreikanter/notes.musayev.com/actions &&
+open https://github.com/dreikanter/notes.musayev.com/actions

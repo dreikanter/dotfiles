@@ -41,15 +41,35 @@
       "cells": [[0, 0, 1, 1]]
     }
   },
+  // {
+  //   "keys": ["super+alt+shift+2"],
+  //   "command": "set_layout",
+  //   "args":
+  //   {
+  //     "cols": [0.0, 0.5, 1.0],
+  //     "rows": [0.0, 1.0],
+  //     "cells": [[0, 0, 1, 1], [1, 0, 2, 1]]
+  //   }
+  // },
+
+  // InsertData
   {
-    "keys": ["super+alt+shift+2"],
-    "command": "set_layout",
-    "args":
-    {
-      "cols": [0.0, 0.5, 1.0],
-      "rows": [0.0, 1.0],
-      "cells": [[0, 0, 1, 1], [1, 0, 2, 1]]
-    }
+    "keys": ["super+k", "super+t"],
+    "command": "insert_date"
   },
 
+  // Autorename file based on a slug value from YAML frontmatter
+  {
+    "keys": ["super+k", "super+r"],
+    "command": "file_autorename"
+  },
+
+  // Turn off layout hotkeys
+  { "keys": ["super+alt+1"], "command": "noop" },
+  { "keys": ["super+alt+2"], "command": "noop" },
+  { "keys": ["super+alt+3"], "command": "noop" },
+  { "keys": ["super+alt+4"], "command": "noop" },
+  { "keys": ["super+alt+shift+2"], "command": "noop" },
+  { "keys": ["super+alt+shift+3"], "command": "noop" },
+  { "keys": ["super+alt+5"], "command": "noop" },
 ]

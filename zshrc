@@ -44,7 +44,7 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 
 . /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 . /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-. /usr/local/share/zsh-z/zsh-z.plugin.zsh
+# . /usr/local/share/zsh-z/zsh-z.plugin.zsh
 
 #
 # Starship
