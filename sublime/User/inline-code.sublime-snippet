@@ -1,6 +1,0 @@
-<snippet>
-  <content><![CDATA[
-`${1:code}`
-]]></content>
-  <tabTrigger>cc</tabTrigger>
-</snippet>
