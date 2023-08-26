@@ -7,6 +7,8 @@ alias h="history | cut -c 8-"
 alias k="kubectl"
 alias vim="nvim"
 alias railstb="rails test $(git diff HEAD main --name-only | grep _test)"
+alias s="subl ."
+alias ss="subl --add ."
 
 #
 # Git
