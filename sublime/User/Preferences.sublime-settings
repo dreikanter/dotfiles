@@ -47,7 +47,6 @@
     ".git"
   ],
   "font_face": "JetBrains Mono",
-  // "font_face": "Martian Mono",
   "font_options":
   [
     "no_calt",
@@ -62,7 +61,6 @@
     "ASP",
     "Batch File",
     "Clojure",
-    "Color Highlighter",
     "D",
     "Git Formats",
     "GoSublime",

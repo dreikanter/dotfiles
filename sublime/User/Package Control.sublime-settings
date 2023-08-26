@@ -9,9 +9,7 @@
 		"Alignment",
 		"ApplySyntax",
 		"AutoAligner",
-		"BetterFindBuffer",
 		"BracketHighlighter",
-		"Color Highlighter",
 		"CSS3",
 		"CSScomb",
 		"Dockerfile Syntax Highlighting",
@@ -30,18 +28,11 @@
 		"nginx",
 		"Origami",
 		"Package Control",
+		"PackageResourceViewer",
 		"Pretty JSON",
 		"Ruby Slim",
 		"SideBarEnhancements",
 		"SqlBeautifier",
 		"Theme - Spacegray",
 	],
-}//{
-	//"bootstrapped": true,
-	//"in_process_packages":
-	//[
-	//],
-	//"installed_packages":
-	//[
-	//],
-//}
+}

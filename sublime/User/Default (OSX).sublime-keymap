@@ -1,14 +1,10 @@
 [
-  { "keys": ["super+n"], "command": "exec", "args": { "shell_cmd": "ruby ~/.dotfiles/scripts/create_note.rb" } },
   { "keys": ["super+shift+t"], "command": "open_recent_file", "args": {"index": 0 } },
 
   { "keys": ["super+o"], "command": "show_overlay", "args": {"overlay": "goto", "show_files": true} },
 
   { "keys": ["ctrl+u"], "command": "lower_case" },
   { "keys": ["ctrl+shift+u"], "command": "upper_case" },
-
-  { "keys": ["super+alt+shift+t"], "command": "insert_timestamp" },
-  { "keys": ["super+alt+t"], "command": "insert_date" },
 
   { "keys": ["super+d"], "command": "find_under_expand" },
 
@@ -28,11 +24,11 @@
 
   // Prevent unnecessary backtick auto-closing
   { "keys": ["`"], "command": "insert", "args": {"characters": "`"}, "context":
-      [
-          { "key": "selector", "operator": "equal", "match_all": true},
-          { "key": "setting.auto_match_enabled", "operator": "equal", "operand": true },
-          { "key": "selection_empty", "operator": "equal", "operand": true, "match_all": true }
-      ]
+    [
+      { "key": "selector", "operator": "equal", "match_all": true},
+      { "key": "setting.auto_match_enabled", "operator": "equal", "operand": true },
+      { "key": "selection_empty", "operator": "equal", "operand": true, "match_all": true }
+    ]
   },
 
   {
