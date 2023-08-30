@@ -31,7 +31,7 @@ def update_file_names(src_dir)
   Dir.glob("#{src_dir}/**/*.md") do |file_name|
     uid = extract_uid(file_name)
     next unless uid
-    slug = extract_slug(file_name)
+    slug = extract_slug(file_name).to_s
     new_file_name = File.join(File.dirname(file_name), "#{uid}#{"_" unless slug.empty?}#{slugify(slug)}#{File.extname(file_name)}")
 
     if new_file_name != file_name
