@@ -11,14 +11,11 @@ HISTSIZE=10000
 SAVEHIST=1000
 HISTDUP=erase
 
-# Append history to the history file (no overwriting)
-setopt appendhistory
-
 # Share history across terminals
-setopt sharehistory
+setopt share_history
 
 # Immediately append to the history file, not just when a term is killed
-setopt incappendhistory
+setopt inc_append_history
 
 #
 # Path
