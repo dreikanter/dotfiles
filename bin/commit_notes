@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+cd $NOTES_PATH && git add . && git commit -m "Autocomit"
