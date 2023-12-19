@@ -72,4 +72,13 @@
   { "keys": ["super+alt+shift+2"], "command": "noop" },
   { "keys": ["super+alt+shift+3"], "command": "noop" },
   { "keys": ["super+alt+5"], "command": "noop" },
+  {
+    "keys": ["super+k", "super+a"],
+    "command": "copilot_accept_completion",
+    "context": [
+        {
+            "key": "setting.copilot.completion.is_visible"
+        }
+    ]
+},
 ]

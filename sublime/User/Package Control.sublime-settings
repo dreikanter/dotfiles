@@ -21,6 +21,8 @@
 		"HTML-CSS-JS Prettify",
 		"HTMLBeautify",
 		"JsPrettier",
+		"LSP",
+		"LSP-copilot",
 		"MarkdownEditing",
 		"MarkdownLink",
 		"MetaQuotes (MQL4) Language Package",
