@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# Replace these with your desired revisions
+REVISION1=$1
+REVISION2=$2
+
+# Temporary directories for checkout
+TEMP_DIR1=$(mktemp -d /tmp/tempdir1.XXX)
+TEMP_DIR2=$(mktemp -d /tmp/tempdir2.XXX)
+
+# Ensure the temporary directories are removed when the script finishes
+trap "rm -rf $TEMP_DIR1 $TEMP_DIR2" exit
+
+# Check out the revisions into the temporary directories
+git archive $REVISION1 | tar -x -C $TEMP_DIR1
+git archive $REVISION2 | tar -x -C $TEMP_DIR2
+
+# Now use Araxis Merge to compare the directories
+# Replace '/Applications/Araxis Merge.app/Contents/Utilities/' with the actual path if different
+'/Applications/Araxis Merge.app/Contents/Utilities/compare' -2 -wait $TEMP_DIR1 $TEMP_DIR2
