@@ -23,7 +23,9 @@ alias gph="git push -u origin HEAD"
 gcm() { git commit -m $1 }
 
 function gb() {
-  git checkout "$(git branch --sort=committerdate | tac | fzf | tr -d '[:space:]')"
+  git checkout "$(git branch --sort=committerdate | tac | fzf --height 20 | tr -d '[:space:]')"
 }
 
 killport() { kill -9 $(lsof -t -i:$1) }
+
+alias rc="PAGER=cat rails console"
