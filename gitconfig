@@ -43,6 +43,8 @@
   lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
   ls = ls-files
   ign = ls-files -o -i --exclude-standard
+  ad = difftool --tool=araxis --dir-diff
+  ads = difftool --tool=araxis --dir-diff --staged
 
 [push]
   default = current
@@ -57,23 +59,26 @@
   cmd = /usr/local/bin/bcomp \"$LOCAL\" \"$REMOTE\" \"$BASE\" \"$MERGED\"
   trustExitCode = true
 
+[difftool "araxis"]
+  path = /Applications/Araxis Merge.app/Contents/Utilities/compare
+  prompt = false
+
+[mergetool "araxis"]
+  path = /Applications/Araxis Merge.app/Contents/Utilities/compare
+  prompt = false
+
 [diff]
-  tool = bcomp
+  tool = araxis
   indentHeuristic = true
   compactionHeuristic = true
 
 [merge]
   summary = true
-  tool = bcomp
+  tool = araxis
   conflictstyle = diff3
-
-[mergetool]
-  prompt = false
-
-[difftool]
-  prompt = false
 
 [push]
   default = matching
+
 [init]
 	defaultBanch = master
