@@ -74,7 +74,7 @@
 
 [merge]
   summary = true
-  tool = araxis
+	tool = vscode
   conflictstyle = diff3
 
 [push]
@@ -82,3 +82,4 @@
 
 [init]
 	defaultBanch = master
+	defaultBranch = main
