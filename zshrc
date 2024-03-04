@@ -95,3 +95,5 @@ fi
 
 # Key bindings
 source "/opt/homebrew/opt/fzf/shell/key-bindings.zsh"
+
+source /Users/alex/.config/broot/launcher/bash/br
