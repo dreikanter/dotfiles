@@ -5,6 +5,7 @@ export EDITOR="subl --wait"
 export RBENV_ROOT=~/.rbenv
 export PYENV_ROOT=~/.pyenv
 export GOPATH=$HOME/go
+export HOMEBREW_NO_AUTO_UPDATE=true
 
 # fzf config
 export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git --exclude node_modules'
