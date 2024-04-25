@@ -11,5 +11,9 @@ hs.hotkey.bind({"ctrl", "shift"}, "n", function()
 end)
 
 hs.hotkey.bind({"ctrl", "shift"}, "l", function()
-  hs.execute("~/.dotfiles/bin/lastnote", true)
+  hs.execute("~/.dotfiles/bin/latestnote", true)
+end)
+
+hs.hotkey.bind({"ctrl", "shift"}, "t", function()
+  hs.execute("~/.dotfiles/bin/latesttodo", true)
 end)
