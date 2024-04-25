@@ -8,3 +8,6 @@ ln -sf ~/.dotfiles/gitignore_global ~/.gitignore_global
 ln -sf ~/.dotfiles/zshrc ~/.zshrc
 ln -sf ~/.dotfiles/bin ~/bin
 ln -sf ~/.dotfiles/config/nvim ~/.config/nvim
+
+mkdir -p ~/.config/wezterm
+ln -sf ~/.dotfiles/config/wezterm/wezterm.lua ~/.config/wezterm/wezterm.lua
