@@ -1,0 +1,11 @@
+<snippet>
+    <tabTrigger>yy</tabTrigger>
+    <scope>text.html.markdown</scope>
+    <description>Add frontmatter slug</description>
+    <content><![CDATA[---
+slug: ${1:slug}
+tags: []
+---
+
+]]></content>
+</snippet>
