@@ -45,12 +45,21 @@
   ign = ls-files -o -i --exclude-standard
   ad = difftool --tool=araxis --dir-diff
   ads = difftool --tool=araxis --dir-diff --staged
+  dlog = "!f() { GIT_EXTERNAL_DIFF=difft git log -p --ext-diff $@; }; f"
+	stush = stash --include-untracked
 
 [push]
   default = current
 
 [credential]
 	helper = osxkeychain
+
+# [diff]
+#  tool = difftastic
+#  external = difft
+
+[difftool]
+  prompt = false
 
 [difftool "bcomp"]
   cmd = /usr/local/bin/bcomp \"$LOCAL\" \"$REMOTE\"
@@ -62,6 +71,12 @@
 [difftool "araxis"]
   path = /Applications/Araxis Merge.app/Contents/Utilities/compare
   prompt = false
+
+[difftool "difftastic"]
+  cmd = difft "$LOCAL" "$REMOTE"
+
+[pager]
+  difftool = false
 
 [mergetool "araxis"]
   path = /Applications/Araxis Merge.app/Contents/Utilities/compare
@@ -83,3 +98,5 @@
 [init]
 	defaultBanch = master
 	defaultBranch = main
+[maintenance]
+	repo = /Users/alex/zipline/zipline-app
