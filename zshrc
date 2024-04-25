@@ -44,7 +44,7 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 # . /usr/local/share/zsh-z/zsh-z.plugin.zsh
 
 #
-# Starship
+# Starship, https://starship.rs
 #
 
 eval "$(starship init zsh)"
