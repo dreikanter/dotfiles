@@ -31,7 +31,7 @@
   ],
   "bold_folder_labels": true,
   "caret_style": "phase",
-  "color_scheme": "Packages/User/base16-oceanicnext (SL).tmTheme",
+  // "color_scheme": "Packages/User/base16-oceanicnext (SL).tmTheme",
   "ensure_newline_at_eof_on_save": true,
   "file_exclude_patterns":
   [
@@ -68,36 +68,36 @@
     "Gitignored File Excluder",
     "Graphviz",
     "Groovy",
-    "HTMLBeautify",
+    // "HTMLBeautify",
     "LaTeX",
     "LSP-copilot",
     "MarkdownEditing",
     "Origami",
     "Vintage",
   ],
-  "indent_guide_options":
-  [
-    "draw_normal",
-    "draw_active"
-  ],
-  "index_exclude_patterns":
-  [
-    "*.log",
-    "node_modules"
-  ],
-  "index_exclude_gitignore": true,
-  "index_files": false,
-  "line_padding_bottom": 5,
-  "line_padding_top": 5,
-  "margin": 10,
+  // "indent_guide_options":
+  // [
+  //   "draw_normal",
+  //   "draw_active"
+  // ],
+  // "index_exclude_patterns":
+  // [
+  //   "*.log",
+  //   "node_modules"
+  // ],
+  // "index_exclude_gitignore": true,
+  // "index_files": false,
+  "line_padding_bottom": 4,
+  "line_padding_top": 4,
+  // "margin": 10,
   "match_brackets": true,
   "match_brackets_angle": true,
   "match_brackets_braces": true,
   "match_brackets_content": true,
   "match_brackets_square": true,
-  "mini_diff": "auto",
-  // "rubocop_path": "/Users/alex/.rbenv/shims/rubocop",
-  // "ruby_path": "/Users/alex/.rbenv/shims/ruby",
+  // "mini_diff": "auto",
+  // // "rubocop_path": "/Users/alex/.rbenv/shims/rubocop",
+  // // "ruby_path": "/Users/alex/.rbenv/shims/ruby",
   "rubocop_path": "/Users/alex/.asdf/shims/rubocop",
   "ruby_path": "/Users/alex/.asdf/shims/ruby",
   "rulers":
@@ -105,33 +105,35 @@
     80,
     120
   ],
-  "scroll_speed": 0,
+  // "scroll_speed": 0,
   "shift_tab_unindent": true,
-  "show_encoding": true,
+  // "show_encoding": true,
   "show_full_path": true,
   "show_line_endings": true,
   "show_panel_on_build": false,
   "tab_size": 2,
-  "theme": "Spacegray Oceanic.sublime-theme",
   "translate_tabs_to_spaces": true,
-  "tree_animation_enabled": false,
+  // "tree_animation_enabled": false,
 
-  // Controls where trailing white space is removed on save.
-  // - "none": Do not remove any trailing white space on save.
-  // - "all": Remove all trailing white space on save.
-  // - "not_on_caret": Only remove white space that won't affect the caret.
-  //                   When used in conjunction with "save_on_focus_lost" and
-  //                   certain desktop environments that frequently make the
-  //                   application lose focus this avoids the caret jumping
-  //                   around a lot.
-  // "trim_trailing_white_space_on_save": "none",
-  //
-  // Only trim white space on save for the parts of a file that have been
-  // modified by you. If there is trailing white space in other parts of the
-  // file they are left alone.
+  // // Controls where trailing white space is removed on save.
+  // // - "none": Do not remove any trailing white space on save.
+  // // - "all": Remove all trailing white space on save.
+  // // - "not_on_caret": Only remove white space that won't affect the caret.
+  // //                   When used in conjunction with "save_on_focus_lost" and
+  // //                   certain desktop environments that frequently make the
+  // //                   application lose focus this avoids the caret jumping
+  // //                   around a lot.
+  // // "trim_trailing_white_space_on_save": "none",
+  // //
+  // // Only trim white space on save for the parts of a file that have been
+  // // modified by you. If there is trailing white space in other parts of the
+  // // file they are left alone.
   "trim_trailing_white_space_on_save": true,
 
   "word_wrap": false,
   "wrap_width": 80,
-  "font_size": 16,
+  "theme": "Spacegray Eighties.sublime-theme",
+  "font_size": 14,
+  "color_scheme": "Packages/User/base16-eighties (SL).tmTheme",
+  "index_files": true,
 }
