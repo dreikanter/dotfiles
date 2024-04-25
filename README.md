@@ -10,3 +10,11 @@ bash ~/.dotfiles/bin/install.sh
 iTerm:
 
 - Enable patched font: iTerm2 → Preferences → Profiles → Font
+
+## Global hotkeys
+
+`Ctrl+Shift+N` – create new note.
+
+`Ctrl+Shift+L` – open the latest note.
+
+`Ctrl+Shift+T` – open the latest todo note.
