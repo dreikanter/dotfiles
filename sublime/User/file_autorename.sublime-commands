@@ -1,3 +1,6 @@
 [
-  { "caption": "File: Autorename", "command": "file_autorename" }
+  {
+    "caption": "File: Autorename",
+    "command": "file_autorename"
+  }
 ]
