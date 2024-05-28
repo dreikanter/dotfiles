@@ -3,6 +3,7 @@
 NOTES_CONFIGURATION_PATH=~/src/notes/configuration.yml ~/src/notes/bin/build &&
 cp -r ~/src/notes/dist/ ~/src/notes.musayev.com &&
 cd ~/src/notes.musayev.com &&
+git status &&
 git add . &&
 git commit -m "Autocommit pages update" &&
 git push origin main &&
