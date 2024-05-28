@@ -10,6 +10,7 @@ alias vim="nvim"
 alias railstb='rails test $(git diff --name-only --diff-filter=ACMRTUXB main...HEAD | grep _test.rb)'
 alias s="subl ."
 alias ss="subl --add ."
+alias prt="yarn run prettier --no-color --write"
 
 #
 # Git
