@@ -7,6 +7,6 @@ def pinned?(path)
   File.basename(path) =~ /^9+_/
 end
 
-wildcard = File.join(NOTES_PATH, '**', '*.md')
+wildcard = File.join(NOTES_PATH, "**", "*_todo.md")
 last_note_path = Dir.glob(wildcard).grep(%r{\d+/\d{2}/.*\.md}).reject { pinned?(_1) }.max
 system("subl --add #{NOTES_PATH} #{last_note_path}")
