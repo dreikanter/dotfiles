@@ -69,6 +69,7 @@
     "Graphviz",
     "Groovy",
     // "HTMLBeautify",
+    "Haskell",
     "LaTeX",
     "LSP-copilot",
     "MarkdownEditing",
@@ -134,6 +135,7 @@
   "wrap_width": 80,
   "theme": "Spacegray Eighties.sublime-theme",
   "font_size": 14,
-  "color_scheme": "Packages/User/base16-eighties (SL).tmTheme",
+  // "color_scheme": "Packages/User/base16-eighties-custom.tmTheme",
+  "color_scheme": "base16-eighties-custom.sublime-color-scheme",
   "index_files": true,
 }

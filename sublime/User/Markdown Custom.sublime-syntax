@@ -1,0 +1,29 @@
+%YAML 1.2
+---
+name: Custom Markdown
+file_extensions:
+  - md
+scope: text.html.markdown
+contexts:
+  main:
+    - match: '\[x\]'
+      scope: markup.other.list.checkedsquare.markdown
+    - match: '\[ \]'
+      scope: markup.other.list.uncheckedsquare.markdown
+    # Add basic Markdown rules here
+    - include: inline
+    - include: block
+
+  inline:
+    # Add basic inline Markdown rules here
+    # Example: bold text
+    - match: '\*\*(.+?)\*\*'
+      scope: markup.bold.markdown
+    # Add other inline rules as needed
+
+  block:
+    # Add basic block Markdown rules here
+    # Example: headers
+    - match: '^#{1,6}\s.+'
+      scope: markup.heading.markdown
+    # Add other block rules as needed
