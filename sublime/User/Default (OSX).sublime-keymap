@@ -1,19 +1,20 @@
 [
   { "keys": ["super+shift+t"], "command": "open_recent_file", "args": {"index": 0 } },
 
+  // Avoid "Open" dialog from popping up
   { "keys": ["super+o"], "command": "show_overlay", "args": {"overlay": "goto", "show_files": true} },
 
   { "keys": ["ctrl+u"], "command": "lower_case" },
   { "keys": ["ctrl+shift+u"], "command": "upper_case" },
 
-  { "keys": ["super+d"], "command": "find_under_expand" },
+  // { "keys": ["super+d"], "command": "find_under_expand" },
 
   { "keys": ["super+up"], "command": "move_to", "args": {"to": "bof", "extend": false } },
   { "keys": ["super+down"], "command": "move_to", "args": {"to": "eof", "extend": false } },
 
   { "keys": ["super+0"], "command": "reset_font_size" },
 
-  { "keys": ["ctrl+k", "ctrl+d"], "command": "find_under_expand_skip" },
+  // { "keys": ["ctrl+k", "ctrl+d"], "command": "find_under_expand_skip" },
 
   { "keys": ["ctrl+a"], "command": "alignment" },
   { "keys": ["ctrl+j"], "command": "join_lines" },
@@ -41,21 +42,18 @@
       "cells": [[0, 0, 1, 1]]
     }
   },
-  // {
-  //   "keys": ["super+alt+shift+2"],
-  //   "command": "set_layout",
-  //   "args":
-  //   {
-  //     "cols": [0.0, 0.5, 1.0],
-  //     "rows": [0.0, 1.0],
-  //     "cells": [[0, 0, 1, 1], [1, 0, 2, 1]]
-  //   }
-  // },
 
-  // InsertData
+  //
+  // Custom commands
+  //
+
   {
     "keys": ["super+k", "super+t"],
-    "command": "insert_date"
+    "command": "insert_current_date"
+  },
+  {
+    "keys": ["super+k", "super+i"],
+    "command": "insert_inline_date"
   },
 
   // Autorename file based on a slug value from YAML frontmatter
@@ -80,5 +78,5 @@
             "key": "setting.copilot.completion.is_visible"
         }
     ]
-},
+  },
 ]
