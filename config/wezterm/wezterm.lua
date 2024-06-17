@@ -11,10 +11,7 @@ return {
     {
       key = "k",
       mods = "CMD",
-      action = action.Multiple {
-        action.ClearScrollback("ScrollbackAndViewport"),
-        action.SendKey { key = "L", mods = "CTRL" },
-      },
+      action = action.ClearScrollback("ScrollbackAndViewport"),
     },
     { key = "f", mods = "CMD", action = action.Search("CurrentSelectionOrEmptyString"), },
     { key = "q", mods = "CMD", action = action.QuitApplication },
