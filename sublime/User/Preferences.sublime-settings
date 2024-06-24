@@ -96,9 +96,8 @@
   "match_brackets_braces": true,
   "match_brackets_content": true,
   "match_brackets_square": true,
-  // "mini_diff": "auto",
-  // // "rubocop_path": "/Users/alex/.rbenv/shims/rubocop",
-  // // "ruby_path": "/Users/alex/.rbenv/shims/ruby",
+  // "rubocop_path": "/Users/alex/.rbenv/shims/rubocop",
+  // "ruby_path": "/Users/alex/.rbenv/shims/ruby",
   "rubocop_path": "/Users/alex/.asdf/shims/rubocop",
   "ruby_path": "/Users/alex/.asdf/shims/ruby",
   "rulers":
@@ -106,7 +105,6 @@
     80,
     120
   ],
-  // "scroll_speed": 0,
   "shift_tab_unindent": true,
   // "show_encoding": true,
   "show_full_path": true,
@@ -134,7 +132,7 @@
   "word_wrap": false,
   "wrap_width": 80,
   "theme": "Spacegray Eighties.sublime-theme",
-  "font_size": 14,
+  "font_size": 13,
   // "color_scheme": "Packages/User/base16-eighties-custom.tmTheme",
   "color_scheme": "base16-eighties-custom.sublime-color-scheme",
   "index_files": true,
