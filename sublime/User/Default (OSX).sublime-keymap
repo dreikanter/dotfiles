@@ -79,4 +79,8 @@
         }
     ]
   },
+
+  // SideBarEnhancements
+  // https://github.com/titoBouzout/SideBarEnhancements/blob/st3/Commands.sublime-commands
+  { "keys": ["super+k", "super+p"], "command": "side_bar_copy_path_relative_from_project" },
 ]
