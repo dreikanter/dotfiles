@@ -31,15 +31,18 @@ def update_file_names(src_dir)
   Dir.glob("#{src_dir}/**/*.md") do |file_name|
     uid = extract_uid(file_name)
     next unless uid
-    slug = extract_slug(file_name).to_s
-    new_file_name = File.join(File.dirname(file_name), "#{uid}#{"_" unless slug.empty?}#{slugify(slug)}#{File.extname(file_name)}")
+
+    slug = slugify(extract_slug(file_name).to_s)
+    extension = File.extname(file_name)
+    new_file_name = File.join(File.dirname(file_name), "#{uid}#{"_" unless slug.empty?}#{slug}#{extension}")
 
     if new_file_name != file_name
       FileUtils.mv(file_name, new_file_name)
 
-      diff_after = File.join(Pathname.new(file_name).relative_path_from(src_dir).dirname, "#{uid}_#{GREEN}#{slugify(slug)}#{CLEAR}#{File.extname(file_name)}")
+      rel_dir_path = Pathname.new(file_name).relative_path_from(src_dir)
+      diff_after = File.join(rel_dir_path.dirname, "#{uid}#{"_" unless slug.empty?}#{GREEN}#{slug}#{CLEAR}#{extension}")
 
-      puts "- #{Pathname.new(file_name).relative_path_from(src_dir)}"
+      puts "- #{original_path}"
       puts "+ #{diff_after}"
       puts
     end
@@ -49,14 +52,14 @@ end
 def empty_file_names(src_dir)
   [].tap do |result|
     Dir.glob("#{src_dir}/**/*.md") do |file_name|
-      result << file_name if File.size(file_name) < 3
+      result << file_name if File.size(file_name) < 3 && File.read(file_name).strip.empty?
     end
   end
 end
 
 src_dir = File.expand_path(ENV["PUBLISH_NOTES_SOURCE_PATH"] || "~/Dropbox/Notes")
 
-if src_dir.nil?
+unless src_dir
   puts "Missing PUBLISH_NOTES_SOURCE_PATH environment variable"
   exit 1
 end
