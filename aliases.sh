@@ -69,3 +69,6 @@ gpf() {
 killport() { kill -9 $(lsof -t -i:$1) }
 
 alias rc="PAGER=cat rails console"
+
+# Requires npm install pg-formatter -g
+alias sqlf="pbpaste > /tmp/pg-formatter-sql.sql && pg-formatter /tmp/pg-formatter-sql.sql && rm /tmp/pg-formatter-sql.sql"
