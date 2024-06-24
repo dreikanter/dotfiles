@@ -1,11 +1,12 @@
 <snippet>
-    <tabTrigger>yy</tabTrigger>
+    <tabTrigger>yyy</tabTrigger>
     <scope>text.html.markdown</scope>
-    <description>Add frontmatter slug</description>
+    <description>Add frontmatter with all fields</description>
     <content><![CDATA[---
 slug: ${1:slug}
 tags: []
 ---
+
 
 ]]></content>
 </snippet>
