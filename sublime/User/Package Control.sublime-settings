@@ -17,6 +17,7 @@
 		"EditorConfig",
 		"Elixir",
 		"Emmet",
+		"FindKeyConflicts",
 		"GitGutter",
 		"Gitignored File Excluder",
 		"HTML-CSS-JS Prettify",
