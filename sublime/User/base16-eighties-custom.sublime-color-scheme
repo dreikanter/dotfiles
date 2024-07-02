@@ -291,20 +291,5 @@
             "foreground": "#00FF00",
             "background": "var(background)"
         },
-        // {
-        //     "scope": "markup.other.list.uncheckedsquare.markdown",
-        //     "foreground": "#FF0000",
-        //     "background": "var(background)"
-        // },
-        {
-            "scope": "markup.bold.markdown",
-            "foreground": "var(foreground)",
-            "font_style": "bold"
-        },
-        {
-            "scope": "markup.heading.markdown",
-            "foreground": "var(foreground)",
-            "font_style": "bold"
-        }
     ]
 }
