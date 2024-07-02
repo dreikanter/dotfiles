@@ -42,7 +42,7 @@ def update_file_names(src_dir)
       rel_dir_path = Pathname.new(file_name).relative_path_from(src_dir)
       diff_after = File.join(rel_dir_path.dirname, "#{uid}#{"_" unless slug.empty?}#{GREEN}#{slug}#{CLEAR}#{extension}")
 
-      puts "- #{original_path}"
+      puts "- #{rel_dir_path}"
       puts "+ #{diff_after}"
       puts
     end
