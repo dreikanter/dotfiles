@@ -72,3 +72,15 @@ alias rc="PAGER=cat rails console"
 
 # Requires npm install pg-formatter -g
 alias sqlf="pbpaste > /tmp/pg-formatter-sql.sql && pg-formatter /tmp/pg-formatter-sql.sql && rm /tmp/pg-formatter-sql.sql"
+
+# Usage: railsi banana.banana
+# The default locale is "en"
+railsi() {
+  ruby -rjson -ryaml -e "
+    file = 'config/locales/en.yml'
+    path = 'en.' + ARGV[0]
+    data = YAML.load_file(file)
+    result = path ? data.dig(*path.split('.')) : data
+    puts JSON.pretty_generate(result)
+  " "$1"
+}
