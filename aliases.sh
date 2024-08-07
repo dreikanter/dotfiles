@@ -84,3 +84,14 @@ railsi() {
     puts JSON.pretty_generate(result)
   " "$1"
 }
+
+# Show diff Rails project routing between the `main` and the current branch HEAD revisions
+railsroutesdiff() {
+  current_branch=$(git rev-parse --abbrev-ref HEAD)
+
+  git checkout main &&
+    rails routes > before.txt &&
+    git checkout "$current_branch" &&
+    rails routes > after.txt &&
+    diff -u -b before.txt after.txt | diff-so-fancy
+}
