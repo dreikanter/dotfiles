@@ -1,13 +1,24 @@
-// Settings in here override those in "LSP/LSP.sublime-settings"
 {
   "clients": {
-        "ruby": {
-            "enabled": true,
-            "command": ["/Users/alex/.asdf/shims/solargraph", "stdio"],
-            "selector": "source.ruby | text.html.ruby",
-            "initializationOptions": {
-                "diagnostics": false
-            }
-        }
+    "ruby": {
+      "enabled": true,
+      "command": [
+        "/Users/alex/.asdf/shims/solargraph",
+        "stdio"
+      ],
+      "selector": "source.ruby | text.html.ruby",
+      "initializationOptions": {
+        "diagnostics": false
+      }
+    },
+    "sorbet": {
+      "enabled": true,
+      "command": [
+        "~/bin/lsp_sorbet"
+      ],
+      "selector": "source.ruby",
+      "initializationOptions": {},
+      "settings": {}
     }
+  }
 }

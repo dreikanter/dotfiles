@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+~/.asdf/shims/srb tc --lsp --disable-watchman --ignore node_modules --ignore vendor --ignore rbi --dir .

@@ -81,11 +81,11 @@
   //   "draw_normal",
   //   "draw_active"
   // ],
-  // "index_exclude_patterns":
-  // [
-  //   "*.log",
-  //   "node_modules"
-  // ],
+  "index_exclude_patterns":
+  [
+    "*.log",
+    "node_modules"
+  ],
   // "index_exclude_gitignore": true,
   // "index_files": false,
   "line_padding_bottom": 4,
@@ -136,4 +136,5 @@
   // "color_scheme": "Packages/User/base16-eighties-custom.tmTheme",
   "color_scheme": "base16-eighties-custom.sublime-color-scheme",
   "index_files": true,
+  "index_workers": 2,
 }

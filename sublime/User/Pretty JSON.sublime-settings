@@ -205,5 +205,8 @@
     // only at the beginning of lines that may introduce
     // ASI failures (semi: false)
     "semi": false
-  }
+  },
+
+  "brace_newline": false,
+  "bracket_newline": false
 }
