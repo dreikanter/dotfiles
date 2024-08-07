@@ -13,60 +13,50 @@
   local = yellow
   remote = green
 
+[color "diff"]
+  whitespace = red reverse
+  meta = yellow bold
+
 [color "status"]
   added = yellow
   changed = green
   untracked = cyan
 
-[color]
-  ui = true
-
-[color "diff"]
-  whitespace = red reverse
-  meta = yellow bold
-
 [core]
   whitespace=fix,-indent-with-non-tab,trailing-space,cr-at-eol
   excludesfile = ~/.gitignore_global
-
-[alias]
-  st = status
-  ci = commit
-  cm = commit -m
-  br = branch
-  co = checkout
-  df = diff
-  dc = diff --cached
-  dt = difftool
-  lg = log -p
-  lol = log --graph --decorate --pretty=oneline --abbrev-commit
-  lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
-  ls = ls-files
-  ign = ls-files -o -i --exclude-standard
-  ad = difftool --tool=araxis --dir-diff
-  ads = difftool --tool=araxis --dir-diff --staged
-  dlog = "!f() { GIT_EXTERNAL_DIFF=difft git log -p --ext-diff $@; }; f"
-	stush = stash --include-untracked
-
-[push]
-  default = current
+	# pager = diff-so-fancy | less --tabs=4 -RF
 
 [credential]
 	helper = osxkeychain
 
+[init]
+  defaultBanch = master
+  defaultBranch = main
+
+[pager]
+  difftool = false
+
+[push]
+  default = matching
+
+[maintenance]
+	repo = /Users/alex/zipline/zipline-app
+
+#
+# Diff and merge
+#
+
 # [diff]
-#  tool = difftastic
-#  external = difft
+#   tool = araxis
+#   indentHeuristic = true
+#   compactionHeuristic = true
 
 [difftool]
   prompt = false
 
 [difftool "bcomp"]
   cmd = /usr/local/bin/bcomp \"$LOCAL\" \"$REMOTE\"
-
-[mergetool "bcomp"]
-  cmd = /usr/local/bin/bcomp \"$LOCAL\" \"$REMOTE\" \"$BASE\" \"$MERGED\"
-  trustExitCode = true
 
 [difftool "araxis"]
   path = /Applications/Araxis Merge.app/Contents/Utilities/compare
@@ -75,28 +65,47 @@
 [difftool "difftastic"]
   cmd = difft "$LOCAL" "$REMOTE"
 
-[pager]
-  difftool = false
+[merge]
+  summary = true
+  tool = vscode
+  conflictstyle = diff3
 
 [mergetool "araxis"]
   path = /Applications/Araxis Merge.app/Contents/Utilities/compare
   prompt = false
 
-[diff]
-  tool = araxis
-  indentHeuristic = true
-  compactionHeuristic = true
+[mergetool "bcomp"]
+  cmd = /usr/local/bin/bcomp \"$LOCAL\" \"$REMOTE\" \"$BASE\" \"$MERGED\"
+  trustExitCode = true
 
-[merge]
-  summary = true
-	tool = vscode
-  conflictstyle = diff3
+#
+# Aliases
+#
 
-[push]
-  default = matching
-
-[init]
-	defaultBanch = master
-	defaultBranch = main
-[maintenance]
-	repo = /Users/alex/zipline/zipline-app
+[alias]
+  a = add
+  b = branch
+  c = commit
+  cb = checkout -b
+  cm = commit -m
+  d = diff
+  da = difftool --tool=araxis --dir-diff
+  das = difftool --tool=araxis --dir-diff --staged
+  dtt = difftool --tool=difftastic --dir-diff --staged
+  dc = diff --cached
+  dt = difftool
+  f = fetch
+  g = grep
+  ign = ls-files -o -i --exclude-standard
+  l = log
+  lg = log -p
+  lol = log --graph --decorate --pretty=oneline --abbrev-commit
+  lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
+  ls = ls-files
+  m = merge
+  o = checkout
+  p = pull
+  pro = pull --rebase origin
+  prom = pull --rebase origin main
+  s = status
+  w = whatchanged
