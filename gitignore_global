@@ -7,3 +7,5 @@
 .ctags
 /log
 /tmp
+
+*_do_not_commit*
