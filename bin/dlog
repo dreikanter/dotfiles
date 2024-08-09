@@ -1,0 +1,29 @@
+#!/usr/bin/env ruby
+
+# Usage: tail -f log/development.log | dlog
+
+buffer = []
+capturing = false
+
+ARGF.each_line do |line|
+  if line.include?("--->")
+    if capturing
+      buffer << line
+    else
+      capturing = true
+      buffer = [line]
+    end
+  elsif capturing
+    if line.match?(/^[DIWEFC],/)
+      puts buffer.join.strip
+      $stdout.flush
+      buffer = []
+      capturing = false
+    else
+      buffer << line
+    end
+  end
+end
+
+# This part won't be reached when using tail -f, but we'll keep it for completeness
+puts buffer.join.strip if !buffer.empty?
