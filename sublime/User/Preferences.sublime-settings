@@ -68,9 +68,7 @@
     "Gitignored File Excluder",
     "Graphviz",
     "Groovy",
-    // "HTMLBeautify",
     "Haskell",
-    "LaTeX",
     "LSP",
     "LSP-copilot",
     "LSP-json",
@@ -131,13 +129,12 @@
   // // modified by you. If there is trailing white space in other parts of the
   // // file they are left alone.
   "trim_trailing_white_space_on_save": true,
-
   "word_wrap": false,
   "wrap_width": 80,
-  "theme": "Spacegray Eighties.sublime-theme",
   "font_size": 15,
-  // "color_scheme": "Packages/User/base16-eighties-custom.tmTheme",
   "color_scheme": "base16-eighties-custom.sublime-color-scheme",
+  /*"color_scheme": "base16-eighties-custom.sublime-color-scheme",*/
   "index_files": true,
   "index_workers": 2,
+  "theme": "Spacegray Eighties.sublime-theme",
 }
