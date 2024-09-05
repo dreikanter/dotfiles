@@ -108,4 +108,8 @@
           {"key": "auto_complete_visible", "operand": false}
       ]
   },
+  {
+    "keys": ["ctrl+o"],
+    "command": "open_note_reference"
+  },
 ]
