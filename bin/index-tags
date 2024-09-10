@@ -1,0 +1,34 @@
+#!/usr/bin/env ruby
+
+require "date"
+require "fileutils"
+require "json"
+require "pry"
+require "psych"
+require "yaml"
+
+notes_path = ENV["NOTES_PATH"]
+result = Hash.new { |h, k| h[k] = [] }
+
+Dir.glob(File.join(notes_path, "**/*.md")).each do |file|
+  content = File.read(file)
+  next unless content =~ /\A---$/
+
+  yaml = YAML.safe_load(content.split(/^---$/, 3)[1])
+  tags = yaml["tags"]
+  tags.each { result[_1] << File.basename(file, File.extname(file)) } if tags
+rescue StandardError => e
+  puts "error reading YAML frontmetter: #{file}"
+end
+
+tags_path = File.join(notes_path, "tags")
+FileUtils.rm_rf(tags_path)
+FileUtils.mkdir_p(tags_path)
+
+result.sort.each do |tag, filenames|
+  puts "#{tag} (#{filenames.count})"
+  tag_file = File.join(tags_path, "#{tag.downcase}.md")
+  File.write(tag_file, filenames.join("\n"))
+end
+
+puts "\n(#{result.count} tags)"
