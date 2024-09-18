@@ -3,11 +3,18 @@
 require "date"
 require "fileutils"
 require "json"
+require "pathname"
 require "pry"
 require "psych"
 require "yaml"
 
 notes_path = ENV["NOTES_PATH"]
+tags_path = File.join(notes_path, "tags")
+
+if File.expand_path(notes_path) == File.expand_path(tags_path)
+  raise "tags path should be different from the root notes path"
+end
+
 result = Hash.new { |h, k| h[k] = [] }
 
 Dir.glob(File.join(notes_path, "**/*.md")).each do |file|
@@ -21,7 +28,6 @@ rescue StandardError => e
   puts "error reading YAML frontmetter: #{file}"
 end
 
-tags_path = File.join(notes_path, "tags")
 FileUtils.rm_rf(tags_path)
 FileUtils.mkdir_p(tags_path)
 
