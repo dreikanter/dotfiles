@@ -6,7 +6,6 @@ import re
 class NotesBrowserCommand(sublime_plugin.WindowCommand):
     def run(self):
         self.base_dir = self._base_dir()
-        self.transient_view = None  # Initialize transient_view
         self.tag_files = self._collect_tags()
         self.tags = sorted(self.tag_files.keys())
 
@@ -58,45 +57,39 @@ class NotesBrowserCommand(sublime_plugin.WindowCommand):
 
         self.selected_tag = self.tags[index]
         files = self.tag_files[self.selected_tag]
-        display_files = [os.path.relpath(f, self.base_dir) for f in files]
         self.files = files
+
+        # Build display list with file previews
+        display_files = []
+        for f in files:
+            file_path = os.path.relpath(f, self.base_dir)
+            try:
+                with open(f, 'r', encoding='utf-8') as file_obj:
+                    # Read the first few lines to use as a preview
+                    preview_lines = []
+                    for _ in range(3):  # Adjust the number of lines as needed
+                        line = file_obj.readline()
+                        if not line:
+                            break
+                        line = line.strip()
+                        if line:
+                            preview_lines.append(line)
+                    preview_text = ' '.join(preview_lines)
+            except Exception as e:
+                preview_text = ''
+            display_files.append([file_path, preview_text])
 
         self.window.show_quick_panel(
             display_files,
-            self._on_file_selected,
-            on_highlight=self._on_file_highlighted
+            self._on_file_selected
         )
 
     def _on_file_selected(self, index):
-        # Close any transient view when the quick panel is closed or a selection is made
-        if self.transient_view and self.transient_view.is_valid():
-            self.window.focus_view(self.transient_view)
-            self.window.run_command('close_file')
-            self.transient_view = None
-
         if index == -1:
-            # User canceled the quick panel
             return
 
         selected_file = self.files[index]
         self.window.open_file(selected_file)
-
-    def _on_file_highlighted(self, index):
-        if index == -1:
-            return
-
-        highlighted_file = self.files[index]
-
-        # Close the previous transient view if it exists
-        if self.transient_view and self.transient_view.is_valid():
-            self.window.focus_view(self.transient_view)
-            self.window.run_command('close_file')
-
-        # Open the highlighted file in a transient view
-        self.transient_view = self.window.open_file(
-            highlighted_file,
-            sublime.TRANSIENT
-        )
 
     def _base_dir(self):
         return os.path.expanduser("~/Dropbox/Notes/")
