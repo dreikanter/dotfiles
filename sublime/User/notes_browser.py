@@ -3,6 +3,10 @@ import sublime_plugin
 import os
 import re
 
+# Compile regular expressions at the module level
+FRONTMATTER_PATTERN = re.compile(r'^---\s*\n(.*?)\n---', re.DOTALL)
+TITLE_PATTERN = re.compile(r'^title:\s*(.*)', re.MULTILINE)
+
 class NotesBrowserCommand(sublime_plugin.WindowCommand):
     def run(self):
         self.base_dir = self._base_dir()
@@ -10,7 +14,7 @@ class NotesBrowserCommand(sublime_plugin.WindowCommand):
         self.tags = sorted(self.tag_files.keys())
 
         if not self.tags:
-            sublime.message_dialog("No tags found in '{}'".format(self.base_dir))
+            sublime.message_dialog(f"No tags found in '{self.base_dir}'")
             return
 
         self.window.show_quick_panel(self.tags, self._on_tag_selected)
@@ -18,10 +22,6 @@ class NotesBrowserCommand(sublime_plugin.WindowCommand):
     def _collect_tags(self):
         tag_files = {}
 
-        # Pattern to match YAML frontmatter
-        frontmatter_pattern = re.compile(r'^---\s*\n(.*?)\n---', re.DOTALL)
-
-        # Pattern to match the 'tags' field within the frontmatter
         tags_pattern = re.compile(r'^tags:\s*\[(.*?)\]', re.MULTILINE)
 
         for root, _, files in os.walk(self.base_dir):
@@ -36,7 +36,7 @@ class NotesBrowserCommand(sublime_plugin.WindowCommand):
                         print(f"Error reading file {filepath}: {e}")
                         continue
 
-                    frontmatter_match = frontmatter_pattern.match(content)
+                    frontmatter_match = FRONTMATTER_PATTERN.match(content)
 
                     if frontmatter_match:
                         frontmatter = frontmatter_match.group(1)
@@ -59,30 +59,77 @@ class NotesBrowserCommand(sublime_plugin.WindowCommand):
         files = self.tag_files[self.selected_tag]
         self.files = files
 
-        # Build display list with file previews
         display_files = []
+
         for f in files:
             file_path = os.path.relpath(f, self.base_dir)
-            try:
-                with open(f, 'r', encoding='utf-8') as file_obj:
-                    # Read the first few lines to use as a preview
-                    preview_lines = []
-                    for _ in range(3):  # Adjust the number of lines as needed
-                        line = file_obj.readline()
-                        if not line:
-                            break
-                        line = line.strip()
-                        if line:
-                            preview_lines.append(line)
-                    preview_text = ' '.join(preview_lines)
-            except Exception as e:
-                preview_text = ''
+            preview_text = self._get_preview_text(f)
             display_files.append([file_path, preview_text])
 
         self.window.show_quick_panel(
             display_files,
             self._on_file_selected
         )
+
+    def _get_preview_text(self, filepath):
+        try:
+            with open(filepath, 'r', encoding='utf-8') as file_obj:
+                content = file_obj.read()
+                return self._extract_preview_text(content)
+        except Exception as e:
+            print(f"Error reading file {filepath}: {e}")
+            return ''
+
+    def _extract_preview_text(self, content):
+        frontmatter_match = FRONTMATTER_PATTERN.match(content)
+
+        if frontmatter_match:
+            frontmatter = frontmatter_match.group(1)
+            title = self._extract_title_from_frontmatter(frontmatter)
+
+            if title:
+                return title
+            else:
+                # No title in frontmatter, check for Markdown heading
+                content_after_frontmatter = content[frontmatter_match.end():].lstrip('\n')
+                heading = self._extract_heading(content_after_frontmatter)
+                if heading:
+                    return heading
+        else:
+            # No frontmatter, check for Markdown heading
+            heading = self._extract_heading(content)
+
+            if heading:
+                return heading
+
+        # Use a snippet from the beginning of the content
+        snippet = content.strip().split('\n', 1)[0]
+        return snippet
+
+    def _extract_title_from_frontmatter(self, frontmatter):
+        title_match = TITLE_PATTERN.search(frontmatter)
+
+        if title_match:
+            title = title_match.group(1).strip().strip("'\"")
+            return title
+
+        return ''
+
+    def _extract_heading(self, content):
+        lines = content.splitlines()
+
+        for line in lines:
+            stripped_line = line.strip()
+
+            if stripped_line:
+                if stripped_line.startswith('# '):
+                    return stripped_line[2:].strip()
+                elif stripped_line.startswith('#'):
+                    return stripped_line.lstrip('#').strip()
+                else:
+                    return stripped_line
+
+        return ''
 
     def _on_file_selected(self, index):
         if index == -1:
