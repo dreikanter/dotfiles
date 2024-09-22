@@ -17,16 +17,21 @@ alias prt="yarn run prettier --no-color --write"
 #
 
 alias g="git status -s"
-alias gl="git log --pretty=format:\"%C(yellow)%h%Creset %ad | %Cgreen%s%Creset %Cred%d%Creset %Cblue[%an]\" --date=short -n 20"
-alias gl1="git log --pretty=format:\"%s\" -n 15"
-alias gbl="git log --no-merges HEAD ^master --reverse --pretty=\"format:* %s\" --abbrev-commit"
+
+# Show recent commits log
+alias gl="git log --pretty=format:\"%C(yellow)%h%Creset [%ad] %Cgreen%s%Creset %Cred%d%Creset %Cblue[%an]\" --date=short -n 20"
+
+# List recent branches
 alias gbr="git branch --sort=committerdate --color --format=\"%(color:red)%(objectname:short)%(color:reset) %(HEAD) %(color:yellow)%(refname:short)%(color:reset) (%(color:green)%(committerdate:relative)%(color:reset))\" | tail -n 10"
+
 alias gph="git push -u origin HEAD"
+
 alias gdf="git diff --name-only main...HEAD"
 alias gdd="GIT_EXTERNAL_DIFF=difft git diff"
 
 gcm() { git commit -m $1 }
 
+# Switch branch interactively
 function gb() {
   git checkout "$(git branch --sort=committerdate | tac | fzf --height 20 | tr -d '[:space:]')"
 }
