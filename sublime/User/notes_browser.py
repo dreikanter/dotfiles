@@ -6,12 +6,13 @@ import re
 # Compile regular expressions at the module level
 FRONTMATTER_PATTERN = re.compile(r'^---\s*\n(.*?)\n---', re.DOTALL)
 TITLE_PATTERN = re.compile(r'^title:\s*(.*)', re.MULTILINE)
+TAGS_PATTERN = re.compile(r'^tags:\s*\[(.*?)\]', re.MULTILINE)
 
 class NotesBrowserCommand(sublime_plugin.WindowCommand):
     def run(self):
         self.base_dir = self._base_dir()
-        self.tag_files = self._collect_tags()
-        self.tags = sorted(self.tag_files.keys())
+        self.tags_index = self._build_index()
+        self.tags = sorted(self.tags_index.keys())
 
         if not self.tags:
             sublime.message_dialog(f"No tags found in '{self.base_dir}'")
@@ -19,10 +20,8 @@ class NotesBrowserCommand(sublime_plugin.WindowCommand):
 
         self.window.show_quick_panel(self.tags, self._on_tag_selected)
 
-    def _collect_tags(self):
-        tag_files = {}
-
-        tags_pattern = re.compile(r'^tags:\s*\[(.*?)\]', re.MULTILINE)
+    def _build_index(self):
+        tags_index = {}
 
         for root, _, files in os.walk(self.base_dir):
             for filename in files:
@@ -40,37 +39,49 @@ class NotesBrowserCommand(sublime_plugin.WindowCommand):
 
                     if frontmatter_match:
                         frontmatter = frontmatter_match.group(1)
-                        tags_match = tags_pattern.search(frontmatter)
+                        tags_match = TAGS_PATTERN.search(frontmatter)
 
                         if tags_match:
                             tags_str = tags_match.group(1)
                             tags = [tag.strip().strip("'\"") for tag in tags_str.split(',')]
 
+                            file_info = {
+                                'path': filepath,
+                                'content': content
+                            }
+
                             for tag in tags:
                                 if tag:
-                                    tag_files.setdefault(tag, []).append(filepath)
-        return tag_files
+                                    if tag not in tags_index:
+                                        tags_index[tag] = []
+                                    tags_index[tag].append(file_info)
+
+        return tags_index
 
     def _on_tag_selected(self, index):
         if index == -1:
             return
 
         self.selected_tag = self.tags[index]
-        files = self.tag_files[self.selected_tag]
+        files_info = self.tags_index[self.selected_tag]
 
         # Prepare a list of file info dictionaries
-        files_info = []
-        for f in files:
-            base_name = self._get_base_file_name(f)
-            preview = self._get_preview(f)
-            files_info.append({'path': f, 'name': base_name, 'preview': preview})
+        display_files_info = []
+        for file_info in files_info:
+            base_name = self._get_base_file_name(file_info['path'])
+            preview = self._extract_preview(file_info['content'])
+            display_files_info.append({
+                'path': file_info['path'],
+                'name': base_name,
+                'preview': preview
+            })
 
-        # Sort files_info by base_name
-        files_info.sort(key=lambda x: x['name'])
+        # Sort display_files_info by base_name
+        display_files_info.sort(key=lambda x: x['name'])
 
-        # Update self.files and prepare display_files
-        self.files = [info['path'] for info in files_info]
-        display_files = [[info['name'], info['preview']] for info in files_info]
+        # Update self.files_info and prepare display_files
+        self.files_info = display_files_info
+        display_files = [[info['name'], info['preview']] for info in display_files_info]
 
         self.window.show_quick_panel(
             display_files,
@@ -79,15 +90,6 @@ class NotesBrowserCommand(sublime_plugin.WindowCommand):
 
     def _get_base_file_name(self, filepath):
         return os.path.splitext(os.path.basename(filepath))[0]
-
-    def _get_preview(self, filepath):
-        try:
-            with open(filepath, 'r', encoding='utf-8') as file_obj:
-                content = file_obj.read()
-                return self._extract_preview(content)
-        except Exception as e:
-            print(f"Error reading file {filepath}: {e}")
-            return ''
 
     def _extract_preview(self, content):
         frontmatter_match = FRONTMATTER_PATTERN.match(content)
@@ -144,7 +146,7 @@ class NotesBrowserCommand(sublime_plugin.WindowCommand):
         if index == -1:
             return
 
-        selected_file = self.files[index]
+        selected_file = self.files_info[index]['path']
         self.window.open_file(selected_file)
 
     def _base_dir(self):
