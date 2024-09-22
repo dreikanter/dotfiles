@@ -60,7 +60,8 @@ class NotesBrowserCommand(sublime_plugin.WindowCommand):
 
             if tags:
                 for tag in tags:
-                    tags_index.setdefault(tag, []).append(file_info)
+                    if tag:
+                        tags_index.setdefault(tag, []).append(file_info)
             else:
                 tags_index['UNTAGGED'].append(file_info)
         else:
@@ -68,7 +69,10 @@ class NotesBrowserCommand(sublime_plugin.WindowCommand):
 
     def _extract_tags(self, frontmatter):
         tags_match = TAGS_PATTERN.search(frontmatter)
-        return [tag.strip().strip("'\"") for tag in tags_match.group(1).split(',')] if tags_match else []
+        if tags_match:
+            tags = [tag.strip().strip("'\"") for tag in tags_match.group(1).split(',')]
+            return [tag for tag in tags if tag]
+        return []
 
     def _sort_index(self, tags_index):
         for files in tags_index.values():
