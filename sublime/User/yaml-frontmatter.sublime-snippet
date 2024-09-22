@@ -3,8 +3,9 @@
     <scope>text.html.markdown</scope>
     <description>Add frontmatter with all fields</description>
     <content><![CDATA[---
-slug: ${1:slug}
-tags: []
+title: ${1:title}
+slug: ${2:slug}
+tags: [${3:tags}]
 ---
 
 
