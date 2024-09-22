@@ -62,9 +62,9 @@ class NotesBrowserCommand(sublime_plugin.WindowCommand):
         display_files = []
 
         for f in files:
-            file_path = os.path.relpath(f, self.base_dir)
+            base_file_name = os.path.splitext(os.path.basename(f))[0]
             preview_text = self._get_preview_text(f)
-            display_files.append([file_path, preview_text])
+            display_files.append([base_file_name, preview_text])
 
         self.window.show_quick_panel(
             display_files,
