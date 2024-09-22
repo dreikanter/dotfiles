@@ -3,25 +3,26 @@ import sublime_plugin
 import os
 import re
 
-# Compile regular expressions at the module level
 FRONTMATTER_PATTERN = re.compile(r'^---\s*\n(.*?)\n---', re.DOTALL)
 TITLE_PATTERN = re.compile(r'^title:\s*(.*)', re.MULTILINE)
 TAGS_PATTERN = re.compile(r'^tags:\s*\[(.*?)\]', re.MULTILINE)
+FILENAME_PATTERN = re.compile(r'^(\d+)(\d{4})_(\d+)')
+SPECIAL_TAGS = ['ALL', 'UNTAGGED']
 
 class NotesBrowserCommand(sublime_plugin.WindowCommand):
     def run(self):
         self.base_dir = self._base_dir()
         self.tags_index = self._build_index()
-        self.tags = sorted(self.tags_index.keys())
+        self.tags = SPECIAL_TAGS + sorted(tag for tag in self.tags_index.keys() if tag not in SPECIAL_TAGS)
 
         if not self.tags:
-            sublime.message_dialog(f"No tags found in '{self.base_dir}'")
+            sublime.message_dialog(f"No files found in '{self.base_dir}'")
             return
 
         self.window.show_quick_panel(self.tags, self._on_tag_selected)
 
     def _build_index(self):
-        tags_index = {}
+        tags_index = {tag: [] for tag in SPECIAL_TAGS}
 
         for root, _, files in os.walk(self.base_dir):
             for filename in files:
@@ -35,8 +36,17 @@ class NotesBrowserCommand(sublime_plugin.WindowCommand):
                         print(f"Error reading file {filepath}: {e}")
                         continue
 
-                    frontmatter_match = FRONTMATTER_PATTERN.match(content)
+                    note_id = self._extract_note_id(filename)
 
+                    file_info = {
+                        'path': filepath,
+                        'content': content,
+                        'note_id': note_id
+                    }
+
+                    tags_index['ALL'].append(file_info)
+
+                    frontmatter_match = FRONTMATTER_PATTERN.match(content)
                     if frontmatter_match:
                         frontmatter = frontmatter_match.group(1)
                         tags_match = TAGS_PATTERN.search(frontmatter)
@@ -45,18 +55,33 @@ class NotesBrowserCommand(sublime_plugin.WindowCommand):
                             tags_str = tags_match.group(1)
                             tags = [tag.strip().strip("'\"") for tag in tags_str.split(',')]
 
-                            file_info = {
-                                'path': filepath,
-                                'content': content
-                            }
+                            if tags:
+                                for tag in tags:
+                                    if tag:
+                                        tags_index.setdefault(tag, []).append(file_info)
+                            else:
+                                tags_index['UNTAGGED'].append(file_info)
+                        else:
+                            tags_index['UNTAGGED'].append(file_info)
+                    else:
+                        tags_index['UNTAGGED'].append(file_info)
 
-                            for tag in tags:
-                                if tag:
-                                    if tag not in tags_index:
-                                        tags_index[tag] = []
-                                    tags_index[tag].append(file_info)
+        # Sort each tag's file list in reverse order of unique numbers
+        for tag in tags_index:
+            tags_index[tag].sort(key=lambda x: x['note_id'], reverse=True)
 
         return tags_index
+
+    def _extract_note_id(self, filename):
+        match = FILENAME_PATTERN.match(filename)
+        if match:
+            year = match.group(1)
+            note_id_str = match.group(3)
+            try:
+                return int(year + note_id_str)
+            except ValueError:
+                print(f"Invalid unique number format in filename: {filename}")
+        return -1  # Return -1 if no valid unique number found
 
     def _on_tag_selected(self, index):
         if index == -1:
@@ -73,13 +98,11 @@ class NotesBrowserCommand(sublime_plugin.WindowCommand):
             display_files_info.append({
                 'path': file_info['path'],
                 'name': base_name,
-                'preview': preview
+                'preview': preview,
+                'note_id': file_info['note_id']
             })
 
-        # Sort display_files_info by base_name
-        display_files_info.sort(key=lambda x: x['name'])
-
-        # Update self.files_info and prepare display_files
+        display_files_info.sort(key=lambda x: x['note_id'], reverse=True)
         self.files_info = display_files_info
         display_files = [[info['name'], info['preview']] for info in display_files_info]
 
