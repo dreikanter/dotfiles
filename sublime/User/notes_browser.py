@@ -57,30 +57,39 @@ class NotesBrowserCommand(sublime_plugin.WindowCommand):
 
         self.selected_tag = self.tags[index]
         files = self.tag_files[self.selected_tag]
-        self.files = files
 
-        display_files = []
-
+        # Prepare a list of file info dictionaries
+        files_info = []
         for f in files:
-            base_file_name = os.path.splitext(os.path.basename(f))[0]
-            preview_text = self._get_preview_text(f)
-            display_files.append([base_file_name, preview_text])
+            base_name = self._get_base_file_name(f)
+            preview = self._get_preview(f)
+            files_info.append({'path': f, 'name': base_name, 'preview': preview})
+
+        # Sort files_info by base_name
+        files_info.sort(key=lambda x: x['name'])
+
+        # Update self.files and prepare display_files
+        self.files = [info['path'] for info in files_info]
+        display_files = [[info['name'], info['preview']] for info in files_info]
 
         self.window.show_quick_panel(
             display_files,
             self._on_file_selected
         )
 
-    def _get_preview_text(self, filepath):
+    def _get_base_file_name(self, filepath):
+        return os.path.splitext(os.path.basename(filepath))[0]
+
+    def _get_preview(self, filepath):
         try:
             with open(filepath, 'r', encoding='utf-8') as file_obj:
                 content = file_obj.read()
-                return self._extract_preview_text(content)
+                return self._extract_preview(content)
         except Exception as e:
             print(f"Error reading file {filepath}: {e}")
             return ''
 
-    def _extract_preview_text(self, content):
+    def _extract_preview(self, content):
         frontmatter_match = FRONTMATTER_PATTERN.match(content)
 
         if frontmatter_match:
