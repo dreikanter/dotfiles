@@ -1,0 +1,6 @@
+[
+  {
+    "caption": "Create Note",
+    "command": "create_note"
+  }
+]
