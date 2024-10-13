@@ -7,10 +7,12 @@ alias l="eza --all --long --group-directories-first"
 alias h="history -30 | cut -c 8-"
 alias k="kubectl"
 alias vim="nvim"
+alias branchtests="git diff --name-only --diff-filter=ACMRTUXB main...HEAD | grep _test.rb"
 alias railstb='rails test $(git diff --name-only --diff-filter=ACMRTUXB main...HEAD | grep _test.rb)'
 alias s="subl ."
 alias ss="subl --add ."
 alias prt="yarn run prettier --no-color --write"
+alias r=rails
 
 #
 # Git
