@@ -1,10 +1,10 @@
 #!/usr/bin/env ruby
 
 require "fileutils"
-require "yaml"
+require "json"
 
 NOTES_PATH = ENV["NOTES_PATH"]
-ID_PATH = File.join(NOTES_PATH, "id.yml")
+ID_PATH = File.join(NOTES_PATH, "id.json")
 
 def new_note_path(time)
   File.join(
@@ -14,11 +14,13 @@ def new_note_path(time)
 end
 
 def generate_new_id
-  last_id.succ.tap { File.write(ID_PATH, YAML.dump("last_id" => _1)) }
+  new_id = last_id.succ
+  File.write(ID_PATH, JSON.generate({ last_id: new_id }))
+  new_id
 end
 
 def last_id
-  Integer(YAML.load(File.read(ID_PATH)).fetch("last_id"))
+  Integer(JSON.parse(File.read(ID_PATH))["last_id"])
 rescue StandardError
   Dir.glob(File.join(NOTES_PATH, "**/*.md")).count
 end
