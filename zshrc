@@ -1,10 +1,24 @@
-# Disable autocorrect
-unsetopt correct_all
+#
+# Path
+#
+
+export PATH=$(eval echo -E $(cat ~/.dotfiles/path | tr "\n" ":")):$PATH
+
+#
+# Keybinding
+#
 
 # Home
 bindkey '^[[H' beginning-of-line
+
 # End
 bindkey '^[[F' end-of-line
+
+source "/opt/homebrew/opt/fzf/shell/key-bindings.zsh"
+
+#
+# History
+#
 
 HISTFILE=~/.history
 HISTSIZE=10000
@@ -16,12 +30,6 @@ setopt share_history
 
 # Immediately append to the history file, not just when a term is killed
 setopt inc_append_history
-
-#
-# Path
-#
-
-export PATH=$(eval echo -E $(cat ~/.dotfiles/path | tr "\n" ":")):$PATH
 
 #
 # Homebrew
@@ -93,9 +101,13 @@ fi
 # Auto-completion
 [[ $- == *i* ]] && source "/opt/homebrew/opt/fzf/shell/completion.zsh" 2> /dev/null
 
-# Key bindings
-source "/opt/homebrew/opt/fzf/shell/key-bindings.zsh"
+eval "$(atuin init zsh)"
+
+#
+# Misc
+#
+
+# Disable autocorrect
+unsetopt correct_all
 
 source /Users/alex/.config/broot/launcher/bash/br
-
-eval "$(atuin init zsh)"
