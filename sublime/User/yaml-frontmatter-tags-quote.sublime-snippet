@@ -1,7 +1,7 @@
 <snippet>
     <tabTrigger>yt</tabTrigger>
     <scope>text.html.markdown</scope>
-    <description>Add frontmatter tags</description>
+    <description>Add YAML frontmatter with tags list</description>
     <content><![CDATA[---
 tags: [${1:quote}]
 ---
