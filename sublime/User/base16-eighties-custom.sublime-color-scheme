@@ -163,7 +163,7 @@
         {
             "name": "Headings",
             "scope": "markup.heading punctuation.definition.heading, entity.name.section",
-            "foreground": "var(color07)"
+            "foreground": "#FFFFFF"
         },
         {
             "name": "Units",
@@ -200,7 +200,7 @@
         {
             "name": "Lists",
             "scope": "markup.list",
-            "foreground": "var(color06)"
+            "foreground": "#f8961e"
         },
         {
             "name": "Quotes",
