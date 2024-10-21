@@ -31,7 +31,6 @@
   ],
   "bold_folder_labels": true,
   "caret_style": "phase",
-  // "color_scheme": "Packages/User/base16-oceanicnext (SL).tmTheme",
   "ensure_newline_at_eof_on_save": true,
   "file_exclude_patterns":
   [
@@ -106,6 +105,7 @@
     80,
     120
   ],
+  "ruler_style": "stippled",
   "shift_tab_unindent": true,
   // "show_encoding": true,
   "show_full_path": true,
@@ -133,7 +133,6 @@
   "wrap_width": 80,
   "font_size": 15,
   "color_scheme": "base16-eighties-custom.sublime-color-scheme",
-  /*"color_scheme": "base16-eighties-custom.sublime-color-scheme",*/
   "index_files": true,
   "index_workers": 2,
   "theme": "Spacegray Eighties.sublime-theme",

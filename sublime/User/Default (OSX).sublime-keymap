@@ -83,6 +83,7 @@
   // SideBarEnhancements
   // https://github.com/titoBouzout/SideBarEnhancements/blob/st3/Commands.sublime-commands
   { "keys": ["super+k", "super+p"], "command": "side_bar_copy_path_relative_from_project" },
+  // { "keys": ["super+k", "super+n"], "command": "side_bar_copy_name" },
 
   //
   // LSP
@@ -111,5 +112,17 @@
   {
     "keys": ["ctrl+o"],
     "command": "open_note_reference"
+  },
+
+  //
+  // Notes Control
+  //
+  {
+    "keys": ["ctrl+b"],
+    "command": "notes_browser"
+  },
+  {
+    "keys": ["ctrl+c"],
+    "command": "copy_name"
   },
 ]
