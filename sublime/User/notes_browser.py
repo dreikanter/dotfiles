@@ -76,7 +76,7 @@ class NotesBrowserCommand(sublime_plugin.WindowCommand):
 
     def _sort_index(self, tags_index):
         for files in tags_index.values():
-            files.sort(key=lambda x: x['note_id'], reverse=True)
+            files.sort(key=lambda x: x['note_id'], reverse=False)
 
     def _extract_note_id(self, filename):
         match = FILENAME_PATTERN.match(filename)
