@@ -1,0 +1,31 @@
+#!/usr/bin/env ruby
+
+#
+# Display locale file fragment
+#
+# Usage: railsi audit.assessments.result.label_completed
+#
+
+require "json"
+require "yaml"
+
+file = "config/locales/en.yml"
+path = ARGV[0] ? "en.#{ARGV[0]}" : "en"
+
+begin
+  data = YAML.load_file(file)
+  result = path.split(".").inject(data) { |memo, key| memo&.fetch(key) }
+
+  if result.nil?
+    puts "Error: Path '#{path}' not found in the YAML file."
+    exit(1)
+  end
+
+  puts JSON.pretty_generate(result)
+rescue Errno::ENOENT
+  puts "Error: File '#{file}' not found."
+  exit(1)
+rescue => e
+  puts "An error occurred: #{e.message}"
+  exit(1)
+end

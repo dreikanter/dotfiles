@@ -1,0 +1,33 @@
+#!/bin/bash
+
+#
+# Kill a process running on the specified port
+#
+# Usage: killport 3000
+#
+
+if [ $# -eq 0 ]; then
+  echo "Error: Please provide a port number."
+  exit 1
+fi
+
+if ! [[ "$1" =~ ^[0-9]+$ ]]; then
+  echo "Error: Port number must be a positive integer."
+  exit 1
+fi
+
+pids=$(lsof -t -i:"$1")
+
+if [ -z "$pids" ]; then
+  echo "No process found running on port $1."
+  exit 0
+fi
+
+kill -9 $pids
+
+if [ $? -eq 0 ]; then
+  echo "Successfully killed process(es) running on port $1."
+else
+  echo "Failed to kill process(es) running on port $1."
+  exit 1
+fi

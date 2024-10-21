@@ -1,0 +1,46 @@
+#!/bin/bash
+
+#
+# Show diff Rails project routing between the `main` and the current branch HEAD revisions
+#
+
+current_branch=$(git rev-parse --abbrev-ref HEAD)
+
+if [ -z "$current_branch" ]; then
+  echo "Error: Could not determine the current branch."
+  exit 1
+fi
+
+# Checkout main branch and generate routes
+if ! git checkout main; then
+  echo "Error: Failed to checkout main branch."
+  exit 1
+fi
+
+if ! rails routes > before.txt; then
+  echo "Error: Failed to generate routes for main branch."
+  git checkout "$current_branch"
+  exit 1
+fi
+
+# Checkout the original branch and generate routes
+if ! git checkout "$current_branch"; then
+  echo "Error: Failed to checkout $current_branch."
+  exit 1
+fi
+
+if ! rails routes > after.txt; then
+  echo "Error: Failed to generate routes for $current_branch."
+  exit 1
+fi
+
+# Compare the routes
+if ! diff -u -b before.txt after.txt | diff-so-fancy; then
+  echo "Error: Failed to compare routes or display diff."
+  exit 1
+fi
+
+# Clean up temporary files
+rm before.txt after.txt
+
+echo "Routes comparison completed successfully."

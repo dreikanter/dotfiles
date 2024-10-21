@@ -1,0 +1,19 @@
+#!/bin/bash
+
+#
+# Push current branch to the origin, specifying explicit remote branch name
+#
+
+current_branch=$(git rev-parse --abbrev-ref HEAD)
+
+if [ -z "$current_branch" ]; then
+  echo "Could not determine the current branch."
+  exit 1
+fi
+
+if [ "$current_branch" = "HEAD" ]; then
+  echo "You are in 'detached HEAD' state. You need to checkout a branch before you can push."
+  exit 1
+fi
+
+git push -u origin "$current_branch"

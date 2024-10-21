@@ -1,0 +1,14 @@
+#!/bin/bash
+
+#
+# Switch branch interactively
+#
+
+selected_branch=$(git branch --sort=committerdate | tac | fzf --height 20 | tr -d '[:space:]')
+
+if [ -z "$selected_branch" ]; then
+  echo "No branch selected. Operation cancelled."
+  exit 1
+fi
+
+git checkout "$selected_branch"
