@@ -31,6 +31,7 @@ alias gph="git push -u origin HEAD"
 alias gdf="git diff --name-only main...HEAD"
 alias gdd="GIT_EXTERNAL_DIFF=difft git diff"
 alias gd="git diff"
+alias gdc="git diff | pbcopy"
 
 #
 # Other
