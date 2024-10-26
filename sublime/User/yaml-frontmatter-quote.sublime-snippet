@@ -1,9 +1,9 @@
 <snippet>
-    <tabTrigger>yyt</tabTrigger>
+    <tabTrigger>yyq</tabTrigger>
     <scope>text.html.markdown</scope>
     <description>Add YAML frontmatter for a todo list</description>
     <content><![CDATA[---
-slug: ${1:todo}
+tags: [quote]
 ---
 
 $0

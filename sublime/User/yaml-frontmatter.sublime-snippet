@@ -8,6 +8,6 @@ slug: ${2:slug}
 tags: [${3:tags}]
 ---
 
-
+$0
 ]]></content>
 </snippet>
