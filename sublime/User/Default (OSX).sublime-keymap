@@ -125,4 +125,8 @@
     "keys": ["ctrl+c"],
     "command": "copy_name"
   },
+  {
+    "keys": ["ctrl+x"],
+    "command": "extract_note"
+  },
 ]
