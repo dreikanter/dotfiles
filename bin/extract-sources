@@ -1,0 +1,91 @@
+#!/bin/bash
+
+# Get the base name of the script
+script_name=$(basename "$0")
+
+# Display usage information
+show_usage() {
+    echo "Usage: $script_name <target_path>"
+    echo
+    echo "What it does:"
+    echo "- Export file(s) from target path to a temp file."
+    echo "- If target is a directory, export all files (respecting .gitignore)."
+    echo "- If target is a file, export only that file."
+    echo "- Copy the temp file into system clipboard."
+}
+
+# Check if fd is installed (needed for directory mode)
+if ! command -v fd >/dev/null 2>&1; then
+    echo "Error: 'fd' command not found. Please install fd-find"
+    exit 1
+fi
+
+# Check if argument is provided
+if [ $# -ne 1 ]; then
+    show_usage
+    exit 1
+fi
+
+target_path="$1"
+output_file="/tmp/sources.txt"
+
+# Check if target path exists
+if [ ! -e "$target_path" ]; then
+    echo "Error: Path '$target_path' does not exist"
+    exit 1
+fi
+
+# Ensure we can write to the output file
+touch "$output_file" 2>/dev/null
+if [ $? -ne 0 ]; then
+    echo "Error: Cannot write to $output_file"
+    exit 1
+fi
+
+# Clear the output file
+> "$output_file"
+
+# Function to process a single file
+process_file() {
+    local file="$1"
+    local relative_path="$2"
+    echo "Including: $relative_path"
+    {
+        echo "---"
+        echo "$relative_path"
+        echo "---"
+        cat "$file"
+        echo
+        echo
+    } >> "$output_file"
+}
+
+# Handle directory vs file case
+if [ -d "$target_path" ]; then
+    # Directory mode
+    cd "$target_path" || exit 1
+    echo "Processing directory: $target_path"
+    fd -t f "" . | while read -r file; do
+        process_file "$file" "$file"
+    done
+else
+    # Single file mode
+    echo "Processing single file: $target_path"
+    process_file "$target_path" "$(basename "$target_path")"
+fi
+
+# Check if any files were found/processed
+if [ ! -s "$output_file" ]; then
+    echo "Warning: No files were processed"
+    exit 0
+fi
+
+# Copy to clipboard using osascript
+osascript -e "tell app \"Finder\" to set the clipboard to (POSIX file \"$output_file\")"
+
+if [ $? -eq 0 ]; then
+    echo "Successfully processed files and copied to clipboard"
+else
+    echo "Error: Failed to copy to clipboard"
+    exit 1
+fi
