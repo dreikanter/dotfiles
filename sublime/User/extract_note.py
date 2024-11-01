@@ -5,6 +5,8 @@ import json
 from datetime import datetime
 
 class ExtractNoteCommand(sublime_plugin.TextCommand):
+    LAST_ID_KEY = 'last_id'
+
     def run(self, edit):
         for region in self.view.sel():
             if region.empty():
@@ -46,13 +48,13 @@ class ExtractNoteCommand(sublime_plugin.TextCommand):
             if os.path.exists(id_file):
                 with open(id_file, 'r') as f:
                     data = json.load(f)
-                    current_id = data.get('id', 0)
+                    current_id = data.get(self.LAST_ID_KEY, 0)
             else:
                 current_id = 0
 
             new_id = current_id + 1
             with open(id_file, 'w') as f:
-                json.dump({'id': new_id}, f)
+                json.dump({self.LAST_ID_KEY: new_id}, f)
 
             return new_id
 
