@@ -1,6 +1,0 @@
-{
-  "file_patterns": ["*.md"],
-  "keyfiles": ["Notesfile"],
-  "shell_cmd": "echo *123*",
-  "syntax": "Packages/Markdown/Markdown.sublime-syntax"
-}

@@ -163,7 +163,7 @@
         {
             "name": "Headings",
             "scope": "markup.heading punctuation.definition.heading, entity.name.section",
-            "foreground": "#FFFFFF"
+            "foreground": "#00AAEE"
         },
         {
             "name": "Units",
