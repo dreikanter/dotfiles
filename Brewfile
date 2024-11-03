@@ -1,93 +1,183 @@
-# Install command-line tools using Homebrew
-#
-#   brew bundle --file=~/.dotfiles/Brewfile
-#
-# Enable patched font for iTerm: iTerm2 → Preferences → Profiles → Font
-
-tap 'homebrew/cask'
-tap 'homebrew/cask-drivers'
-tap 'homebrew/cask-fonts'
-tap 'homebrew/cask-versions'
-tap 'homebrew/core'
-tap 'homebrew/bundle'
-tap 'homebrew/services'
-
-brew 'ansible'
-brew 'bat'
-brew 'cowsay'
-brew 'docker-compose'
-brew 'dua-cli'
-brew 'exa'
-brew 'eza'
-brew 'fd'
-brew 'font-jetbrains-mono-nerd-font'
-brew 'fzf'
-brew 'git'
-brew 'go'
-brew 'htop'
-brew 'httpie'
-brew 'jq'
-brew 'lazydocker'
-brew 'ncdu'
-brew 'neovim'
-brew 'node'
-brew 'postgresql'
-brew 'pure'
-brew 'ripgrep'
-brew 'rsync'
-brew 'tree'
-brew 'wget'
-brew 'yarn'
-brew 'zsh'
-brew `ctop
-
-# brew 'spaceship'
-# brew 'docker-machine'
-# brew 'figlet'
-# brew 'pow'
-# brew 'pyenv'
-# brew 'rbenv'
-# brew 'rclone'
-# brew 'lame'
-# brew 'micro'
-# brew 'nnn'
-
-# Desktop apps
-cask '1password'
-cask 'bartender'
-cask 'betterdisplay'
-cask 'cleanmymac'
-cask 'cleanshot'
-cask 'docker'
-cask 'dropbox'
-cask 'firefox'
-cask 'google-chrome'
-cask 'hammerspoon'
-cask 'iterm2'
-cask 'qlmarkdown'
-cask 'rectangle'
-cask 'slack'
-cask 'spotify'
-cask 'sublime-merge'
-cask 'sublime-text'
-cask 'telegram-desktop'
-cask 'xbar'
-cask 'zoomus'
-
-# cask 'ableton-live-suite'
-# cask 'ilya-birman-typography-layout'
-# cask 'qlcolorcode'
-# cask 'quicklook-json'
-
-# Fonts
-cask 'font-jetbrains-mono'
-brew 'font-jetbrains-mono-nerd-font'
-# cask 'font-anonymous-pro'
-# cask 'font-droid-sans'
-# cask 'font-droid-sans-mono'
-# cask 'font-inconsolata'
-# cask 'font-pt-mono'
-# cask 'font-pt-sans'
-# cask 'font-pt-serif'
-# cask 'font-roboto'
-# cask 'font-roboto-mono'
+tap "adoptopenjdk/openjdk"
+tap "alex/local-tap"
+tap "create-go-app/tap"
+tap "derailed/k9s"
+tap "elastic/tap"
+tap "go-task/tap"
+tap "hashicorp/tap"
+tap "heroku/brew"
+tap "homebrew/bundle"
+tap "homebrew/cask"
+tap "homebrew/cask-drivers"
+tap "homebrew/cask-fonts"
+tap "homebrew/cask-versions"
+tap "homebrew/core"
+tap "homebrew/services"
+tap "hudochenkov/sshpass"
+tap "oven-sh/bun"
+tap "puma/puma"
+tap "tdewolff/tap"
+tap "ynqa/tap"
+brew "act"
+brew "libssh"
+brew "ansible"
+brew "ansible-lint"
+brew "webp"
+brew "jpeg-xl"
+brew "aom"
+brew "automake"
+brew "asdf"
+brew "atuin"
+brew "libssh2"
+brew "bat"
+brew "black"
+brew "broot"
+brew "btop"
+brew "buildkit"
+brew "caddy"
+brew "glib"
+brew "cairo"
+brew "cfssl"
+brew "cmake"
+brew "cowsay"
+brew "ctop"
+brew "diff-so-fancy"
+brew "difftastic"
+brew "direnv"
+brew "libidn"
+brew "ghostscript"
+brew "djvu2pdf"
+brew "docker-compose"
+brew "dua-cli"
+brew "duf"
+brew "exa"
+brew "eza"
+brew "fd"
+brew "harfbuzz"
+brew "leptonica"
+brew "libass"
+brew "libbluray"
+brew "libmicrohttpd"
+brew "pango"
+brew "tesseract"
+brew "ffmpeg"
+brew "open-mpi"
+brew "fftw"
+brew "node"
+brew "fx"
+brew "fzf"
+brew "gh"
+brew "git"
+brew "git-cliff"
+brew "git-crypt"
+brew "git-delta"
+brew "gitui"
+brew "glow"
+brew "gnupg"
+brew "go"
+brew "gobject-introspection"
+brew "ncurses"
+brew "htop"
+brew "httpie"
+brew "shared-mime-info"
+brew "libheif"
+brew "imagemagick"
+brew "instaloader"
+brew "jq"
+brew "keyring"
+brew "lazydocker"
+brew "lazygit"
+brew "lefthook"
+brew "libmediainfo"
+brew "openssl@1.1"
+brew "libzip"
+brew "lighttpd"
+brew "llvm"
+brew "luv"
+brew "marp-cli"
+brew "media-info"
+brew "mpv"
+brew "ncdu"
+brew "neovim"
+brew "nginx"
+brew "openjdk"
+brew "openvino"
+brew "tmux"
+brew "overmind"
+brew "peco"
+brew "pgcli"
+brew "postgresql@14", restart_service: true
+brew "pgvector"
+brew "pure"
+brew "python@3.10"
+brew "python@3.11"
+brew "qemu"
+brew "ruby-build"
+brew "rbenv"
+brew "rclone"
+brew "redis"
+brew "restic"
+brew "ripgrep"
+brew "rust"
+brew "sk"
+brew "starship"
+brew "syncthing", restart_service: true
+brew "tdlib"
+brew "the_silver_searcher"
+brew "tldr"
+brew "tree"
+brew "watch"
+brew "watchman"
+brew "wget"
+brew "yarn"
+brew "yq"
+brew "create-go-app/tap/cgapp"
+brew "derailed/k9s/k9s"
+brew "elastic/tap/elasticsearch-full"
+brew "go-task/tap/go-task"
+brew "hashicorp/tap/terraform"
+brew "heroku/brew/heroku"
+brew "hudochenkov/sshpass/sshpass"
+brew "oven-sh/bun/bun"
+brew "puma/puma/puma-dev"
+brew "tdewolff/tap/minify"
+brew "ynqa/tap/sigrs"
+cask "1password"
+cask "adoptopenjdk8"
+cask "audacity"
+cask "betterdisplay"
+cask "cleanshot"
+cask "docker"
+cask "dropbox"
+cask "fig"
+cask "firefox"
+cask "firefox@developer-edition"
+cask "font-jetbrains-mono"
+cask "gimp"
+cask "hammerspoon"
+cask "ilya-birman-typography-layout"
+cask "jordanbaird-ice"
+cask "keybase"
+cask "maestral"
+cask "mks"
+cask "netnewswire"
+cask "notunes"
+cask "numi"
+cask "openvpn-connect"
+cask "orion"
+cask "pgadmin4"
+cask "qbittorrent"
+cask "qlmarkdown"
+cask "rectangle"
+cask "slack"
+cask "spotify"
+cask "sublime-merge"
+cask "sublime-text"
+cask "swiftbar"
+cask "telegram-desktop"
+cask "temurin"
+cask "visual-studio-code"
+cask "vlc"
+cask "wezterm"
+vscode "ms-azuretools.vscode-docker"
+vscode "ms-vscode-remote.remote-containers"

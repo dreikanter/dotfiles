@@ -18,3 +18,17 @@ iTerm:
 `Ctrl+Shift+L` – open the latest note.
 
 `Ctrl+Shift+T` – open the latest todo note.
+
+## Brew
+
+Install homebrew packages:
+
+```
+brew bundle --file=~/.dotfiles/Brewfile
+```
+
+Update `Brewfile`:
+
+```
+brew bundle dump --force --file=~/.dotfiles/Brewfile
+```
