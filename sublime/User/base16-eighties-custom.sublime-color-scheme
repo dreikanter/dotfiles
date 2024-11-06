@@ -180,7 +180,7 @@
             "name": "Italic",
             "scope": "markup.italic, punctuation.definition.italic",
             "font_style": "italic",
-            "foreground": "var(color05)"
+            "foreground": "var(color06)"
         },
         {
             "name": "Code",
@@ -195,7 +195,7 @@
         {
             "name": "Link Url",
             "scope": "meta.link",
-            "foreground": "var(color12)"
+            "foreground": "var(color07)"
         },
         {
             "name": "Lists",
