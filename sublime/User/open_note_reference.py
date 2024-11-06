@@ -6,7 +6,7 @@ from datetime import datetime
 
 class OpenNoteReferenceCommand(sublime_plugin.TextCommand):
     REFERENCE_PATTERN = r'^\d{8}_[a-zA-Z0-9_-]+?$'
-    DATE_PATTERN = r'^\d{8,}(_[a-zA-Z0-9_-]+)?$'
+    DATE_PATTERN = r'^(\d{8}_\d+)(_[a-zA-Z0-9_-]+)?$'
 
     def run(self, edit):
         for region in self.view.sel():
@@ -17,8 +17,7 @@ class OpenNoteReferenceCommand(sublime_plugin.TextCommand):
                 print(f"selected word is not a note reference: '{selected_word}'")
                 continue
 
-            reference = selected_word.strip('[]')
-
+            reference = selected_word.strip("[]")
             referenced_file = self._find_referenced_file(reference)
 
             if referenced_file:
@@ -33,16 +32,14 @@ class OpenNoteReferenceCommand(sublime_plugin.TextCommand):
         if not root_path:
             return
 
-        if re.match(self.DATE_PATTERN, reference):
-            year, month, day = reference[:4], reference[4:2], reference[6:2]
-            search_dir = os.path.join(root_path, year, month)
-        else:
-            search_dir = root_path
+        match = re.match(self.DATE_PATTERN, reference)
 
-        for root, dirs, files in os.walk(search_dir):
-            for file in files:
-                if file.endswith(".md"):
-                    if reference in file:
+        if match:
+            note_id = match.group(1)
+
+            for root, dirs, files in os.walk(root_path):
+                for file in files:
+                    if file.startswith(note_id) and file.endswith(".md"):
                         return os.path.join(root, file)
 
         return None
