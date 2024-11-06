@@ -3,6 +3,7 @@ import sublime_plugin
 import os
 import json
 from datetime import datetime
+import re
 
 class ExtractNoteCommand(sublime_plugin.TextCommand):
     LAST_ID_KEY = 'last_id'
@@ -14,16 +15,28 @@ class ExtractNoteCommand(sublime_plugin.TextCommand):
 
         sublime.set_timeout(lambda: self.view.run_command('save'), 0)
 
+    def _extract_note_id_from_filename(self, filename):
+        if not filename:
+            return "unknown"
+
+        match = re.match(r'(\d+_\d+).*', os.path.basename(filename))
+        return match.group(1) if match else "unknown"
+
     def _process_line(self, edit, region):
         date = self._current_date()
         note_id = self._get_new_note_id()
         new_note_file = self._get_new_file_path(date, note_id)
+        original_file = self.view.file_name()
+        original_note_id = self._extract_note_id_from_filename(original_file)
 
         line = self.view.line(region)
         line_content = self.view.substr(line)
-        self.view.replace(edit, line, f"{line_content} // {date}_{note_id}")
+        self.view.replace(edit, line, f"{line_content} // *{date}_{note_id}*")
 
         with open(new_note_file, 'w', encoding='utf-8') as f:
+            f.write("---\n")
+            f.write(f"origin: {original_note_id}\n")
+            f.write("---\n\n")
             f.write(f"{line_content}\n")
 
         self.view.window().open_file(new_note_file)
