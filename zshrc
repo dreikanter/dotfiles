@@ -42,14 +42,10 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 #
 
 # Plugins installation:
-# cd /usr/local/share
-# git clone https://github.com/zsh-users/zsh-autosuggestions.git
-# git clone https://github.com/zsh-users/zsh-syntax-highlighting.git
-# git clone git@github.com:agkozak/zsh-z.git
-
-. /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-. /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-# . /usr/local/share/zsh-z/zsh-z.plugin.zsh
+# brew install zsh-autosuggestions zsh-syntax-highlighting
+#
+source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 #
 # Starship, https://starship.rs (brew install starship)
