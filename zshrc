@@ -57,6 +57,12 @@ eval "$(starship init zsh)"
 # asdf
 #
 
+# asdf plugin add ruby
+# asdf list all ruby
+# asdf plugin-update ruby
+# asdf install ruby latest
+# asdf global ruby 3.3.6
+
 . /opt/homebrew/opt/asdf/libexec/asdf.sh
 
 #
