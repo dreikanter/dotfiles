@@ -54,12 +54,6 @@ source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 eval "$(starship init zsh)"
 
 #
-# Base16 color scheme (Works with iTerm2)
-#
-
-. $HOME/.config/base16-shell/scripts/base16-3024.sh
-
-#
 # asdf
 #
 
@@ -105,5 +99,3 @@ eval "$(atuin init zsh)"
 
 # Disable autocorrect
 unsetopt correct_all
-
-source /Users/alex/.config/broot/launcher/bash/br
