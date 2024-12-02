@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 export LC_CTYPE=en_US.UTF-8
 export LANG=en_US.UTF-8
 export LANG11=en_US.UTF-8
@@ -12,5 +14,7 @@ export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git --exclu
 export FZF_DEFAULT_OPTS="--reverse --multi"
 # --preview 'bat --wrap {}'
 
-export JAVA_HOME=$(/usr/libexec/java_home)
+JAVA_HOME=$(/usr/libexec/java_home)
+export JAVA_HOME
+
 export ES_JAVA_HOME=$JAVA_HOME
