@@ -20,10 +20,11 @@ source "/opt/homebrew/opt/fzf/shell/key-bindings.zsh"
 # History
 #
 
-HISTFILE=~/.history
-HISTSIZE=10000
-SAVEHIST=1000
-HISTDUP=erase
+export HISTFILE=~/.history
+export HISTSIZE=10000
+export SAVEHIST=1000
+export HISTDUP=erase
+export HISTCONTROL='ignoreboth';
 
 # Share history across terminals
 setopt share_history
