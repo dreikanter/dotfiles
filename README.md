@@ -1,8 +1,16 @@
 # Alex's dotfiles
 
+Initial setup:
+
 ``` bash
 git clone git@github.com:dreikanter/dotfiles.git ~/.dotfiles
-bash ~/.dotfiles/bin/install.sh
+bash ~/.dotfiles/install/all.sh
+```
+
+Install homebrew packages:
+
+```
+brew bundle --file=~/.dotfiles/Brewfile
 ```
 
 ## Setup tips
@@ -13,22 +21,15 @@ iTerm:
 
 ## Global hotkeys
 
-`Ctrl+Shift+N` – create new note.
+- `Ctrl+Shift+N` – create new note.
+- `Ctrl+Shift+L` – open the latest note.
+- `Ctrl+Shift+T` – open the latest todo note.
 
-`Ctrl+Shift+L` – open the latest note.
-
-`Ctrl+Shift+T` – open the latest todo note.
-
-## Brew
-
-Install homebrew packages:
-
-```
-brew bundle --file=~/.dotfiles/Brewfile
-```
+## Maintenance
 
 Update `Brewfile`:
 
 ```
 brew bundle dump --force --file=~/.dotfiles/Brewfile
 ```
+
