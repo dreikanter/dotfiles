@@ -18,3 +18,5 @@ JAVA_HOME=$(/usr/libexec/java_home)
 export JAVA_HOME
 
 export ES_JAVA_HOME=$JAVA_HOME
+
+export NOTES_PATH=~/Dropbox/Notes
