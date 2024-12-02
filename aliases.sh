@@ -1,9 +1,13 @@
+#!/usr/bin/env bash
+
 #
 # Core tools
 #
 
 # alias l="exa --all --long --group-directories-first"
+alias c="clear"
 alias l="eza --all --long --group-directories-first"
+alias l1="eza --all --group-directories-first -1"
 alias h="history -30 | cut -c 8-"
 alias k="kubectl"
 alias vim="nvim"
@@ -12,7 +16,7 @@ alias railstb='rails test $(git diff --name-only --diff-filter=ACMRTUXB main...H
 alias s="subl ."
 alias ss="subl --add ."
 alias prt="yarn run prettier --no-color --write"
-alias r=rails
+alias r="PAGER=cat rails"
 
 #
 # Git
@@ -26,9 +30,15 @@ alias gl="git log --pretty=format:\"%C(yellow)%h%Creset [%ad] %Cgreen%s%Creset %
 # List recent branches
 alias gbr="git branch --sort=committerdate --color --format=\"%(color:red)%(objectname:short)%(color:reset) %(HEAD) %(color:yellow)%(refname:short)%(color:reset) (%(color:green)%(committerdate:relative)%(color:reset))\" | tail -n 10"
 
-alias gph="git push -u origin HEAD"
+alias gto="git checkout"
+alias gta="git add"
+alias gtc="git commit -m"
+alias gtm="git commit -m"
+# alias gtp="git push -u origin HEAD"
 
+# List file names modified in the current branch
 alias gdf="git diff --name-only main...HEAD"
+
 alias gdd="GIT_EXTERNAL_DIFF=difft git diff"
 alias gd="git diff"
 alias gdc="git diff | pbcopy"
