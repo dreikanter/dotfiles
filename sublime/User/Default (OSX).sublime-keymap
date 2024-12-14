@@ -109,14 +109,14 @@
           {"key": "auto_complete_visible", "operand": false}
       ]
   },
-  {
-    "keys": ["ctrl+o"],
-    "command": "open_note_reference"
-  },
 
   //
   // Notes Control
   //
+  {
+    "keys": ["ctrl+o"],
+    "command": "open_note_reference"
+  },
   {
     "keys": ["ctrl+b"],
     "command": "notes_browser"
