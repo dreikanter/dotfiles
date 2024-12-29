@@ -9,6 +9,7 @@ return {
   font = wezterm.font("JetBrains Mono"),
   font_size = 16.0,
   window_close_confirmation = "NeverPrompt",
+  skip_close_confirmation_for_processes_named = { "bash", "sh", "zsh", "fish", "tmux", "rails" },
   keys = {
     { key = "l", mods = "CMD|SHIFT", action = action.ShowDebugOverlay },
     {
