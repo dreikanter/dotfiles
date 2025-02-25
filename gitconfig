@@ -37,7 +37,7 @@
   difftool = false
 
 [push]
-  default = matching
+	default = simple
 
 [maintenance]
 	repo = /Users/alex/zipline/zipline-app
@@ -108,3 +108,10 @@
   prom = pull --rebase origin main
   s = status
   w = whatchanged
+[diff]
+	algorithm = histogram
+	colorMoved = plain
+	mnemonicPrefix = true
+	renames = true
+[remote]
+	pushDefault = origin
