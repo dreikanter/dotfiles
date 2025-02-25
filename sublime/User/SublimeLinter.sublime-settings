@@ -4,13 +4,13 @@
   "paths": {
     "linux": [],
     "osx": [
-      "~/.rbenv/shims:$PATH"
+      "~/.asdf/shims:$PATH"
     ],
     "windows": []
   },
   "linters": {
     "rubocop": {
-      // "use_bundle_exec": true
+      "use_bundle_exec": true
     }
   }
 }

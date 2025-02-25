@@ -35,7 +35,7 @@ if ! rails routes > after.txt; then
 fi
 
 # Compare the routes
-if ! diff -u -b before.txt after.txt | diff-so-fancy; then
+if ! diff -u -b before.txt after.txt; then
   echo "Error: Failed to compare routes or display diff."
   exit 1
 fi

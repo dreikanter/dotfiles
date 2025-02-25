@@ -40,6 +40,8 @@
 		"Ruby Slim",
 		"SideBarEnhancements",
 		"SqlBeautifier",
+		"SublimeLinter",
+		"SublimeLinter-rubocop",
 		"SublimeLinter-shellcheck",
 		"Theme - Spacegray",
 		"TOML",

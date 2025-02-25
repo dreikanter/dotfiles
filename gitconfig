@@ -108,3 +108,8 @@
   prom = pull --rebase origin main
   s = status
   w = whatchanged
+[diff]
+	algorithm = histogram
+	colorMoved = plain
+	mnemonicPrefix = true
+	renames = true
