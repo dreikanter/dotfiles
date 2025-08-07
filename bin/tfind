@@ -1,0 +1,37 @@
+#!/usr/bin/env ruby
+
+require "yaml"
+
+def find_keys(data, target_keys, path = [])
+  case data
+  when Hash
+    data.each do |key, value|
+      new_path = path + [key]
+      if new_path.last(target_keys.length) == target_keys
+        puts "#{new_path.join(".")}\n#{value.inspect}\n"
+      end
+      find_keys(value, target_keys, new_path)
+    end
+  when Array
+    data.each_with_index do |item, index|
+      find_keys(item, target_keys, path + [index])
+    end
+  end
+end
+
+FILE_PATH = "./config/locales/en.yml".freeze
+
+USAGE = <<~USAGE
+  Find all i18n values matching key fragment in #{FILE_PATH}
+
+  Usage: #{File.basename($PROGRAM_NAME)} <key.path.to.match>
+USAGE
+
+if ARGV.empty?
+  puts USAGE
+  exit 1
+end
+
+target = ARGV[0].split(".")
+yaml_data = YAML.load_file(FILE_PATH)
+find_keys(yaml_data, target)
