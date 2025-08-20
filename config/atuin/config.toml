@@ -1,0 +1,9 @@
+# https://docs.atuin.sh/configuration/config/
+
+show_preview = true
+show_help = true
+show_tabs = true
+style = "compact"
+auto_sync = false
+sync_frequency = "0"
+search_mode = "fuzzy"

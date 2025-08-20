@@ -2,14 +2,17 @@
 # Path
 #
 
+if [[ -x "/opt/homebrew/bin/brew" ]]; then
+  # Homebrew installed
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
+
 path=(
-  $HOME/bin
-  /usr/bin
-  /bin
-  /usr/sbin
-  /sbin
+ $HOME/bin
+ $path
 )
 
+typeset -U path
 export PATH
 
 #
@@ -18,27 +21,21 @@ export PATH
 
 export LC_CTYPE=en_US.UTF-8
 export LANG=en_US.UTF-8
-export LANG11=en_US.UTF-8
-export EDITOR="subl --wait"
+export VISUAL="subl --wait"
+export EDITOR=nvim
 export GOPATH=$HOME/go
 export HOMEBREW_NO_AUTO_UPDATE=true
-export JAVA_HOME=$(/usr/libexec/java_home)
-export ES_JAVA_HOME=$JAVA_HOME
+
+if [[ -x "/usr/libexec/java_home" ]]; then
+  export JAVA_HOME=$(/usr/libexec/java_home 2>/dev/null)
+  export ES_JAVA_HOME=$JAVA_HOME
+fi
+
 export NOTES_PATH=~/Dropbox/Notes
 export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git --exclude node_modules'
 export FZF_DEFAULT_OPTS="--reverse --multi"
 
-#
-# Homebrew
-#
-
-eval "$(/opt/homebrew/bin/brew shellenv)"
-
-#
-# Mise
-#
-
-eval "$(mise activate zsh)"
+source ~/.profile
 
 #
 # Aliases
@@ -69,12 +66,8 @@ alias gl="git log --pretty=format:\"%C(yellow)%h%Creset [%ad] %Cgreen%s%Creset %
 # List recent branches
 alias gbr="git branch --sort=committerdate --color --format=\"%(color:red)%(objectname:short)%(color:reset) %(HEAD) %(color:yellow)%(refname:short)%(color:reset) (%(color:green)%(committerdate:relative)%(color:reset))\" | tail -n 10"
 
-alias gto="git checkout"
-alias gta="git add"
-alias gtc="git commit -m"
-alias gtm="git commit -m"
 alias gp="git push -u origin HEAD"
-alias gp!="git push -u --force origin HEAD"
+alias gpforce="git push -u --force-with-lease origin HEAD"
 
 # List file names modified in the current branch
 alias gdf="git diff --name-only main...HEAD"
@@ -98,7 +91,7 @@ bindkey '^[[H' beginning-of-line
 # End
 bindkey '^[[F' end-of-line
 
-source "/opt/homebrew/opt/fzf/shell/key-bindings.zsh"
+[[ -r "/opt/homebrew/opt/fzf/shell/key-bindings.zsh" ]] && source "/opt/homebrew/opt/fzf/shell/key-bindings.zsh"
 
 #
 # History
@@ -106,7 +99,7 @@ source "/opt/homebrew/opt/fzf/shell/key-bindings.zsh"
 
 export HISTFILE=~/.history
 export HISTSIZE=10000
-export SAVEHIST=1000
+export SAVEHIST=10000
 export HISTDUP=erase
 
 setopt hist_ignore_all_dups
@@ -121,33 +114,25 @@ setopt share_history
 
 eval "$(starship init zsh)"
 
-#
-# Env vars and aliases
-#
+command -v atuin >/dev/null && eval "$(atuin init zsh)"
 
-. ~/.profile
-. ~/.dotfiles/aliases.sh
-
-#
-# Auto-completion
-#
-
-[[ $- == *i* ]] && source "/opt/homebrew/opt/fzf/shell/completion.zsh" 2> /dev/null
+{
+  command -v mise >/dev/null && eval "$(mise activate zsh)"
+} &!
 
 #
-# atuin
+# Fzf completion (vim **<TAB>; cd /usr/**<TAB>)
 #
 
-eval "$(atuin init zsh)"
-
-#
-# Zsh
-#
-
-unsetopt correct_all
+[[ -r "/opt/homebrew/opt/fzf/shell/completion.zsh" ]] && [[ $- == *i* ]] &&
+  source "/opt/homebrew/opt/fzf/shell/completion.zsh"
 
 # Plugins installation:
 # brew install zsh-autosuggestions zsh-syntax-highlighting
 #
-source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+[[ -r "/opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ]] &&
+  source "/opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
+[[ -r "/opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]] &&
+  source "/opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+
+unsetopt correct_all

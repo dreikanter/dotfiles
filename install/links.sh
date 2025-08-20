@@ -13,3 +13,6 @@ ln -sf ~/.dotfiles/config/starship.toml ~/.config/
 
 mkdir -p ~/.config/wezterm
 ln -sf ~/.dotfiles/config/wezterm/wezterm.lua ~/.config/wezterm/wezterm.lua
+
+mkdir -p ~/.config/atuin
+ln -sf ~/.dotfiles/config/atuin/config.toml ~/.config/atuin/config.toml
