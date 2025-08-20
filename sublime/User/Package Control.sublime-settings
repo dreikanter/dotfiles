@@ -43,5 +43,6 @@
 		"SublimeLinter-shellcheck",
 		"Theme - Spacegray",
 		"TOML",
+		"WordingStatus",
 	],
 }

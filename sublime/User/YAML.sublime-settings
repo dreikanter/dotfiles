@@ -1,8 +1,12 @@
 {
 	"extensions":
 	[
-		"enc"
+		".gemrc",
+		"YAML-tmLanguage",
+		"enc",
+		"yml.dist",
+		"yml",
 	],
 	"tab_size": 2,
-	"translate_tabs_to_spaces": true
+	"translate_tabs_to_spaces": true,
 }

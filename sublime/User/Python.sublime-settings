@@ -11,5 +11,10 @@
 		"build",
 		"site",
 		"__pycache__"
-	]
+	],
+	"extensions":
+	[
+		"py3",
+		"pyw"
+	],
 }

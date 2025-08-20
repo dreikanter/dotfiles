@@ -1,8 +1,13 @@
 {
-	"translate_tabs_to_spaces": false,
-	"tab_size": 2,
 	"extensions":
 	[
-		"sublime-settings"
+		".stylelintrc",
+		".csslintrc",
+		".babelrc",
+		"geojson",
+		".bowerrc",
+		".jshintrc",
+		".jscsrc",
+		".eslintrc"
 	]
 }

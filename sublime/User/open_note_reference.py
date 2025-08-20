@@ -2,7 +2,6 @@ import sublime
 import sublime_plugin
 import os
 import re
-from datetime import datetime
 
 class OpenNoteReferenceCommand(sublime_plugin.TextCommand):
     REFERENCE_PATTERN = r'^\d{8}_[a-zA-Z0-9_-]+?$'
