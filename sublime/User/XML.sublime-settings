@@ -1,18 +1,18 @@
 {
 	"extensions":
 	[
+		"proj",
 		"xml",
+		"atom",
 		"xslt",
+		"targets",
 		"svg",
 		"xaml",
-		"resx",
-		"proj",
+		"Config",
 		"xsd",
-		"atom",
 		"csproj",
 		"xml.dist",
-		"Config",
-		"targets",
+		"resx",
 	],
 	"hidden_extensions":
 	[

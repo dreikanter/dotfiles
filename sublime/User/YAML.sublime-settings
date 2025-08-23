@@ -3,9 +3,9 @@
 	[
 		".gemrc",
 		"YAML-tmLanguage",
-		"enc",
-		"yml.dist",
 		"yml",
+		"yml.dist",
+		"enc",
 	],
 	"tab_size": 2,
 	"translate_tabs_to_spaces": true,
