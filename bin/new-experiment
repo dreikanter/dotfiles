@@ -2,17 +2,33 @@
 
 if [ $# -eq 0 ]; then
   echo "Usage: new-experiment <experiment-name>"
+  echo "Create experiment directory with date prefix and cd into it"
   exit 1
 fi
 
-# Get slug from Ruby script
-slug=$($HOME/.dotfiles/bin/new-experiment-path "$@")
-if [ $? -ne 0 ]; then
+slugify() {
+  local text="$1"
+  # Convert to lowercase
+  text=$(echo "$text" | tr '[:upper:]' '[:lower:]')
+  # Remove non-alphanumeric characters (keep spaces and dashes)
+  text=$(echo "$text" | tr -cd 'a-z0-9 -')
+  # Replace spaces with dashes
+  text=$(echo "$text" | sed 's/ /-/g')
+  # Remove repeated dashes
+  text=$(echo "$text" | tr -s '-')
+  # Remove leading/trailing dashes
+  text="${text#-}"
+  text="${text%-}"
+  echo "$text"
+}
+
+slug=$(slugify "$*")
+if [ -z "$slug" ]; then
+  echo "Error: Invalid experiment name"
   exit 1
 fi
+date_prefix=$(date +%Y%m%d)
+dir="$HOME/src/${date_prefix}_${slug}"
 
-dir="$HOME/src/$slug"
-
-# Create directory and cd into it
 mkdir -p "$dir"
 cd "$dir"
