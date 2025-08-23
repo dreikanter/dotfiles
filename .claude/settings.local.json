@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(chmod:*)",
+      "Bash(/Users/alex/.dotfiles/bin/new-experiment:*)",
+      "Read(//Users/alex/src/**)",
+      "Read(//Users/alex/.config/**)",
+      "Read(//Users/alex/.config/aerospace/**)",
+      "Bash(aerospace list-workspaces:*)"
+    ],
+    "deny": [],
+    "ask": [],
+    "additionalDirectories": [
+      "/Users/alex/Library",
+      "/Users/alex/.config/zed"
+    ]
+  }
+}
