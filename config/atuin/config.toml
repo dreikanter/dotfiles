@@ -7,3 +7,4 @@ style = "compact"
 auto_sync = false
 sync_frequency = "0"
 search_mode = "fuzzy"
+enter_accept = true

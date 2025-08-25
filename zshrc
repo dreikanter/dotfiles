@@ -116,9 +116,7 @@ eval "$(starship init zsh)"
 
 command -v atuin >/dev/null && eval "$(atuin init zsh)"
 
-{
-  command -v mise >/dev/null && eval "$(mise activate zsh)"
-} &!
+command -v mise >/dev/null && eval "$(mise activate zsh)"
 
 #
 # Fzf completion (vim **<TAB>; cd /usr/**<TAB>)
