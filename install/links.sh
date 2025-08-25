@@ -16,3 +16,6 @@ ln -sf ~/.dotfiles/config/wezterm/wezterm.lua ~/.config/wezterm/wezterm.lua
 
 mkdir -p ~/.config/atuin
 ln -sf ~/.dotfiles/config/atuin/config.toml ~/.config/atuin/config.toml
+
+mkdir -p ~/.config/aerospace
+ln -sf ~/.dotfiles/config/aerospace/aerospace.toml ~/.config/aerospace/aerospace.toml
