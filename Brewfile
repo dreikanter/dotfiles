@@ -1,180 +1,220 @@
-tap "adoptopenjdk/openjdk"
-tap "create-go-app/tap"
-tap "derailed/k9s"
-tap "elastic/tap"
-tap "go-task/tap"
-tap "hashicorp/tap"
-tap "heroku/brew"
-tap "homebrew/bundle"
-tap "homebrew/services"
-tap "hudochenkov/sshpass"
-tap "oven-sh/bun"
-tap "puma/puma"
-tap "tdewolff/tap"
-tap "ynqa/tap"
-brew "act"
-brew "libssh"
-brew "ansible"
-brew "ansible-lint"
-brew "webp"
-brew "jpeg-xl"
-brew "aom"
-brew "automake"
-brew "asdf"
+#
+# Priority CLI tools, libs and services
+#
+
+# Interactive comamnd history
 brew "atuin"
-brew "libssh2"
+
+# Fancy cat with syntax highlighting
 brew "bat"
-brew "black"
-brew "bottom"
-brew "broot"
-brew "btop"
-brew "buildkit"
-brew "glib"
-brew "cairo"
-brew "cfssl"
-brew "cmake"
+
 brew "cowsay"
-brew "ctop"
-brew "diff-so-fancy"
-brew "difftastic"
-brew "direnv"
-brew "harfbuzz"
-brew "leptonica"
-brew "libidn"
-brew "pango"
-brew "tesseract"
-brew "ghostscript"
-brew "djvu2pdf"
-brew "docker-compose"
-brew "dua-cli"
-brew "duf"
-brew "eza"
-brew "fd"
-brew "libass"
-brew "libbluray"
-brew "libmicrohttpd"
-brew "ffmpeg"
-brew "open-mpi"
-brew "fftw"
-brew "node"
-brew "fx"
 brew "fzf"
 brew "gh"
 brew "git"
-brew "git-cliff"
-brew "git-crypt"
-brew "git-delta"
-brew "gitui"
-brew "glow"
-brew "gnupg"
-brew "go"
-brew "gobject-introspection"
-brew "ncurses"
 brew "htop"
-brew "httpie"
-brew "shared-mime-info"
-brew "libheif"
-brew "imagemagick"
-brew "instaloader"
 brew "jq"
-brew "jsonpp"
-brew "keyring"
-brew "lazydocker"
-brew "lazygit"
 brew "lefthook"
-brew "libmediainfo"
-brew "openssl@1.1"
-brew "python@3.9"
-brew "libzip"
-brew "lighttpd"
-brew "llvm"
-brew "lsd"
-brew "luajit"
-brew "luv"
-brew "marp-cli"
-brew "media-info"
-brew "mpv"
-brew "ncdu"
 brew "neovim"
-brew "nginx"
-brew "openjdk"
-brew "openvino"
-brew "tmux"
-brew "overmind"
-brew "peco"
-brew "pgcli"
-brew "pgvector"
-brew "postgresql@14", restart_service: true
-brew "pure"
-brew "python@3.10"
-brew "python@3.11"
-brew "qemu"
-brew "ruby-build"
-brew "rbenv"
-brew "rclone"
-brew "redis"
-brew "restic"
 brew "ripgrep"
-brew "rust"
-brew "sk"
-brew "starship"
-brew "stow"
-brew "tdlib"
-brew "the_silver_searcher"
-brew "tldr"
-brew "tree"
-brew "watch"
-brew "watchman"
 brew "wget"
 brew "yarn"
 brew "yq"
 brew "zsh-autosuggestions"
+brew "zsh-autosuggestions"
 brew "zsh-syntax-highlighting"
-brew "create-go-app/tap/cgapp"
-brew "derailed/k9s/k9s"
-brew "elastic/tap/elasticsearch-full"
-brew "go-task/tap/go-task"
-brew "hashicorp/tap/terraform"
-brew "heroku/brew/heroku"
-brew "hudochenkov/sshpass/sshpass"
+brew "zsh-syntax-highlighting"
+
+# Process manager for Procfile-based applications and tmux
+brew "overmind"
+
+# Vector extension for PostgreSQL
+brew "pgvector"
+
+brew "postgresql@16", restart_service: true
+
+brew "redis"
+
+# ls with colors
+brew "eza"
+
+# Nice zsh prompt
+brew "starship"
+
+# TLDR for man
+brew "tldr"
+
+# Show file tree structure
+brew "tree"
+
+# Find files
+brew "fd"
+
+# Borders for macOS windows
+tap "FelixKratz/formulae"
+brew "borders"
+
+# Install and control versions for Ruby, Node, Python
+brew "mise"
+
+# Bun
+tap "oven-sh/bun"
 brew "oven-sh/bun/bun"
+
+# Create local .test domains for Puma apps
+tap "puma/puma"
 brew "puma/puma/puma-dev"
-brew "tdewolff/tap/minify"
-brew "ynqa/tap/sigrs"
-cask "audacity"
-cask "betterdisplay"
-cask "bitwarden"
-cask "cleanshot"
-cask "docker"
-cask "dropbox"
-cask "fig"
-cask "firefox"
-cask "firefox@developer-edition"
+
 cask "font-jetbrains-mono"
-cask "gimp"
+
+#
+# Apps
+#
+
+# cask "wezterm"
+# cask "nikitabobko/tap/aerospace"
+# cask "raycast"
+# cask "rectangle"
+# cask "slack"
+# cask "spotify"
+# cask "sublime-merge"
+# cask "sublime-text"
+# cask "swiftbar"
+# cask "telegram-desktop"
+# cask "betterdisplay"
+# cask "bitwarden"
+# cask "cleanshot"
+# cask "dropbox"
+
+# cask "firefox"
+# cask "firefox@developer-edition"
+
+# Global hotkeys
 cask "hammerspoon"
-cask "ilya-birman-typography-layout"
-cask "jordanbaird-ice"
-cask "maestral"
-cask "meld"
-cask "mks"
-cask "netnewswire"
-cask "notunes"
-cask "openvpn-connect"
-cask "orion"
-cask "pgadmin4"
-cask "qlmarkdown"
-cask "raycast"
-cask "rectangle"
-cask "slack"
-cask "spotify"
-cask "sublime-merge"
-cask "sublime-text"
-cask "swiftbar"
-cask "telegram-desktop"
-cask "temurin"
-cask "visual-studio-code"
-cask "vlc"
-cask "wezterm"
-vscode "ms-azuretools.vscode-docker"
-vscode "ms-vscode-remote.remote-containers"
+
+# cask "ilya-birman-typography-layout"
+
+# Hide menu bar icons
+# cask "jordanbaird-ice"
+
+# Visual diff and merge tool
+# cask "meld"
+
+# Disable opening iTunes with headphones media button
+# cask "notunes"
+
+# Quick look pluhin for Markdown
+# cask "qlmarkdown"
+
+# cask "vlc"
+# cask "gimp"
+
+#
+# On demand
+#
+
+# brew "ansible"
+# brew "difftastic"
+
+# Fuzzy finder
+# brew "sk"
+
+# Load/unload environment variables based on $PWD
+# brew "direnv"
+
+# Docker
+# brew "docker"
+# brew "docker-compose"
+# brew "qemu"
+# brew "lazydocker"
+
+# Changelog generator
+# brew "git-cliff"
+
+# Render Markdown in CLI
+# brew "glow"
+
+# brew "gnupg"
+
+# brew "httpie"
+
+# Instagram downloader
+# brew "instaloader"
+
+# Interactive JSON viewer
+# brew "fx"
+
+# JSON pretty-printer
+# brew "jsonpp"
+
+# brew "lazygit"
+
+# Markdown to HTML/CSS, PDF, PPT and images
+# brew "marp-cli"
+
+# Media player
+# brew "mpv"
+
+# Interactive du (disk usage)
+# brew "ncdu"
+# brew "duf"
+
+# tap "adoptopenjdk/openjdk"
+# brew "openjdk"
+
+# Filter logs and other things; sort of interactive grep
+# brew "peco"
+
+# PostgreSQL client
+# brew "pgcli"
+
+# Backup automation
+# brew "restic"
+
+# Execute a program periodically and monitor the output in full-screen mode
+# brew "watch"
+
+# Watches files and records, or triggers actions, when they change
+# brew "watchman"
+
+# tap "create-go-app/tap"
+# brew "create-go-app/tap/cgapp" # Create Go App CLI
+
+# Control Kubernetes
+# tap "derailed/k9s"
+# brew "derailed/k9s/k9s"
+
+# tap "elastic/tap"
+# brew "elastic/tap/elasticsearch-full"
+
+# Task Runner
+# tap "go-task/tap"
+# brew "go-task/tap/go-task"
+
+# Terraform
+# tap "hashicorp/tap"
+# brew "hashicorp/tap/terraform"
+
+# tap "heroku/brew"
+# brew "heroku/brew/heroku"
+
+# Go minifiers for web formats
+# tap "tdewolff/tap"
+# brew "tdewolff/tap/minify"
+
+# Interactive grep
+# tap "ynqa/tap"
+# brew "ynqa/tap/sigrs"
+
+# cask "audacity"
+# cask "fig"
+
+# Custom Dropbox client
+# cask "maestral"
+
+# cask "pgadmin4"
+
+# JDK from the Eclipse Foundation
+# cask "temurin"
+
+# cask "visual-studio-code"
