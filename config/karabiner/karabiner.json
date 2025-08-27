@@ -1,0 +1,188 @@
+{
+  "global": {
+    "show_in_menu_bar": false
+  },
+  "profiles": [
+    {
+      "complex_modifications": {
+        "rules": [
+          {
+            "description": "Switch keyboard layouts",
+            "manipulators": [
+              {
+                "from": {
+                  "key_code": "1",
+                  "modifiers": {
+                    "mandatory": [
+                      "left_command",
+                      "left_option"
+                    ],
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "key_code": "1",
+                    "modifiers": [
+                      "left_command",
+                      "left_option"
+                    ]
+                  }
+                ],
+                "to_if_alone": [
+                  {
+                    "select_input_source": {
+                      "input_source_id": "english"
+                    }
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "from": {
+                  "key_code": "2",
+                  "modifiers": {
+                    "mandatory": [
+                      "left_command",
+                      "left_option"
+                    ],
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "key_code": "2",
+                    "modifiers": [
+                      "left_command",
+                      "left_option"
+                    ]
+                  }
+                ],
+                "to_if_alone": [
+                  {
+                    "select_input_source": {
+                      "input_source_id": "russian"
+                    }
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          },
+          {
+            "description": "Notes control",
+            "manipulators": [
+              {
+                "type": "basic",
+                "from": {
+                  "key_code": "n",
+                  "modifiers": {
+                    "mandatory": [
+                      "left_control",
+                      "left_shift"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "shell_command": "/bin/sh -lc '. ~/.dotfiles/karabiner-env.sh; exec ~/.dotfiles/bin/new-note'"
+                  }
+                ]
+              },
+              {
+                "type": "basic",
+                "from": {
+                  "key_code": "l",
+                  "modifiers": {
+                    "mandatory": [
+                      "left_control",
+                      "left_shift"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "shell_command": "/bin/sh -lc '. ~/.dotfiles/karabiner-env.sh; exec ~/.dotfiles/bin/new-note'"
+                  }
+                ]
+              },
+              {
+                "type": "basic",
+                "from": {
+                  "key_code": "t",
+                  "modifiers": {
+                    "mandatory": [
+                      "left_control",
+                      "left_shift"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "shell_command": "/bin/sh -lc '. ~/.dotfiles/karabiner-env.sh; exec ~/.dotfiles/bin/new-note'"
+                  }
+                ]
+              },
+              {
+                "type": "basic",
+                "from": {
+                  "key_code": "b",
+                  "modifiers": {
+                    "mandatory": [
+                      "left_control",
+                      "left_shift"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "shell_command": "/bin/sh -lc '. ~/.dotfiles/karabiner-env.sh; exec ~/.dotfiles/bin/new-note'"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "devices": [
+        {
+          "identifiers": {
+            "is_keyboard": true,
+            "product_id": 783,
+            "vendor_id": 5215
+          },
+          "simple_modifications": [
+            {
+              "from": {
+                "pointing_button": "button4"
+              },
+              "to": [
+                {
+                  "key_code": "open_bracket"
+                }
+              ]
+            }
+          ],
+          "treat_as_built_in_keyboard": true
+        },
+        {
+          "identifiers": {
+            "is_pointing_device": true,
+            "product_id": 783,
+            "vendor_id": 5215
+          },
+          "ignore": false
+        }
+      ],
+      "name": "Default profile",
+      "selected": true,
+      "virtual_hid_keyboard": {
+        "keyboard_type_v2": "ansi"
+      }
+    }
+  ]
+}

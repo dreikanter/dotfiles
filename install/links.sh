@@ -19,3 +19,6 @@ ln -sf ~/.dotfiles/config/atuin/config.toml ~/.config/atuin/config.toml
 
 mkdir -p ~/.config/aerospace
 ln -sf ~/.dotfiles/config/aerospace/aerospace.toml ~/.config/aerospace/aerospace.toml
+
+mkdir -p ~/.config/karabiner
+ln -sf ~/.dotfiles/config/karabiner/karabiner.json ~/.config/karabiner/karabiner.json
