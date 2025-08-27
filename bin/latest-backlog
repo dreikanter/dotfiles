@@ -1,7 +1,8 @@
 #!/usr/bin/env ruby
 
-NOTES_PATH = ENV["NOTES_PATH"]
+NOTES_PATH = ENV["NOTES_PATH"] || File.expand_path("~/Dropbox/Notes")
+EDITOR = ENV["EDITOR"] || "/opt/homebrew/bin/subl --add"
 
 wildcard = File.join(NOTES_PATH, "**", "*_backlog.md")
 last_note_path = Dir.glob(wildcard).grep(%r{\d+/\d{2}/.*\.md}).max
-system("subl --add #{NOTES_PATH} #{last_note_path}")
+system("#{EDITOR} #{NOTES_PATH} #{last_note_path}")

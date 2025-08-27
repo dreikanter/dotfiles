@@ -89,7 +89,7 @@
                 },
                 "to": [
                   {
-                    "shell_command": "/bin/sh -lc '. ~/.dotfiles/karabiner-env.sh; exec ~/.dotfiles/bin/new-note'"
+                    "shell_command": "$HOME/.dotfiles/bin/new-note"
                   }
                 ]
               },
@@ -106,7 +106,7 @@
                 },
                 "to": [
                   {
-                    "shell_command": "/bin/sh -lc '. ~/.dotfiles/karabiner-env.sh; exec ~/.dotfiles/bin/new-note'"
+                    "shell_command": "$HOME/.dotfiles/bin/latest-note"
                   }
                 ]
               },
@@ -123,7 +123,7 @@
                 },
                 "to": [
                   {
-                    "shell_command": "/bin/sh -lc '. ~/.dotfiles/karabiner-env.sh; exec ~/.dotfiles/bin/new-note'"
+                    "shell_command": "$HOME/.dotfiles/bin/latest-todo"
                   }
                 ]
               },
@@ -140,7 +140,7 @@
                 },
                 "to": [
                   {
-                    "shell_command": "/bin/sh -lc '. ~/.dotfiles/karabiner-env.sh; exec ~/.dotfiles/bin/new-note'"
+                    "shell_command": "$HOME/.dotfiles/bin/latest-backlog"
                   }
                 ]
               }

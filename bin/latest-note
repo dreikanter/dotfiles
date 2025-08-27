@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 
-NOTES_PATH = ENV["NOTES_PATH"]
+NOTES_PATH = ENV["NOTES_PATH"] || File.expand_path("~/Dropbox/Notes")
+EDITOR = ENV["EDITOR"] || "/opt/homebrew/bin/subl --add"
 
 # Skip "99999999_*" notes
 def pinned?(path)
@@ -9,4 +10,4 @@ end
 
 wildcard = File.join(NOTES_PATH, "**", "*.md")
 last_note_path = Dir.glob(wildcard).grep(%r{\d+/\d{2}/.*\.md}).reject { |path| pinned?(path) }.max
-system("subl --add #{NOTES_PATH} #{last_note_path}")
+system("#{EDITOR} #{NOTES_PATH} #{last_note_path}")
