@@ -122,7 +122,7 @@
                 },
                 "to": [
                   {
-                    "shell_command": "$HOME/.dotfiles/bin/new-note"
+                    "shell_command": "/bin/zsh -c 'source $HOME/.zshenv && $HOME/.dotfiles/bin/new-note'"
                   }
                 ]
               },
@@ -139,7 +139,7 @@
                 },
                 "to": [
                   {
-                    "shell_command": "$HOME/.dotfiles/bin/latest-note"
+                    "shell_command": "/bin/zsh -c 'source $HOME/.zshenv && $HOME/.dotfiles/bin/latest-note"
                   }
                 ]
               },
@@ -156,7 +156,7 @@
                 },
                 "to": [
                   {
-                    "shell_command": "$HOME/.dotfiles/bin/latest-todo"
+                    "shell_command": "/bin/zsh -c 'source $HOME/.zshenv && $HOME/.dotfiles/bin/latest-todo"
                   }
                 ]
               },
@@ -173,7 +173,7 @@
                 },
                 "to": [
                   {
-                    "shell_command": "$HOME/.dotfiles/bin/latest-backlog"
+                    "shell_command": "/bin/zsh -c 'source $HOME/.zshenv && $HOME/.dotfiles/bin/latest-backlog"
                   }
                 ]
               }
