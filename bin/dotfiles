@@ -4,10 +4,16 @@ require "fileutils"
 require "optparse"
 
 CONFIG_FILES = {
-  "~/.config/karabiner/karabiner.json" => "~/.dotfiles/config/karabiner/karabiner.json"
+  "~/.config/karabiner/karabiner.json" => "~/.dotfiles/config/karabiner/karabiner.json",
+  "~/.gitconfig" => "~/.dotfiles/config/git/gitconfig",
+  "~/.gitignore_global" => "~/.dotfiles/config/git/gitignore_global",
+  "~/.editorconfig" => "~/.dotfiles/config/editorconfig/editorconfig",
+  "~/.zshrc" => "~/.dotfiles/config/zsh/zshrc"
 }
 
 def copy_file(src, dest, dry_run)
+  puts "#{src} -> #{dest}"
+
   src = File.expand_path(src)
   dest = File.expand_path(dest)
 
@@ -16,10 +22,10 @@ def copy_file(src, dest, dry_run)
     return false
   end
 
-  puts "#{src} -> #{dest}"
   return if dry_run
 
   FileUtils.mkdir_p(File.dirname(dest))
+  File.unlink(dest) if File.symlink?(dest)
   FileUtils.cp(src, dest)
 end
 

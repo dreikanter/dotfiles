@@ -1,0 +1,10 @@
+*.log
+*.retry
+*.pyc
+*.sqlite3
+.bundle
+.DS_Store
+.ctags
+/log
+/tmp
+*_do_not_commit*
