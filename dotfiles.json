@@ -11,6 +11,7 @@
   "~/.gemrc": "~/.dotfiles/config/gem/gemrc",
   "~/.pryrc": "~/.dotfiles/config/pry/pryrc",
   "~/.config/zed/settings.json": "~/.dotfiles/config/zed/settings.json",
+  "~/.config/nvim/init.lua": "~/.dotfiles/config/nvim/init.lua",
   "~/Library/Application Support/Sublime Text/Packages/User/base16-eighties-custom.sublime-color-scheme": "~/.dotfiles/config/sublimetext/",
   "~/Library/Application Support/Sublime Text/Packages/User/copy_name.py": "~/.dotfiles/config/sublimetext/",
   "~/Library/Application Support/Sublime Text/Packages/User/copy_name.sublime-commands": "~/.dotfiles/config/sublimetext/",
