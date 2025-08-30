@@ -14,7 +14,9 @@
                 "from": {
                   "key_code": "caps_lock",
                   "modifiers": {
-                    "optional": ["any"]
+                    "optional": [
+                      "any"
+                    ]
                   }
                 },
                 "to": [
@@ -207,6 +209,14 @@
             "is_pointing_device": true,
             "product_id": 783,
             "vendor_id": 5215
+          },
+          "ignore": false
+        },
+        {
+          "identifiers": {
+            "device_address": "fa-f4-7d-51-7f-e7",
+            "is_keyboard": true,
+            "is_pointing_device": true
           },
           "ignore": false
         }
