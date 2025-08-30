@@ -3,11 +3,7 @@
 Initial setup:
 
 ``` bash
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-brew install git
-git clone git@github.com:dreikanter/dotfiles.git ~/.dotfiles
-bash ~/.dotfiles/bin/dotfiles load
-ln -sf ~/.dotfiles/bin ~/bin
+bash <(curl -fsSL https://raw.githubusercontent.com/dreikanter/dotfiles/master/setup)
 ```
 
 Install homebrew packages:

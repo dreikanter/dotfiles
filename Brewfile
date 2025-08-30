@@ -1,4 +1,10 @@
 #
+# Homebrew bundle installation is intentionally not included into setup script.
+#
+# Usage: brew bundle --file=~/.dotfiles/Brewfile
+#
+
+#
 # Priority CLI tools, libs and services
 #
 

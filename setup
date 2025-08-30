@@ -1,0 +1,41 @@
+#!/bin/bash
+
+set -e
+
+if ! command -v brew &> /dev/null; then
+    echo "Installing Homebrew..."
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+else
+    echo "Homebrew already installed, skipping..."
+fi
+
+# Check if git is properly installed (not just the Xcode stub)
+if ! git --version &> /dev/null || git --version 2>&1 | grep -q "xcode-select"; then
+    echo "Installing git..."
+    brew install git
+else
+    echo "Git already installed, skipping..."
+fi
+
+if [ ! -d ~/.dotfiles ]; then
+    echo "Cloning dotfiles..."
+    git clone git@github.com:dreikanter/dotfiles.git ~/.dotfiles
+else
+    echo "Dotfiles directory already exists, skipping clone..."
+fi
+
+if [ -d ~/.dotfiles/bin ]; then
+    echo "Creating bin symlink..."
+    ln -sf ~/.dotfiles/bin ~/bin
+else
+    echo "Warning: ~/.dotfiles/bin directory not found"
+fi
+
+if [ -f ~/.dotfiles/bin/dotfiles ]; then
+    echo "Loading dotfiles..."
+    bash ~/.dotfiles/bin/dotfiles load
+else
+    echo "Warning: dotfiles script not found at ~/.dotfiles/bin/dotfiles"
+fi
+
+echo "Dotfiles installation complete!"
