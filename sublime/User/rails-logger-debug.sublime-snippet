@@ -1,7 +1,0 @@
-<snippet>
-    <content><![CDATA[
-Rails.logger.debug("---> ${1}")
-]]></content>
-    <tabTrigger>rd</tabTrigger>
-    <scope>source.ruby</scope>
-</snippet>

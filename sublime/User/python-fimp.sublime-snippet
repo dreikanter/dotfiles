@@ -1,7 +1,0 @@
-<!-- See http://www.sublimetext.com/docs/snippets for more information -->
-<snippet>
-    <tabTrigger>fimp</tabTrigger>
-    <scope>source.python</scope>
-    <description>Python from... import ...</description>
-    <content><![CDATA[from $1 import $0]]></content>
-</snippet>

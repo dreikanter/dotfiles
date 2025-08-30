@@ -1,7 +1,0 @@
-<snippet>
-    <tabTrigger>pd</tabTrigger>
-    <scope>source.ruby</scope>
-    <description>Print to stdout</description>
-    <content><![CDATA[p "-----> ${1}"
-]]></content>
-</snippet>

@@ -1,7 +1,0 @@
-<snippet>
-    <content><![CDATA[
-Rails.logger.debug("---> ${1} == #{JSON.pretty_generate(${1}.as_json)}")
-]]></content>
-    <tabTrigger>rdd</tabTrigger>
-    <scope>source.ruby</scope>
-</snippet>
