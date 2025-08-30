@@ -90,37 +90,52 @@ def load_dotfiles(config_files, dry_run)
   end
 end
 
-def list_managed_files(config_files)
-  puts "Managed files:"
+def show_status(config_files)
+  puts "Status of managed files:"
   puts
 
   config_files.each do |local_path, dotfile_path|
-    local_exists = File.exist?(local_path)
-    dotfile_exists = File.exist?(dotfile_path)
-
-    status = case
-             when local_exists && dotfile_exists
-               colorize("✓", Colors::GREEN)
-             when local_exists && !dotfile_exists
-               colorize("L", Colors::GRAY)
-             when !local_exists && dotfile_exists
-               colorize("D", Colors::GRAY)
-             else
-               colorize("✗", Colors::RED)
-             end
-
-    puts "#{status} #{local_path}"
+    status = status_text(local_path, dotfile_path)
+    puts "#{status.ljust(30)} #{local_path}"
   end
+end
 
-  puts
-  puts "Legend: ✓ = both exist, L = local only, D = dotfile only, ✗ = neither exist"
+def status_text(local_path, dotfile_path)
+  local_exists = File.exist?(local_path)
+  dotfile_exists = File.exist?(dotfile_path)
+
+  case
+  when !local_exists && !dotfile_exists
+    colorize("neither exists", Colors::RED)
+  when !local_exists && dotfile_exists
+    colorize("local copy missing", Colors::GRAY)
+  when local_exists && !dotfile_exists
+    colorize("dotfile missing", Colors::GRAY)
+  when local_exists && dotfile_exists
+    if files_equal?(local_path, dotfile_path)
+      colorize("in sync", Colors::GREEN)
+    else
+      local_mtime = File.mtime(local_path)
+      dotfile_mtime = File.mtime(dotfile_path)
+
+      if local_mtime > dotfile_mtime
+        colorize("local changes", Colors::RED)
+      else
+        colorize("dotfile changes", Colors::RED)
+      end
+    end
+  end
+end
+
+def files_equal?(file1, file2)
+  return false unless File.exist?(file1) && File.exist?(file2)
+  File.read(file1) == File.read(file2)
 end
 
 def show_config(config_files)
-  puts JSON.pretty_generate(config_files)
+  puts JSON.pretty_generate(config_files.invert)
 end
 
-# Parse arguments
 options = { dry_run: false }
 
 parser = OptionParser.new do |opts|
@@ -130,7 +145,7 @@ parser = OptionParser.new do |opts|
   opts.separator "Commands:"
   opts.separator "  save        Copy local environment configuration to dotfiles"
   opts.separator "  load        Load dotfiles configuration to local environment"
-  opts.separator "  ls          List managed files with status"
+  opts.separator "  status      Show status of managed files"
   opts.separator "  config      Show configuration mapping as JSON"
   opts.separator ""
   opts.separator "Options:"
@@ -166,8 +181,8 @@ when "save"
   save_dotfiles(config_files, options[:dry_run])
 when "load"
   load_dotfiles(config_files, options[:dry_run])
-when "ls"
-  list_managed_files(config_files)
+when "ls", "status"
+  show_status(config_files)
 when "config"
   show_config(config_files)
 else
