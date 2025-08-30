@@ -6,16 +6,29 @@ require "json"
 
 CONFIG_PATH = File.expand_path("~/.dotfiles/dotfiles.json").freeze
 
+# ANSI color codes
+module Colors
+  RED = "\033[31m"
+  GREEN = "\033[32m"
+  GRAY = "\033[90m"
+  RESET = "\033[0m"
+end
+
+def colorize(text, color)
+  return text if ENV["NO_COLOR"]
+  "#{color}#{text}#{Colors::RESET}"
+end
+
 def load_config_files
   unless File.exist?(CONFIG_PATH)
-    puts "Error: Configuration file not found: #{CONFIG_PATH}"
+    puts colorize("Error:", Colors::RED) + " Configuration file not found: #{CONFIG_PATH}"
     exit 1
   end
 
   begin
     JSON.parse(File.read(CONFIG_PATH))
   rescue JSON::ParserError => e
-    puts "Error: Invalid JSON in #{CONFIG_PATH}: #{e.message}"
+    puts colorize("Error:", Colors::RED) + " Invalid JSON in #{CONFIG_PATH}: #{e.message}"
     exit 1
   end
 end
@@ -34,20 +47,35 @@ end
 
 def copy_file(src, dest, dry_run)
   resolved_dest = resolve_destination(src, dest)
-  puts "#{src} -> #{resolved_dest}"
-
   src = File.expand_path(src)
 
+  puts src
+  puts colorize(resolved_dest, Colors::GRAY)
+
   unless File.exist?(src)
-    puts "Source file not found: #{src}"
+    puts colorize("Error:", Colors::RED) + " Source file not found: #{src}"
+    puts
     return false
   end
 
-  return if dry_run
+  if dry_run
+    puts colorize("OK", Colors::GREEN) + " (dry run)"
+    puts
+    return true
+  end
 
-  FileUtils.mkdir_p(File.dirname(resolved_dest))
-  File.unlink(resolved_dest) if File.symlink?(resolved_dest)
-  FileUtils.cp(src, resolved_dest)
+  begin
+    FileUtils.mkdir_p(File.dirname(resolved_dest))
+    File.unlink(resolved_dest) if File.symlink?(resolved_dest)
+    FileUtils.cp(src, resolved_dest)
+    puts colorize("OK", Colors::GREEN)
+    puts
+    true
+  rescue => e
+    puts colorize("Error:", Colors::RED) + e.message
+    puts
+    false
+  end
 end
 
 def save_dotfiles(dry_run)
