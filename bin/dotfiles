@@ -2,20 +2,41 @@
 
 require "fileutils"
 require "optparse"
+require "json"
 
-CONFIG_FILES = {
-  "~/.config/karabiner/karabiner.json" => "~/.dotfiles/config/karabiner/karabiner.json",
-  "~/.gitconfig" => "~/.dotfiles/config/git/gitconfig",
-  "~/.gitignore_global" => "~/.dotfiles/config/git/gitignore_global",
-  "~/.editorconfig" => "~/.dotfiles/config/editorconfig/editorconfig",
-  "~/.zshrc" => "~/.dotfiles/config/zsh/zshrc"
-}
+CONFIG_PATH = File.expand_path("~/.dotfiles/dotfiles.json").freeze
+
+def load_config_files
+  unless File.exist?(CONFIG_PATH)
+    puts "Error: Configuration file not found: #{CONFIG_PATH}"
+    exit 1
+  end
+
+  begin
+    JSON.parse(File.read(CONFIG_PATH))
+  rescue JSON::ParserError => e
+    puts "Error: Invalid JSON in #{CONFIG_PATH}: #{e.message}"
+    exit 1
+  end
+end
+
+def resolve_destination(src, dest)
+  expanded_dest = File.expand_path(dest)
+
+  # If destination ends with a slash, it's a directory - preserve source filename
+  if dest.end_with?("/")
+    src_filename = File.basename(src)
+    File.join(expanded_dest, src_filename)
+  else
+    expanded_dest
+  end
+end
 
 def copy_file(src, dest, dry_run)
-  puts "#{src} -> #{dest}"
+  resolved_dest = resolve_destination(src, dest)
+  puts "#{src} -> #{resolved_dest}"
 
   src = File.expand_path(src)
-  dest = File.expand_path(dest)
 
   unless File.exist?(src)
     puts "Source file not found: #{src}"
@@ -24,16 +45,17 @@ def copy_file(src, dest, dry_run)
 
   return if dry_run
 
-  FileUtils.mkdir_p(File.dirname(dest))
-  File.unlink(dest) if File.symlink?(dest)
-  FileUtils.cp(src, dest)
+  FileUtils.mkdir_p(File.dirname(resolved_dest))
+  File.unlink(resolved_dest) if File.symlink?(resolved_dest)
+  FileUtils.cp(src, resolved_dest)
 end
 
 def save_dotfiles(dry_run)
   puts "local environment -> dotfiles#{" [DRY RUN]" if dry_run}"
   puts
 
-  CONFIG_FILES.each do |local_path, dotfile_path|
+  config_files = load_config_files
+  config_files.each do |local_path, dotfile_path|
     copy_file(local_path, dotfile_path, dry_run)
   end
 end
@@ -42,7 +64,8 @@ def load_dotfiles(dry_run)
   puts "dotfiles -> local environment#{" [DRY RUN]" if dry_run}"
   puts
 
-  CONFIG_FILES.each do |local_path, dotfile_path|
+  config_files = load_config_files
+  config_files.each do |local_path, dotfile_path|
     copy_file(dotfile_path, local_path, dry_run)
   end
 end

@@ -1,0 +1,11 @@
+{
+  "~/.config/aerospace/aerospace.toml": "~/.dotfiles/config/aerospace/aerospace.toml",
+  "~/.config/atuin/config.toml": "~/.dotfiles/config/atuin/config.toml",
+  "~/.config/karabiner/karabiner.json": "~/.dotfiles/config/karabiner/karabiner.json",
+  "~/.config/wezterm/wezterm.lua": "~/.dotfiles/config/wezterm/wezterm.lua",
+  "~/.editorconfig": "~/.dotfiles/config/editorconfig/editorconfig",
+  "~/.gitconfig": "~/.dotfiles/config/git/gitconfig",
+  "~/.gitignore_global": "~/.dotfiles/config/git/gitignore_global",
+  "~/.zshrc": "~/.dotfiles/config/zsh/zshrc",
+  "~/.config/starship.toml": "~/.dotfiles/config/starship/starship.toml"
+}
