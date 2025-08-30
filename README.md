@@ -7,6 +7,7 @@ Initial setup:
 brew install git
 git clone git@github.com:dreikanter/dotfiles.git ~/.dotfiles
 bash ~/.dotfiles/bin/dotfiles load
+ln -sf ~/.dotfiles/bin ~/bin
 ```
 
 Install homebrew packages:
