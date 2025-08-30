@@ -1,0 +1,90 @@
+#!/usr/bin/env ruby
+
+require "fileutils"
+require "optparse"
+
+CONFIG_FILES = {
+  "~/.config/karabiner/karabiner.json" => "~/.dotfiles/config/karabiner/karabiner.json"
+}
+
+def copy_file(src, dest, dry_run)
+  src = File.expand_path(src)
+  dest = File.expand_path(dest)
+
+  unless File.exist?(src)
+    puts "Source file not found: #{src}"
+    return false
+  end
+
+  puts "#{src} -> #{dest}"
+  return if dry_run
+
+  FileUtils.mkdir_p(File.dirname(dest))
+  FileUtils.cp(src, dest)
+end
+
+def save_dotfiles(dry_run)
+  puts "local environment -> dotfiles#{" [DRY RUN]" if dry_run}"
+  puts
+
+  CONFIG_FILES.each do |local_path, dotfile_path|
+    copy_file(local_path, dotfile_path, dry_run)
+  end
+end
+
+def load_dotfiles(dry_run)
+  puts "dotfiles -> local environment#{" [DRY RUN]" if dry_run}"
+  puts
+
+  CONFIG_FILES.each do |local_path, dotfile_path|
+    copy_file(dotfile_path, local_path, dry_run)
+  end
+end
+
+# Parse arguments
+options = { dry_run: false }
+
+parser = OptionParser.new do |opts|
+  opts.banner = "Usage: #{File.basename($0)} COMMAND [OPTIONS]"
+  opts.separator "Manage dotfiles configuration"
+  opts.separator ""
+  opts.separator "Commands:"
+  opts.separator "  save        Copy local environment configuration to dotfiles"
+  opts.separator "  load        Load dotfiles configuration to local environment"
+  opts.separator ""
+  opts.separator "Options:"
+
+  opts.on("-n", "--dry-run", "Show what would be done") do
+    options[:dry_run] = true
+  end
+
+  opts.on("-h", "--help", "Show this help message") do
+    puts opts
+    exit 0
+  end
+end
+
+begin
+  parser.parse!
+rescue OptionParser::InvalidOption => e
+  puts "Error: #{e}"
+  puts parser
+  exit 1
+end
+
+if ARGV.empty?
+  puts parser
+  exit 0
+end
+
+command = ARGV[0]
+
+case command
+when "save"
+  save_dotfiles(options[:dry_run])
+when "load"
+  load_dotfiles(options[:dry_run])
+else
+  puts "Unknown command: #{command}"
+  exit 1
+end
