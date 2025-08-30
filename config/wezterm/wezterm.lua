@@ -5,10 +5,12 @@ local action = wezterm.action
 -- https://wezfurlong.org/wezterm/colorschemes/a/index.html
 
 return {
-  color_scheme = "Afterglow",
+  -- color_scheme = "Afterglow",
+  color_scheme = "Tokyo Night",
   font = wezterm.font("JetBrains Mono"),
   font_size = 16.0,
   window_close_confirmation = "NeverPrompt",
+  window_padding = { left=15, right=15, top=15, bottom=15 },
   scrollback_lines = 50000,
   skip_close_confirmation_for_processes_named = { "bash", "sh", "zsh", "fish", "tmux", "rails" },
   keys = {
