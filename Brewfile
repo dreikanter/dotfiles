@@ -90,7 +90,7 @@ cask "font-jetbrains-mono"
 # cask "firefox@developer-edition"
 
 # Global hotkeys
-cask "hammerspoon"
+# cask "hammerspoon"
 
 # cask "ilya-birman-typography-layout"
 

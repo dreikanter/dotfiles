@@ -7,7 +7,6 @@ ln -sf ~/.dotfiles/gitconfig ~/.gitconfig
 ln -sf ~/.dotfiles/gitignore_global ~/.gitignore_global
 ln -sf ~/.dotfiles/zshrc ~/.zshrc
 ln -sf ~/.dotfiles/bin ~/bin
-ln -sf ~/.dotfiles/hammerspoon ~/.hammerspoon
 ln -sf ~/.dotfiles/config/nvim ~/.config/nvim
 ln -sf ~/.dotfiles/config/starship.toml ~/.config/
 
