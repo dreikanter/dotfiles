@@ -90,6 +90,36 @@ def load_dotfiles(config_files, dry_run)
   end
 end
 
+def list_managed_files(config_files)
+  puts "Managed files:"
+  puts
+
+  config_files.each do |local_path, dotfile_path|
+    local_exists = File.exist?(local_path)
+    dotfile_exists = File.exist?(dotfile_path)
+
+    status = case
+             when local_exists && dotfile_exists
+               colorize("✓", Colors::GREEN)
+             when local_exists && !dotfile_exists
+               colorize("L", Colors::GRAY)
+             when !local_exists && dotfile_exists
+               colorize("D", Colors::GRAY)
+             else
+               colorize("✗", Colors::RED)
+             end
+
+    puts "#{status} #{local_path}"
+  end
+
+  puts
+  puts "Legend: ✓ = both exist, L = local only, D = dotfile only, ✗ = neither exist"
+end
+
+def show_config(config_files)
+  puts JSON.pretty_generate(config_files)
+end
+
 # Parse arguments
 options = { dry_run: false }
 
@@ -100,6 +130,8 @@ parser = OptionParser.new do |opts|
   opts.separator "Commands:"
   opts.separator "  save        Copy local environment configuration to dotfiles"
   opts.separator "  load        Load dotfiles configuration to local environment"
+  opts.separator "  ls          List managed files with status"
+  opts.separator "  config      Show configuration mapping as JSON"
   opts.separator ""
   opts.separator "Options:"
 
@@ -134,6 +166,10 @@ when "save"
   save_dotfiles(config_files, options[:dry_run])
 when "load"
   load_dotfiles(config_files, options[:dry_run])
+when "ls"
+  list_managed_files(config_files)
+when "config"
+  show_config(config_files)
 else
   puts "Unknown command: #{command}"
   exit 1
