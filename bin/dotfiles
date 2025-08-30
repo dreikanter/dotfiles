@@ -6,7 +6,6 @@ require "json"
 
 CONFIG_PATH = File.expand_path("~/.dotfiles/dotfiles.json").freeze
 
-# ANSI color codes
 module Colors
   RED = "\033[31m"
   GREEN = "\033[32m"
@@ -19,38 +18,33 @@ def colorize(text, color)
   "#{color}#{text}#{Colors::RESET}"
 end
 
-def load_config_files
-  unless File.exist?(CONFIG_PATH)
-    puts colorize("Error:", Colors::RED) + " Configuration file not found: #{CONFIG_PATH}"
-    exit 1
-  end
+def load_configuration
+  raw_config = JSON.parse(File.read(CONFIG_PATH))
 
-  begin
-    JSON.parse(File.read(CONFIG_PATH))
-  rescue JSON::ParserError => e
-    puts colorize("Error:", Colors::RED) + " Invalid JSON in #{CONFIG_PATH}: #{e.message}"
-    exit 1
-  end
-end
+  # Resolve directory destinations to full file paths
+  raw_config.to_h do |local_path, dotfile_path|
+    if dotfile_path.end_with?("/")
+      src_filename = File.basename(local_path)
+      resolved_dotfile_path = File.join(File.expand_path(dotfile_path), src_filename)
+    else
+      resolved_dotfile_path = File.expand_path(dotfile_path)
+    end
 
-def resolve_destination(src, dest)
-  expanded_dest = File.expand_path(dest)
-
-  # If destination ends with a slash, it's a directory - preserve source filename
-  if dest.end_with?("/")
-    src_filename = File.basename(src)
-    File.join(expanded_dest, src_filename)
-  else
-    expanded_dest
+    [File.expand_path(local_path), resolved_dotfile_path]
   end
+rescue Errno::ENOENT
+  puts colorize("Error:", Colors::RED) + " Configuration file not found: #{CONFIG_PATH}"
+  exit 1
+rescue JSON::ParserError => e
+  puts colorize("Error:", Colors::RED) + " Invalid JSON in #{CONFIG_PATH}: #{e.message}"
+  exit 1
 end
 
 def copy_file(src, dest, dry_run)
-  resolved_dest = resolve_destination(src, dest)
   src = File.expand_path(src)
 
   puts src
-  puts colorize(resolved_dest, Colors::GRAY)
+  puts colorize(dest, Colors::GRAY)
 
   unless File.exist?(src)
     puts colorize("Error:", Colors::RED) + " Source file not found: #{src}"
@@ -65,9 +59,9 @@ def copy_file(src, dest, dry_run)
   end
 
   begin
-    FileUtils.mkdir_p(File.dirname(resolved_dest))
-    File.unlink(resolved_dest) if File.symlink?(resolved_dest)
-    FileUtils.cp(src, resolved_dest)
+    FileUtils.mkdir_p(File.dirname(dest))
+    File.unlink(dest) if File.symlink?(dest)
+    FileUtils.cp(src, dest)
     puts colorize("OK", Colors::GREEN)
     puts
     true
@@ -78,21 +72,19 @@ def copy_file(src, dest, dry_run)
   end
 end
 
-def save_dotfiles(dry_run)
+def save_dotfiles(config_files, dry_run)
   puts "local environment -> dotfiles#{" [DRY RUN]" if dry_run}"
   puts
 
-  config_files = load_config_files
   config_files.each do |local_path, dotfile_path|
     copy_file(local_path, dotfile_path, dry_run)
   end
 end
 
-def load_dotfiles(dry_run)
+def load_dotfiles(config_files, dry_run)
   puts "dotfiles -> local environment#{" [DRY RUN]" if dry_run}"
   puts
 
-  config_files = load_config_files
   config_files.each do |local_path, dotfile_path|
     copy_file(dotfile_path, local_path, dry_run)
   end
@@ -135,12 +127,13 @@ if ARGV.empty?
 end
 
 command = ARGV[0]
+config_files = load_configuration
 
 case command
 when "save"
-  save_dotfiles(options[:dry_run])
+  save_dotfiles(config_files, options[:dry_run])
 when "load"
-  load_dotfiles(options[:dry_run])
+  load_dotfiles(config_files, options[:dry_run])
 else
   puts "Unknown command: #{command}"
   exit 1
