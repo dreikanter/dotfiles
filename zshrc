@@ -55,6 +55,7 @@ alias railstb='rails test $(git diff --name-only --diff-filter=ACMRTUXB main...H
 alias s="subl ."
 alias ss="subl --add ."
 alias vim="nvim"
+alias v="nvim"
 
 # Git
 
