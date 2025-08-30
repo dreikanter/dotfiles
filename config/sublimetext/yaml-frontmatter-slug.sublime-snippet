@@ -1,0 +1,11 @@
+<snippet>
+    <tabTrigger>yys</tabTrigger>
+    <scope>text.html.markdown</scope>
+    <description>Add YAML frontmatter with slug</description>
+    <content><![CDATA[---
+slug: ${1:slug}
+---
+
+$0
+]]></content>
+</snippet>

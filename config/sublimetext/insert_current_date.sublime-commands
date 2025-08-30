@@ -1,0 +1,6 @@
+[
+  {
+    "caption": "Insert Current Date With Linebreak",
+    "command": "insert_current_date"
+  }
+]

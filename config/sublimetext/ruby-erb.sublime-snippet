@@ -1,0 +1,7 @@
+<snippet>
+    <tabTrigger>erb</tabTrigger>
+    <scope>source.ruby, text</scope>
+    <description>Blank ERB tag</description>
+    <content><![CDATA[<% ${1:code} %>
+]]></content>
+</snippet>

@@ -1,0 +1,13 @@
+{
+	"extensions":
+	[
+    "md",
+		"markdown",
+    "txt"
+	],
+	"tab_size": 2,
+	"trim_trailing_white_space_on_save": false,
+  "line_numbers": false,
+  "word_wrap": true,
+  "draw_centered": false
+}

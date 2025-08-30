@@ -1,0 +1,11 @@
+<snippet>
+    <tabTrigger>yytg</tabTrigger>
+    <scope>text.html.markdown</scope>
+    <description>Add YAML frontmatter with tags list</description>
+    <content><![CDATA[---
+tags: [${1}]
+---
+
+$0
+]]></content>
+</snippet>

@@ -1,0 +1,12 @@
+<snippet>
+    <tabTrigger>yye</tabTrigger>
+    <scope>text.html.markdown</scope>
+    <description>YAML frontmatter for eurorack sessions series</description>
+    <content><![CDATA[---
+slug: eurorack-session-${1:00}
+tags: [eurorack]
+---
+
+$0
+]]></content>
+</snippet>

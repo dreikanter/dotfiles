@@ -1,0 +1,11 @@
+<snippet>
+    <tabTrigger>yyt</tabTrigger>
+    <scope>text.html.markdown</scope>
+    <description>Add YAML frontmatter for a todo list</description>
+    <content><![CDATA[---
+slug: ${1:todo}
+---
+
+$0
+]]></content>
+</snippet>
