@@ -7,5 +7,7 @@
   "~/.gitconfig": "~/.dotfiles/config/git/gitconfig",
   "~/.gitignore_global": "~/.dotfiles/config/git/gitignore_global",
   "~/.zshrc": "~/.dotfiles/config/zsh/zshrc",
-  "~/.config/starship.toml": "~/.dotfiles/config/starship/starship.toml"
+  "~/.config/starship.toml": "~/.dotfiles/config/starship/starship.toml",
+  "~/.gemrc": "~/.dotfiles/config/gem/gemrc",
+  "~/.pryrc": "~/.dotfiles/config/pry/pryrc"
 }

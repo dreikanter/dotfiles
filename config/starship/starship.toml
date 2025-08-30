@@ -1,0 +1,32 @@
+# https://starship.rs/config/
+
+format = """
+$username\
+$hostname\
+$directory\
+$git_branch\
+$git_commit\
+$git_state\
+$git_metrics\
+$hg_branch\
+$ruby\
+$custom\
+$sudo\
+$cmd_duration\
+$line_break\
+$jobs\
+$status\
+$shell\
+$character"""
+
+[directory]
+style = "bold green"
+
+[git_branch]
+symbol = ""
+style = "bold blue"
+
+[ruby]
+format = "[$symbol($version)]($style) "
+symbol = "rb "
+version_format = "${raw}"
