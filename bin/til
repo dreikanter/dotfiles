@@ -1,0 +1,22 @@
+#!/usr/bin/env ruby
+
+notes_path = ENV["NOTES_PATH"]
+
+abort "NOTES_PATH environment variable not set" if notes_path.nil? || notes_path.empty?
+abort "Directory #{notes_path} does not exist" unless Dir.exist?(notes_path)
+
+til_file = File.join(notes_path, "til.md")
+text = ARGV.join(" ")
+
+unless text.empty?
+  timestamp = Time.now.strftime("%Y-%m-%d %H:%M")
+  entry = "- #{timestamp}: #{text}\n"
+  File.open(til_file, "a") { |f| f.write(entry) }
+  puts "Saved"
+  exit
+end
+
+lines = File.readlines(til_file) rescue []
+lines.last(10).each do |line|
+  puts line.sub(/^- [\d:\s-]+: /, "")
+end
