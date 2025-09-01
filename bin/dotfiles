@@ -40,21 +40,18 @@ rescue JSON::ParserError => e
   exit 1
 end
 
-def copy_file(src, dest, dry_run)
+def copy_file(src, dest, dry_run: false, verbose: false)
   src = File.expand_path(src)
-
-  puts src
-  puts colorize(dest, Colors::GRAY)
+  puts src + "\n" + colorize(dest, Colors::GRAY) if verbose
 
   unless File.exist?(src)
-    puts colorize("Error:", Colors::RED) + " Source file not found: #{src}"
-    puts
+    puts colorize("Error:", Colors::RED) + " Source file not found: #{src}" + "\n\n"
     return false
   end
 
   if dry_run
-    puts colorize("OK", Colors::GREEN) + " (dry run)"
-    puts
+    puts colorize("OK", Colors::GREEN) + " (dry run)" if verbose
+    puts if verbose
     return true
   end
 
@@ -62,8 +59,7 @@ def copy_file(src, dest, dry_run)
     FileUtils.mkdir_p(File.dirname(dest))
     File.unlink(dest) if File.symlink?(dest)
     FileUtils.cp(src, dest)
-    puts colorize("OK", Colors::GREEN)
-    puts
+    puts colorize("OK", Colors::GREEN) + "\n" if verbose
     true
   rescue => e
     puts colorize("Error:", Colors::RED) + e.message
@@ -72,22 +68,40 @@ def copy_file(src, dest, dry_run)
   end
 end
 
-def save_dotfiles(config_files, dry_run)
-  puts "local environment -> dotfiles#{" [DRY RUN]" if dry_run}"
-  puts
+def save_dotfiles(config_files, dry_run: false, verbose: false)
+  puts "local environment -> dotfiles#{" [DRY RUN]" if dry_run}" + "\n\n"
+
+  success_count = 0
+  errors_count = 0
 
   config_files.each do |local_path, dotfile_path|
-    copy_file(local_path, dotfile_path, dry_run)
+    if copy_file(local_path, dotfile_path, dry_run: dry_run, verbose: verbose)
+      success_count += 1
+    else
+      errors_count += 1
+    end
   end
+
+  puts "Files copied: #{success_count}; errors: #{errors_count}"
+  puts "All good" if errors_count.zero?
 end
 
-def load_dotfiles(config_files, dry_run)
-  puts "dotfiles -> local environment#{" [DRY RUN]" if dry_run}"
-  puts
+def load_dotfiles(config_files, dry_run: false, verbose: false)
+  puts "dotfiles -> local environment#{" [DRY RUN]" if dry_run}" + "\n\n"
+
+  success_count = 0
+  errors_count = 0
 
   config_files.each do |local_path, dotfile_path|
-    copy_file(dotfile_path, local_path, dry_run)
+    if copy_file(dotfile_path, local_path, dry_run: dry_run, verbose: verbose)
+      success_count += 1
+    else
+      errors_count += 1
+    end
   end
+
+  puts "Files copied: #{success_count}; errors: #{errors_count}"
+  puts "All good" if errors_count.zero?
 end
 
 def show_status(config_files)
@@ -154,6 +168,10 @@ parser = OptionParser.new do |opts|
     options[:dry_run] = true
   end
 
+  opts.on("-v", "--verbose", "Verbose output") do
+    options[:verbose] = true
+  end
+
   opts.on("-h", "--help", "Show this help message") do
     puts opts
     exit 0
@@ -178,9 +196,9 @@ config_files = load_configuration
 
 case command
 when "save"
-  save_dotfiles(config_files, options[:dry_run])
+  save_dotfiles(config_files, **options)
 when "load"
-  load_dotfiles(config_files, options[:dry_run])
+  load_dotfiles(config_files, **options)
 when "ls", "status"
   show_status(config_files)
 when "config"
