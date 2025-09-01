@@ -34,17 +34,11 @@
   "ensure_newline_at_eof_on_save": true,
   "file_exclude_patterns":
   [
-    ".DS_Store"
   ],
   "find_selected_text": true,
   "fold_buttons": false,
   "folder_exclude_patterns":
   [
-    "coverage",
-    "tmp/cache",
-    ".bundle",
-    ".git",
-    "node_modules"
   ],
   "font_face": "JetBrains Mono",
   "font_options":
@@ -121,7 +115,7 @@
   // // Only trim white space on save for the parts of a file that have been
   // // modified by you. If there is trailing white space in other parts of the
   // // file they are left alone.
-  "trim_trailing_white_space_on_save": true,
+  "trim_trailing_white_space_on_save": "all",
   "word_wrap": false,
   "wrap_width": 80,
   "font_size": 14,
