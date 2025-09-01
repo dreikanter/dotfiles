@@ -46,16 +46,16 @@ alias branchtests="git diff --name-only --diff-filter=ACMRTUXB main...HEAD | gre
 alias c="clear"
 alias h="history -30 | cut -c 8-"
 alias k="kubectl"
-alias l1="eza --all --group-directories-first -1"
 alias l="eza --all --long --group-directories-first"
 alias prt="yarn run prettier --no-color --write"
 alias r="PAGER=cat rails"
-alias rc="PAGER=cat rails console"
 alias railstb='rails test $(git diff --name-only --diff-filter=ACMRTUXB main...HEAD | grep _test.rb)'
+alias rc="PAGER=cat rails console"
+alias reload="source ~/.zshrc"
 alias s="subl ."
 alias ss="subl --add ."
-alias vim="nvim"
 alias v="nvim"
+alias vim="nvim"
 
 # Git
 
