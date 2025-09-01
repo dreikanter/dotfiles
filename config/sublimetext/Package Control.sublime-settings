@@ -1,0 +1,15 @@
+{
+	"installed_packages":
+	[
+		"AdvancedNewFile",
+		"EditorConfig",
+		"GitGutter",
+		"Package Control",
+		"Ruby Slim",
+		"SideBarEnhancements",
+		"Theme - Spacegray",
+	],
+	"in_process_packages":
+	[
+	],
+}
