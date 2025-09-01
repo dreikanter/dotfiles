@@ -57,5 +57,6 @@
   "~/Library/Application Support/Sublime Text/Packages/User/yaml-frontmatter-slug.sublime-snippet": "~/.dotfiles/config/sublimetext/",
   "~/Library/Application Support/Sublime Text/Packages/User/yaml-frontmatter-tags-quote.sublime-snippet": "~/.dotfiles/config/sublimetext/",
   "~/Library/Application Support/Sublime Text/Packages/User/yaml-frontmatter-todo.sublime-snippet": "~/.dotfiles/config/sublimetext/",
-  "~/Library/Application Support/Sublime Text/Packages/User/yaml-frontmatter.sublime-snippet": "~/.dotfiles/config/sublimetext/"
+  "~/Library/Application Support/Sublime Text/Packages/User/yaml-frontmatter.sublime-snippet": "~/.dotfiles/config/sublimetext/",
+  "~//Library/Application Support/Sublime Text/Packages/User/Preferences.sublime-settings": "~/.dotfiles/config/sublimetext/"
 }
