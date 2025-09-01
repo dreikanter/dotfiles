@@ -24,6 +24,8 @@ pcall(function()
   require("telescope").setup({})
   vim.cmd.colorscheme("tokyonight-night")
   require('mini.statusline').setup()
+  require('mini.diff').setup()
+  require('mini.comment').setup()
 end)
 
 -- keymaps
