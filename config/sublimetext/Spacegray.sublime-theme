@@ -1,0 +1,15 @@
+// Documentation at https://www.sublimetext.com/docs/themes.html
+{
+  "variables":
+  {
+   "font_face": "JetBrains Mono",
+    "font_size": 15
+   },
+  "rules":
+  [
+    {
+      "class": "sidebar_label",
+      "font.bold": false
+    }
+  ]
+}

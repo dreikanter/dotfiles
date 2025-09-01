@@ -119,8 +119,18 @@
   "word_wrap": false,
   "wrap_width": 80,
   "font_size": 14,
-  "color_scheme": "base16-eighties-custom.sublime-color-scheme",
   "index_files": true,
   "index_workers": 2,
-  "theme": "Spacegray Eighties.sublime-theme",
+
+  // "theme": "Spacegray Eighties.sublime-theme",
+  // "color_scheme": "base16-eighties-custom.sublime-color-scheme",
+
+  "theme": "Spacegray.sublime-theme",
+  "color_scheme": "Base16 Ocean Dark.sublime-color-scheme",
+  "theme.spacegray.tabs.height": "large",
+  "theme.spacegray.tabs.auto_width": true,
+  "theme.spacegray.sidebar.row_height": "large",
+  "theme.spacegray.sidebar.show_icons": true,
+  "theme.spacegray.sidebar.vcs_color_labels": true,
+  "theme.spacegray.sidebar.vcs_color_expanded": true,
 }
