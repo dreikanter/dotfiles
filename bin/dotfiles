@@ -20,18 +20,17 @@ end
 
 def load_configuration
   raw_config = JSON.parse(File.read(CONFIG_PATH))
+  config_map = {}
 
-  # Resolve directory destinations to full file paths
-  raw_config.to_h do |local_path, dotfile_path|
-    if dotfile_path.end_with?("/")
+  raw_config.each do |dotfile_dir, local_paths|
+    local_paths.each do |local_path|
       src_filename = File.basename(local_path)
-      resolved_dotfile_path = File.join(File.expand_path(dotfile_path), src_filename)
-    else
-      resolved_dotfile_path = File.expand_path(dotfile_path)
+      dotfile_path = File.expand_path("~/.dotfiles/config/#{dotfile_dir}/#{src_filename}")
+      config_map[File.expand_path(local_path)] = dotfile_path
     end
-
-    [File.expand_path(local_path), resolved_dotfile_path]
   end
+
+  config_map
 rescue Errno::ENOENT
   puts colorize("Error:", Colors::RED) + " Configuration file not found: #{CONFIG_PATH}"
   exit 1

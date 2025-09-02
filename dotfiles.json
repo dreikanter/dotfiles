@@ -1,66 +1,92 @@
 {
-  "~/.config/aerospace/aerospace.toml": "~/.dotfiles/config/aerospace/aerospace.toml",
-  "~/.config/atuin/config.toml": "~/.dotfiles/config/atuin/config.toml",
-  "~/.config/karabiner/karabiner.json": "~/.dotfiles/config/karabiner/karabiner.json",
-  "~/.config/wezterm/wezterm.lua": "~/.dotfiles/config/wezterm/wezterm.lua",
-  "~/.editorconfig": "~/.dotfiles/config/editorconfig/editorconfig",
-  "~/.gitconfig": "~/.dotfiles/config/git/gitconfig",
-  "~/.gitignore_global": "~/.dotfiles/config/git/gitignore_global",
-  "~/.zshrc": "~/.dotfiles/config/zsh/zshrc",
-  "~/.config/starship.toml": "~/.dotfiles/config/starship/starship.toml",
-  "~/.gemrc": "~/.dotfiles/config/gem/gemrc",
-  "~/.pryrc": "~/.dotfiles/config/pry/pryrc",
-  "~/.config/zed/settings.json": "~/.dotfiles/config/zed/",
-  "~/.config/zed/keymap.json": "~/.dotfiles/config/zed/",
-  "~/.config/nvim/init.lua": "~/.dotfiles/config/nvim/init.lua",
-  "~/Library/Application Support/Sublime Text/Packages/User/base16-eighties-custom.sublime-color-scheme": "~/.dotfiles/config/sublimetext/",
-  "~/Library/Application Support/Sublime Text/Packages/User/copy_name.py": "~/.dotfiles/config/sublimetext/",
-  "~/Library/Application Support/Sublime Text/Packages/User/copy_name.sublime-commands": "~/.dotfiles/config/sublimetext/",
-  "~/Library/Application Support/Sublime Text/Packages/User/Default (Linux).sublime-keymap": "~/.dotfiles/config/sublimetext/",
-  "~/Library/Application Support/Sublime Text/Packages/User/Default (OSX).sublime-keymap": "~/.dotfiles/config/sublimetext/",
-  "~/Library/Application Support/Sublime Text/Packages/User/Default (Windows).sublime-keymap": "~/.dotfiles/config/sublimetext/",
-  "~/Library/Application Support/Sublime Text/Packages/User/extract_note.py": "~/.dotfiles/config/sublimetext/",
-  "~/Library/Application Support/Sublime Text/Packages/User/extract_note.sublime-commands": "~/.dotfiles/config/sublimetext/",
-  "~/Library/Application Support/Sublime Text/Packages/User/extract_note.sublime-settings": "~/.dotfiles/config/sublimetext/",
-  "~/Library/Application Support/Sublime Text/Packages/User/fenced-code-block.sublime-snippet": "~/.dotfiles/config/sublimetext/",
-  "~/Library/Application Support/Sublime Text/Packages/User/file_autorename.py": "~/.dotfiles/config/sublimetext/",
-  "~/Library/Application Support/Sublime Text/Packages/User/file_autorename.sublime-commands": "~/.dotfiles/config/sublimetext/",
-  "~/Library/Application Support/Sublime Text/Packages/User/insert_current_date.py": "~/.dotfiles/config/sublimetext/",
-  "~/Library/Application Support/Sublime Text/Packages/User/insert_current_date.sublime-commands": "~/.dotfiles/config/sublimetext/",
-  "~/Library/Application Support/Sublime Text/Packages/User/insert_current_date.sublime-settings": "~/.dotfiles/config/sublimetext/",
-  "~/Library/Application Support/Sublime Text/Packages/User/insert_inline_date.py": "~/.dotfiles/config/sublimetext/",
-  "~/Library/Application Support/Sublime Text/Packages/User/insert_inline_date.sublime-commands": "~/.dotfiles/config/sublimetext/",
-  "~/Library/Application Support/Sublime Text/Packages/User/insert_inline_date.sublime-settings": "~/.dotfiles/config/sublimetext/",
-  "~/Library/Application Support/Sublime Text/Packages/User/insert_line_numbers.py": "~/.dotfiles/config/sublimetext/",
-  "~/Library/Application Support/Sublime Text/Packages/User/insert_line_numbers.sublime-commands": "~/.dotfiles/config/sublimetext/",
-  "~/Library/Application Support/Sublime Text/Packages/User/insert_timestamp.py": "~/.dotfiles/config/sublimetext/",
-  "~/Library/Application Support/Sublime Text/Packages/User/insert_timestamp.sublime-commands": "~/.dotfiles/config/sublimetext/",
-  "~/Library/Application Support/Sublime Text/Packages/User/Markdown Custom.sublime-syntax": "~/.dotfiles/config/sublimetext/",
-  "~/Library/Application Support/Sublime Text/Packages/User/Markdown.sublime-settings": "~/.dotfiles/config/sublimetext/",
-  "~/Library/Application Support/Sublime Text/Packages/User/notes_browser.py": "~/.dotfiles/config/sublimetext/",
-  "~/Library/Application Support/Sublime Text/Packages/User/notes_browser.sublime-commands": "~/.dotfiles/config/sublimetext/",
-  "~/Library/Application Support/Sublime Text/Packages/User/open_note_reference.py": "~/.dotfiles/config/sublimetext/",
-  "~/Library/Application Support/Sublime Text/Packages/User/OpenNoteReference.sublime-commands": "~/.dotfiles/config/sublimetext/",
-  "~/Library/Application Support/Sublime Text/Packages/User/python-fimp.sublime-snippet": "~/.dotfiles/config/sublimetext/",
-  "~/Library/Application Support/Sublime Text/Packages/User/python-hdr.sublime-snippet": "~/.dotfiles/config/sublimetext/",
-  "~/Library/Application Support/Sublime Text/Packages/User/rails-logger-debug-formatted-json.sublime-snippet": "~/.dotfiles/config/sublimetext/",
-  "~/Library/Application Support/Sublime Text/Packages/User/rails-logger-debug.sublime-snippet": "~/.dotfiles/config/sublimetext/",
-  "~/Library/Application Support/Sublime Text/Packages/User/rspec-describe.sublime-snippet": "~/.dotfiles/config/sublimetext/",
-  "~/Library/Application Support/Sublime Text/Packages/User/ruby-bp.sublime-snippet": "~/.dotfiles/config/sublimetext/",
-  "~/Library/Application Support/Sublime Text/Packages/User/ruby-erb.sublime-snippet": "~/.dotfiles/config/sublimetext/",
-  "~/Library/Application Support/Sublime Text/Packages/User/ruby-erbe.sublime-snippet": "~/.dotfiles/config/sublimetext/",
-  "~/Library/Application Support/Sublime Text/Packages/User/ruby-format-array.sublime-macro": "~/.dotfiles/config/sublimetext/",
-  "~/Library/Application Support/Sublime Text/Packages/User/ruby-format-hash.sublime-macro": "~/.dotfiles/config/sublimetext/",
-  "~/Library/Application Support/Sublime Text/Packages/User/ruby-frozen-string-literal.sublime-snippet": "~/.dotfiles/config/sublimetext/",
-  "~/Library/Application Support/Sublime Text/Packages/User/ruby-pd.sublime-snippet": "~/.dotfiles/config/sublimetext/",
-  "~/Library/Application Support/Sublime Text/Packages/User/yaml-frontmatter-eurorack-session.sublime-snippet": "~/.dotfiles/config/sublimetext/",
-  "~/Library/Application Support/Sublime Text/Packages/User/yaml-frontmatter-quote.sublime-snippet": "~/.dotfiles/config/sublimetext/",
-  "~/Library/Application Support/Sublime Text/Packages/User/yaml-frontmatter-slug.sublime-snippet": "~/.dotfiles/config/sublimetext/",
-  "~/Library/Application Support/Sublime Text/Packages/User/yaml-frontmatter-tags-quote.sublime-snippet": "~/.dotfiles/config/sublimetext/",
-  "~/Library/Application Support/Sublime Text/Packages/User/yaml-frontmatter-todo.sublime-snippet": "~/.dotfiles/config/sublimetext/",
-  "~/Library/Application Support/Sublime Text/Packages/User/yaml-frontmatter.sublime-snippet": "~/.dotfiles/config/sublimetext/",
-  "~/Library/Application Support/Sublime Text/Packages/User/Spacegray Eighties.sublime-theme": "~/.dotfiles/config/sublimetext/",
-  "~/Library/Application Support/Sublime Text/Packages/User/Preferences.sublime-settings": "~/.dotfiles/config/sublimetext/",
-  "~/Library/Application Support/Sublime Text/Packages/User/Spacegray.sublime-theme": "~/.dotfiles/config/sublimetext/",
-  "~/Library/Application Support/Sublime Text/Packages/User/Package Control.sublime-settings": "~/.dotfiles/config/sublimetext/"
+  "aerospace": [
+    "~/.config/aerospace/aerospace.toml"
+  ],
+  "atuin": [
+    "~/.config/atuin/config.toml"
+  ],
+  "editorconfig": [
+    "~/.editorconfig"
+  ],
+  "gem": [
+    "~/.gemrc"
+  ],
+  "git": [
+    "~/.gitconfig",
+    "~/.gitignore_global"
+  ],
+  "karabiner": [
+    "~/.config/karabiner/karabiner.json"
+  ],
+  "nvim": [
+    "~/.config/nvim/init.lua"
+  ],
+  "pry": [
+    "~/.pryrc"
+  ],
+  "starship": [
+    "~/.config/starship.toml"
+  ],
+  "sublimetext": [
+    "~/Library/Application Support/Sublime Text/Packages/User/base16-eighties-custom.sublime-color-scheme",
+    "~/Library/Application Support/Sublime Text/Packages/User/copy_name.py",
+    "~/Library/Application Support/Sublime Text/Packages/User/copy_name.sublime-commands",
+    "~/Library/Application Support/Sublime Text/Packages/User/Default (Linux).sublime-keymap",
+    "~/Library/Application Support/Sublime Text/Packages/User/Default (OSX).sublime-keymap",
+    "~/Library/Application Support/Sublime Text/Packages/User/Default (Windows).sublime-keymap",
+    "~/Library/Application Support/Sublime Text/Packages/User/extract_note.py",
+    "~/Library/Application Support/Sublime Text/Packages/User/extract_note.sublime-commands",
+    "~/Library/Application Support/Sublime Text/Packages/User/extract_note.sublime-settings",
+    "~/Library/Application Support/Sublime Text/Packages/User/fenced-code-block.sublime-snippet",
+    "~/Library/Application Support/Sublime Text/Packages/User/file_autorename.py",
+    "~/Library/Application Support/Sublime Text/Packages/User/file_autorename.sublime-commands",
+    "~/Library/Application Support/Sublime Text/Packages/User/insert_current_date.py",
+    "~/Library/Application Support/Sublime Text/Packages/User/insert_current_date.sublime-commands",
+    "~/Library/Application Support/Sublime Text/Packages/User/insert_current_date.sublime-settings",
+    "~/Library/Application Support/Sublime Text/Packages/User/insert_inline_date.py",
+    "~/Library/Application Support/Sublime Text/Packages/User/insert_inline_date.sublime-commands",
+    "~/Library/Application Support/Sublime Text/Packages/User/insert_inline_date.sublime-settings",
+    "~/Library/Application Support/Sublime Text/Packages/User/insert_line_numbers.py",
+    "~/Library/Application Support/Sublime Text/Packages/User/insert_line_numbers.sublime-commands",
+    "~/Library/Application Support/Sublime Text/Packages/User/insert_timestamp.py",
+    "~/Library/Application Support/Sublime Text/Packages/User/insert_timestamp.sublime-commands",
+    "~/Library/Application Support/Sublime Text/Packages/User/Markdown Custom.sublime-syntax",
+    "~/Library/Application Support/Sublime Text/Packages/User/Markdown.sublime-settings",
+    "~/Library/Application Support/Sublime Text/Packages/User/notes_browser.py",
+    "~/Library/Application Support/Sublime Text/Packages/User/notes_browser.sublime-commands",
+    "~/Library/Application Support/Sublime Text/Packages/User/open_note_reference.py",
+    "~/Library/Application Support/Sublime Text/Packages/User/OpenNoteReference.sublime-commands",
+    "~/Library/Application Support/Sublime Text/Packages/User/python-fimp.sublime-snippet",
+    "~/Library/Application Support/Sublime Text/Packages/User/python-hdr.sublime-snippet",
+    "~/Library/Application Support/Sublime Text/Packages/User/rails-logger-debug-formatted-json.sublime-snippet",
+    "~/Library/Application Support/Sublime Text/Packages/User/rails-logger-debug.sublime-snippet",
+    "~/Library/Application Support/Sublime Text/Packages/User/rspec-describe.sublime-snippet",
+    "~/Library/Application Support/Sublime Text/Packages/User/ruby-bp.sublime-snippet",
+    "~/Library/Application Support/Sublime Text/Packages/User/ruby-erb.sublime-snippet",
+    "~/Library/Application Support/Sublime Text/Packages/User/ruby-erbe.sublime-snippet",
+    "~/Library/Application Support/Sublime Text/Packages/User/ruby-format-array.sublime-macro",
+    "~/Library/Application Support/Sublime Text/Packages/User/ruby-format-hash.sublime-macro",
+    "~/Library/Application Support/Sublime Text/Packages/User/ruby-frozen-string-literal.sublime-snippet",
+    "~/Library/Application Support/Sublime Text/Packages/User/ruby-pd.sublime-snippet",
+    "~/Library/Application Support/Sublime Text/Packages/User/yaml-frontmatter-eurorack-session.sublime-snippet",
+    "~/Library/Application Support/Sublime Text/Packages/User/yaml-frontmatter-quote.sublime-snippet",
+    "~/Library/Application Support/Sublime Text/Packages/User/yaml-frontmatter-slug.sublime-snippet",
+    "~/Library/Application Support/Sublime Text/Packages/User/yaml-frontmatter-tags-quote.sublime-snippet",
+    "~/Library/Application Support/Sublime Text/Packages/User/yaml-frontmatter-todo.sublime-snippet",
+    "~/Library/Application Support/Sublime Text/Packages/User/yaml-frontmatter.sublime-snippet",
+    "~/Library/Application Support/Sublime Text/Packages/User/Spacegray Eighties.sublime-theme",
+    "~/Library/Application Support/Sublime Text/Packages/User/Preferences.sublime-settings",
+    "~/Library/Application Support/Sublime Text/Packages/User/Spacegray.sublime-theme",
+    "~/Library/Application Support/Sublime Text/Packages/User/Package Control.sublime-settings"
+  ],
+  "wezterm": [
+    "~/.config/wezterm/wezterm.lua"
+  ],
+  "zed": [
+    "~/.config/zed/settings.json",
+    "~/.config/zed/keymap.json"
+  ],
+  "zsh": [
+    "~/.zshrc"
+  ]
 }
