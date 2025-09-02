@@ -32,14 +32,13 @@
   "bold_folder_labels": true,
   "caret_style": "phase",
   "ensure_newline_at_eof_on_save": true,
-  "file_exclude_patterns":
-  [
+  "folder_exclude_patterns": [
+    ".git",
+    "node_modules"
   ],
+  "file_exclude_patterns": [".DS_Store"],
   "find_selected_text": true,
   "fold_buttons": false,
-  "folder_exclude_patterns":
-  [
-  ],
   "font_face": "JetBrains Mono",
   "font_options":
   [
@@ -63,17 +62,12 @@
     "Haskell",
     "Vintage",
   ],
-  // "indent_guide_options":
-  // [
-  //   "draw_normal",
-  //   "draw_active"
-  // ],
   "index_exclude_patterns":
   [
     "*.log",
     "node_modules"
   ],
-  // "index_exclude_gitignore": true,
+  "index_exclude_gitignore": true,
   // "index_files": false,
   "line_padding_bottom": 4,
   "line_padding_top": 4,

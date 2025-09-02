@@ -30,3 +30,6 @@ style = "bold blue"
 format = "[$symbol($version)]($style) "
 symbol = "rb "
 version_format = "${raw}"
+
+[character]
+vimcmd_symbol = "[N](bright-blue)"
