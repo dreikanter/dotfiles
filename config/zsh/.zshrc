@@ -55,6 +55,7 @@ alias reload="source ~/.zshrc"
 alias s="subl ."
 alias ss="subl --add ."
 alias v="nvim"
+alias vconf="nvim ~/.config/nvim/init.lua"
 alias vim="nvim"
 
 # Git
