@@ -50,3 +50,7 @@ vim.keymap.set("n", "<leader>y", '"+y', { silent = true, desc = "Yank to system 
 vim.keymap.set("v", "<leader>y", '"+y', { silent = true, desc = "Yank to system clipboard" })
 vim.keymap.set("n", "<leader>p", '"+p', { silent = true, desc = "Paste from system clipboard" })
 
+-- moves
+vim.keymap.set({"n", "x"}, "<leader>h", "^")
+vim.keymap.set({"n", "x"}, "<leader>l", "$")
+
