@@ -28,6 +28,7 @@
     "~/.config/starship.toml"
   ],
   "sublimetext": [
+    "~/Library/Application Support/Sublime Text/Packages/User/Base16 Ocean Dark.sublime-color-scheme",
     "~/Library/Application Support/Sublime Text/Packages/User/base16-eighties-custom.sublime-color-scheme",
     "~/Library/Application Support/Sublime Text/Packages/User/copy_name.py",
     "~/Library/Application Support/Sublime Text/Packages/User/copy_name.sublime-commands",
@@ -56,6 +57,8 @@
     "~/Library/Application Support/Sublime Text/Packages/User/notes_browser.sublime-commands",
     "~/Library/Application Support/Sublime Text/Packages/User/open_note_reference.py",
     "~/Library/Application Support/Sublime Text/Packages/User/OpenNoteReference.sublime-commands",
+    "~/Library/Application Support/Sublime Text/Packages/User/Package Control.sublime-settings",
+    "~/Library/Application Support/Sublime Text/Packages/User/Preferences.sublime-settings",
     "~/Library/Application Support/Sublime Text/Packages/User/python-fimp.sublime-snippet",
     "~/Library/Application Support/Sublime Text/Packages/User/python-hdr.sublime-snippet",
     "~/Library/Application Support/Sublime Text/Packages/User/rails-logger-debug-formatted-json.sublime-snippet",
@@ -68,16 +71,14 @@
     "~/Library/Application Support/Sublime Text/Packages/User/ruby-format-hash.sublime-macro",
     "~/Library/Application Support/Sublime Text/Packages/User/ruby-frozen-string-literal.sublime-snippet",
     "~/Library/Application Support/Sublime Text/Packages/User/ruby-pd.sublime-snippet",
+    "~/Library/Application Support/Sublime Text/Packages/User/Spacegray Eighties.sublime-theme",
+    "~/Library/Application Support/Sublime Text/Packages/User/Spacegray.sublime-theme",
     "~/Library/Application Support/Sublime Text/Packages/User/yaml-frontmatter-eurorack-session.sublime-snippet",
     "~/Library/Application Support/Sublime Text/Packages/User/yaml-frontmatter-quote.sublime-snippet",
     "~/Library/Application Support/Sublime Text/Packages/User/yaml-frontmatter-slug.sublime-snippet",
     "~/Library/Application Support/Sublime Text/Packages/User/yaml-frontmatter-tags-quote.sublime-snippet",
     "~/Library/Application Support/Sublime Text/Packages/User/yaml-frontmatter-todo.sublime-snippet",
-    "~/Library/Application Support/Sublime Text/Packages/User/yaml-frontmatter.sublime-snippet",
-    "~/Library/Application Support/Sublime Text/Packages/User/Spacegray Eighties.sublime-theme",
-    "~/Library/Application Support/Sublime Text/Packages/User/Preferences.sublime-settings",
-    "~/Library/Application Support/Sublime Text/Packages/User/Spacegray.sublime-theme",
-    "~/Library/Application Support/Sublime Text/Packages/User/Package Control.sublime-settings"
+    "~/Library/Application Support/Sublime Text/Packages/User/yaml-frontmatter.sublime-snippet"
   ],
   "wezterm": [
     "~/.config/wezterm/wezterm.lua"

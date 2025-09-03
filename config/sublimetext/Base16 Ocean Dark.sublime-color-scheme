@@ -1,0 +1,12 @@
+{
+  "variables": {
+  },
+  "globals": {
+    "selection": "#1E90FFa0",
+    "selection_border": "#1E90FF",
+    "selection_foreground": "#dddddd",
+    "selection_inactive": "#F0F8FF40"
+  },
+  "rules": [
+  ]
+}
