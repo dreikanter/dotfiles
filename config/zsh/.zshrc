@@ -57,6 +57,7 @@ alias ss="subl --add ."
 alias v="nvim"
 alias vconf="nvim ~/.config/nvim/init.lua"
 alias vim="nvim"
+alias t="eza --color=always --git-ignore -T -L 2"
 
 # Git
 
