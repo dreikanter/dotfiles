@@ -121,6 +121,7 @@
 
   "theme": "Spacegray.sublime-theme",
   "color_scheme": "Base16 Ocean Dark.sublime-color-scheme",
+  // "color_scheme": "Packages/User/Base16 Ocean Dark (High Contrast).sublime-color-scheme",
   "theme.spacegray.tabs.height": "large",
   "theme.spacegray.tabs.auto_width": true,
   "theme.spacegray.sidebar.row_height": "large",
