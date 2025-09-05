@@ -126,7 +126,7 @@ default-root-container-orientation = 'auto'
     alt-6 = 'workspace 6'
     alt-7 = 'workspace 7'
     alt-8 = 'workspace 8'
-    alt-9 = 'workspace 9'
+    # alt-9 = 'workspace 9'
     alt-a = 'workspace A' # In your config, you can drop workspace bindings that you don't need
     alt-b = 'workspace B'
     alt-c = 'workspace C'
@@ -159,13 +159,13 @@ default-root-container-orientation = 'auto'
     alt-shift-6 = 'move-node-to-workspace 6'
     alt-shift-7 = 'move-node-to-workspace 7'
     alt-shift-8 = 'move-node-to-workspace 8'
-    alt-shift-9 = 'move-node-to-workspace 9'
+    # alt-shift-9 = 'move-node-to-workspace 9'
     alt-shift-a = 'move-node-to-workspace A'
     alt-shift-b = 'move-node-to-workspace B'
     alt-shift-c = 'move-node-to-workspace C'
     alt-shift-d = 'move-node-to-workspace D'
     alt-shift-e = 'move-node-to-workspace E'
-    alt-shift-f = 'move-node-to-workspace F'
+    # alt-shift-f = 'move-node-to-workspace F'
     alt-shift-g = 'move-node-to-workspace G'
     alt-shift-i = 'move-node-to-workspace I'
     alt-shift-m = 'move-node-to-workspace M'
@@ -175,7 +175,7 @@ default-root-container-orientation = 'auto'
     alt-shift-q = 'move-node-to-workspace Q'
     alt-shift-r = 'move-node-to-workspace R'
     alt-shift-s = 'move-node-to-workspace S'
-    alt-shift-t = 'move-node-to-workspace T'
+    # alt-shift-t = 'move-node-to-workspace T'
     alt-shift-u = 'move-node-to-workspace U'
     alt-shift-v = 'move-node-to-workspace V'
     alt-shift-w = 'move-node-to-workspace W'
@@ -209,31 +209,31 @@ default-root-container-orientation = 'auto'
 
 [[on-window-detected]]
     if.app-id = 'org.mozilla.firefox'
-    run = ['layout floating', 'move-node-to-workspace 1']
+    run = ['layout tiling', 'move-node-to-workspace 1']
 
 [[on-window-detected]]
     if.app-id = 'org.mozilla.firefoxdeveloperedition'
-    run = ['layout floating', 'move-node-to-workspace 2']
+    run = ['layout tiling', 'move-node-to-workspace 2']
 
 [[on-window-detected]]
     if.app-id = 'com.tinyspeck.slackmacgap'
-    run = ['move-node-to-workspace 3']
+    run = ['layout tiling','move-node-to-workspace 3']
 
 [[on-window-detected]]
     if.app-id = 'com.tdesktop.Telegram'
-    run = ['move-node-to-workspace 4']
+    run = ['layout tiling','move-node-to-workspace 4']
 
 [[on-window-detected]]
     if.app-id = 'com.sublimetext.4'
-    run = ['move-node-to-workspace S']
+    run = ['layout tiling','move-node-to-workspace S']
 
 [[on-window-detected]]
     if.app-id = 'com.sublimemerge'
-    run = ['move-node-to-workspace D']
+    run = ['layout tiling','move-node-to-workspace D']
 
 [[on-window-detected]]
     if.app-id = 'com.github.wez.wezterm'
-    run = ['move-node-to-workspace W']
+    run = ['layout tiling','move-node-to-workspace W']
 
 [[on-window-detected]]
     if.app-id = 'com.bitwarden.desktop'
