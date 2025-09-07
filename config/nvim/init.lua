@@ -12,7 +12,8 @@ vim.pack.add {
   { src = "https://github.com/folke/tokyonight.nvim" },
   { src = "https://github.com/echasnovski/mini.nvim" },
   { src = "https://github.com/ibhagwan/fzf-lua" },
-  { src = "https://github.com/lewis6991/gitsigns.nvim" }
+  { src = "https://github.com/lewis6991/gitsigns.nvim" },
+  { src = "https://github.com/stevearc/oil.nvim" }
 }
 
 -- plugins setup (safe if not yet installed)
@@ -24,6 +25,7 @@ pcall(function()
   require("mini.diff").setup()
   require("mini.comment").setup()
   require("mini.pick").setup()
+  require("oil").setup()
 
   require("fzf-lua").setup({
     winopts = {
@@ -79,6 +81,7 @@ map("n", "<leader>f", require("fzf-lua").files, { desc = "Find files" })
 map("n", "<leader>w", "<cmd>w<CR>", { silent = true, desc = "Save file" })
 map("n", "<leader>r", "<cmd>luafile ~/.config/nvim/init.lua<CR><cmd>echo 'Config reloaded'<CR>", { desc = "Reload config" })
 map("n", "<Esc>", "<cmd>nohlsearch<CR><Esc>", { silent = true, desc = "Clear search highlights" })
+map("n", "<leader>-", "<cmd>Oil<CR>", { desc = "Open parent directory" })
 
 map({"n", "x"}, "<leader>h", "^")
 map({"n", "x"}, "<leader>l", "$")
