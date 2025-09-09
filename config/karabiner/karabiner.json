@@ -5,7 +5,7 @@
             "complex_modifications": {
                 "rules": [
                     {
-                        "description": "Caps Lock acts as Hyper (momentary variable)",
+                        "description": "CapsLock → Hyper (hold) / Escape (tap) using variable",
                         "manipulators": [
                             {
                                 "from": {
@@ -19,7 +19,10 @@
                                             "value": 1
                                         }
                                     },
-                                    { "key_code": "vk_none" }
+                                    {
+                                        "key_code": "left_control",
+                                        "modifiers": ["left_option", "left_command"]
+                                    }
                                 ],
                                 "to_after_key_up": [
                                     {
@@ -29,6 +32,7 @@
                                         }
                                     }
                                 ],
+                                "to_if_alone": [{ "key_code": "escape" }],
                                 "type": "basic"
                             }
                         ]
