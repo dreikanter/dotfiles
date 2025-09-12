@@ -28,7 +28,41 @@
   "base_keymap": "SublimeText",
   "buffer_font_family": "JetBrains Mono",
   "buffer_font_size": 15,
-  "show_completions_on_input": false
-  // "ui_font_family": "Inter",
-  // "ui_font_size": 14
+  "show_completions_on_input": false,
+  "ui_font_family": "JetBrains Mono",
+  "ui_font_size": 14,
+  "languages": {
+    "Ruby": {
+      "language_servers": ["ruby-lsp"],
+      "formatter": {
+        "external": {
+          "command": "bundle",
+          "arguments": [
+            "exec",
+            "rubocop",
+            "--stdin",
+            "{buffer_path}",
+            "--format",
+            "quiet",
+            "--stderr",
+            "--autocorrect"
+          ]
+        }
+      }
+    }
+  },
+  "lsp": {
+    "ruby-lsp": {
+      "initialization_options": {
+        "enabledFeatures": [
+          "completion",
+          "definition",
+          "diagnostics",
+          "formatting",
+          "hover"
+        ],
+        "formatter": "rubocop"
+      }
+    }
+  }
 }
