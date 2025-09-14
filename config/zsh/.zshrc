@@ -56,6 +56,7 @@ alias s="subl ."
 alias ss="subl --add ."
 alias v="nvim"
 alias vconf="nvim ~/.config/nvim/init.lua"
+alias vzsh="nvim ~/.zshrc"
 alias vim="nvim"
 alias t="eza --color=always --git-ignore -T -L 2"
 
@@ -95,6 +96,9 @@ bindkey '^[[H' beginning-of-line
 bindkey '^[[F' end-of-line
 
 [[ -r "/opt/homebrew/opt/fzf/shell/key-bindings.zsh" ]] && source "/opt/homebrew/opt/fzf/shell/key-bindings.zsh"
+
+bindkey -v
+bindkey '^[' vi-cmd-mode
 
 #
 # History
