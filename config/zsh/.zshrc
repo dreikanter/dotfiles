@@ -8,8 +8,10 @@ if [[ -x "/opt/homebrew/bin/brew" ]]; then
 fi
 
 path=(
- $HOME/bin
- $path
+  $HOME/.local/bin
+  $HOME/.opencode/bin
+  $HOME/bin
+  $path
 )
 
 typeset -U path
