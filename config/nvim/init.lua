@@ -15,11 +15,12 @@ vim.o.showmode = false -- do not show mode, since statusline shows it anyway
 -- plugins
 
 vim.pack.add {
+  { src = "https://github.com/nvim-lua/plenary.nvim" },
   { src = "https://github.com/folke/tokyonight.nvim" },
   { src = "https://github.com/echasnovski/mini.nvim" },
-  { src = "https://github.com/ibhagwan/fzf-lua" },
   { src = "https://github.com/lewis6991/gitsigns.nvim" },
-  { src = "https://github.com/stevearc/oil.nvim" }
+  { src = "https://github.com/stevearc/oil.nvim" },
+  { src = "https://github.com/nvim-telescope/telescope.nvim" }
 }
 
 -- plugins setup (safe if not yet installed)
@@ -30,47 +31,13 @@ pcall(function()
   require("mini.statusline").setup()
   require("mini.diff").setup()
   require("mini.comment").setup()
-  require("mini.pick").setup()
-  require("oil").setup()
+  require("oil").setup({ default_file_explorer = true })
+  require("telescope").setup({})
 
-  require("fzf-lua").setup({
-    winopts = {
-      height = 0.85,
-      width = 0.90,
-      -- row = 0.35,
-      -- col = 0.50,
-      border = "rounded",
-      preview = {
-        layout = "vertical",
-        vertical = "down:60%",
-      },
-    },
-    keymap = {
-      builtin = {
-        ["<C-d>"] = "preview-page-down",
-        ["<C-u>"] = "preview-page-up",
-      },
-    },
-    fzf_opts = {
-      ["--layout"] = "default",
-      ["--info"] = "inline",
-    },
-    files = {
-      git_icons = false,
-      file_icons = false,
-      color_icons = false,
-      fd_opts = "--color=never --type f --hidden --follow --exclude .git",
-      find_opts = [[-type f -not -path '*/\.git/*' -printf '%P\n']],
-    },
-    grep = {
-      rg_opts = "--hidden --column --line-number --no-heading --color=always --smart-case --max-columns=512",
-    },
-  })
-
-  require('gitsigns').setup {
+  require('gitsigns').setup({
     signcolumn = false,
     current_line_blame = true
-  }
+  })
 end)
 
 -- keymaps
@@ -83,7 +50,7 @@ map("n", "<leader>tw", function()
   vim.notify(vim.wo.wrap and "Word wrap" or "No wrap")
 end, { desc = "Toggle word wrap" })
 
-map("n", "<leader>f", require("fzf-lua").files, { desc = "Find files" })
+-- map("n", "<leader>f", require("fzf-lua").files, { desc = "Find files" })
 map("n", "<leader>w", "<cmd>w<CR>", { silent = true, desc = "Save file" })
 map("n", "<leader>r", "<cmd>luafile ~/.config/nvim/init.lua<CR><cmd>echo 'Config reloaded'<CR>", { desc = "Reload config" })
 map("n", "<Esc>", "<cmd>nohlsearch<CR><Esc>", { silent = true, desc = "Clear search highlights" })
@@ -93,6 +60,12 @@ map({"n", "x"}, "<leader>h", "^")
 map({"n", "x"}, "<leader>l", "$")
 map("n", "<C-d>", "<C-d>zz") -- center cursor on screen after page-down, Ctrl-D
 map("n", "<C-u>", "<C-u>zz") -- center cursor on screen after page-up, Ctrl-U
+
+local builtin = require("telescope.builtin")
+map('n', '<leader>ff', builtin.find_files, {})
+map('n', '<leader>fg', require("telescope.builtin").live_grep, {})
+map('n', '<leader>fb', require("telescope.builtin").buffers, {})
+map('n', '<leader>fh', require("telescope.builtin").help_tags, {})
 
 map("n", "<leader>gg", "<cmd>Gitsigns toggle_signs<CR>", { desc = "Gitsigns: signs" })
 map("n", "<leader>gn", "<cmd>Gitsigns toggle_numhl<CR>", { desc = "Gitsigns: numhl" })
