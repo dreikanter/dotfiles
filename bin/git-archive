@@ -1,0 +1,113 @@
+#!/bin/bash
+
+# Script to archive git branches by renaming them with archive/ prefix
+# Archives all local branches except the current branch and main branch
+#
+# Usage: ./archive-branches.sh [--confirm]
+#   Default behavior is dry run (safe)
+#   --confirm    Actually perform the branch renames
+
+set -e  # Exit on any error
+
+# Parse arguments
+DRY_RUN=true
+if [ "$1" = "--confirm" ]; then
+    DRY_RUN=false
+fi
+
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
+
+# Get current branch
+CURRENT_BRANCH=$(git branch --show-current)
+MAIN_BRANCH="main"
+
+echo -e "${BLUE}Git Branch Archiver${NC}"
+if [ "$DRY_RUN" = true ]; then
+    echo -e "${YELLOW}(DRY RUN MODE - No changes will be made)${NC}"
+fi
+echo "==================="
+echo -e "Current branch: ${GREEN}${CURRENT_BRANCH}${NC}"
+echo -e "Main branch: ${GREEN}${MAIN_BRANCH}${NC}"
+echo ""
+
+# Get all local branches except current and main
+BRANCHES_TO_ARCHIVE=$(git branch --format='%(refname:short)' | grep -v "^${CURRENT_BRANCH}$" | grep -v "^${MAIN_BRANCH}$" | grep -v "^archive/")
+
+if [ -z "$BRANCHES_TO_ARCHIVE" ]; then
+    echo -e "${YELLOW}No branches found to archive.${NC}"
+    exit 0
+fi
+
+# Count branches
+BRANCH_COUNT=$(echo "$BRANCHES_TO_ARCHIVE" | wc -l | tr -d ' ')
+
+if [ "$DRY_RUN" = true ]; then
+    echo "Branches to be archived:"
+    while IFS= read -r branch; do
+        if [ -n "$branch" ]; then
+            echo "  - $branch -> archive/$branch"
+        fi
+    done <<< "$BRANCHES_TO_ARCHIVE"
+    echo ""
+fi
+
+echo -e "${BLUE}Found ${BRANCH_COUNT} branches to archive.${NC}"
+
+
+# Archive each branch
+SUCCESS_COUNT=0
+FAILED_BRANCHES=()
+
+if [ "$DRY_RUN" = false ]; then
+    echo "Archiving branches..."
+    echo "===================="
+
+    while IFS= read -r branch; do
+        if [ -n "$branch" ]; then
+            echo -n "Archiving '$branch' -> 'archive/$branch'... "
+
+            if git branch -m "$branch" "archive/$branch" 2>/dev/null; then
+                echo -e "${GREEN}✓${NC}"
+                ((SUCCESS_COUNT++))
+            else
+                echo -e "${RED}✗${NC}"
+                FAILED_BRANCHES+=("$branch")
+            fi
+        fi
+    done <<< "$BRANCHES_TO_ARCHIVE"
+else
+    # In dry run mode, just count the branches
+    SUCCESS_COUNT=$(echo "$BRANCHES_TO_ARCHIVE" | wc -l | tr -d ' ')
+fi
+
+echo ""
+echo "Summary:"
+echo "========"
+if [ "$DRY_RUN" = true ]; then
+    echo -e "Would archive: ${GREEN}${SUCCESS_COUNT}${NC} branches"
+    echo -e "${BLUE}This was a dry run. No changes were made.${NC}"
+    echo "To actually archive branches, run:"
+    echo -e "  ${BLUE}./archive-branches.sh --confirm${NC}"
+else
+    echo -e "Successfully archived: ${GREEN}${SUCCESS_COUNT}${NC} branches"
+
+    if [ ${#FAILED_BRANCHES[@]} -gt 0 ]; then
+        echo -e "Failed to archive: ${RED}${#FAILED_BRANCHES[@]}${NC} branches"
+        echo "Failed branches:"
+        for branch in "${FAILED_BRANCHES[@]}"; do
+            echo -e "  - ${RED}$branch${NC}"
+        done
+        exit 1
+    else
+        echo -e "${GREEN}All branches archived successfully!${NC}"
+    fi
+fi
+
+echo ""
+echo "You can view archived branches with:"
+echo -e "  ${BLUE}git branch | grep '^  archive/'${NC}"

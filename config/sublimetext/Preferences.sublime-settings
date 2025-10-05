@@ -112,7 +112,7 @@
   "trim_trailing_white_space_on_save": "all",
   "word_wrap": false,
   "wrap_width": 80,
-  "font_size": 14,
+  "font_size": 16,
   "index_files": true,
   "index_workers": 2,
 

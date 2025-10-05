@@ -50,7 +50,7 @@ alias h="history -30 | cut -c 8-"
 alias k="kubectl"
 alias l="eza --all --long --group-directories-first"
 alias prt="yarn run prettier --no-color --write"
-alias r="PAGER=cat rails"
+alias r="PAGER=cat bin/rails"
 alias railstb='rails test $(git diff --name-only --diff-filter=ACMRTUXB main...HEAD | grep _test.rb)'
 alias rc="PAGER=cat rails console"
 alias reload="source ~/.zshrc"
@@ -81,6 +81,17 @@ alias gdf="git diff --name-only main...HEAD"
 alias gdd="GIT_EXTERNAL_DIFF=difft git diff"
 alias gd="git diff"
 alias gdcp="git diff | pbcopy"
+
+# New git branch from the synchronized main HEAD
+bb() {
+  if [[ -n $(git status -s) ]]; then
+    echo "Error: Uncommitted changes exist"
+    return 1
+  fi
+  git checkout main && \
+  git pull --rebase origin main && \
+  git checkout -b "$1"
+}
 
 # Other
 

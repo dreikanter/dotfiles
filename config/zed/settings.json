@@ -28,6 +28,9 @@
   "base_keymap": "SublimeText",
   "buffer_font_family": "JetBrains Mono",
   "buffer_font_size": 15,
+  "features": {
+    "edit_prediction_provider": "none"
+  },
   "show_completions_on_input": false,
   "ui_font_family": "JetBrains Mono",
   "ui_font_size": 14,
