@@ -4,7 +4,7 @@ require "fileutils"
 require "json"
 
 NOTES_PATH = ENV["NOTES_PATH"] || File.expand_path("~/Dropbox/Notes")
-VISUAL_EDITOR = ENV["VISUAL"] || "/opt/homebrew/bin/subl --add"
+VISUAL_EDITOR = ENV["NOTES_EDITOR"] || "/opt/homebrew/bin/subl --add"
 
 ID_PATH = File.join(NOTES_PATH, "id.json")
 
