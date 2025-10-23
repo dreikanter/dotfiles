@@ -108,6 +108,15 @@ function y() {
 	rm -f -- "$tmp"
 }
 
+function repeat() {
+  count=$1
+  shift
+  for i in $(seq 1 $count); do
+    echo "Run #$i"
+    "$@"
+  done
+}
+
 #
 # Keybinding
 #
@@ -164,3 +173,7 @@ command -v mise >/dev/null && eval "$(mise activate zsh)"
   source "/opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
 
 unsetopt correct_all
+
+# opencode
+export PATH=/Users/alex/.opencode/bin:$PATH
+export PATH="$(brew --prefix llvm)/bin:$PATH"
