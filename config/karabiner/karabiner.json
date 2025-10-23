@@ -110,6 +110,14 @@
                                 },
                                 "to": [{ "shell_command": "/bin/zsh -c '$HOME/.dotfiles/bin/latest-backlog'" }],
                                 "type": "basic"
+                            },
+                            {
+                                "from": {
+                                    "key_code": "w",
+                                    "modifiers": { "mandatory": ["left_control", "left_shift"] }
+                                },
+                                "to": [{ "shell_command": "/bin/zsh -c '$HOME/.dotfiles/bin/latest-weekly'" }],
+                                "type": "basic"
                             }
                         ]
                     }
