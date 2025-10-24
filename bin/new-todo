@@ -82,11 +82,11 @@ end
 def extract_tasks(path, include_moved:)
   lines = File.readlines(path, chomp: false)
   daily_tasks = []
-  carryover_tasks = []
+  regular_tasks = []
   updated_lines = []
   modified = false
 
-  lines.each do |line|
+  lines.each_with_index do |line, index|
     content, newline = split_line_and_newline(line)
     match = content.match(TASK_REGEX)
 
@@ -103,21 +103,24 @@ def extract_tasks(path, include_moved:)
 
     case marker
     when " "
-      carryover_tasks << task_text
+      regular_tasks << [index, task_text]
       updated_lines << "#{indent}[>]#{body}#{newline}"
       modified = true
     when ">"
-      carryover_tasks << task_text if include_moved
+      regular_tasks << [index, task_text] if include_moved
       updated_lines << "#{indent}[>]#{body}#{newline}"
     else
       updated_lines << line
     end
 
-    daily_tasks << task_text if daily
+    daily_tasks << [index, task_text] if daily
   end
 
+  daily_tasks.sort_by!(&:first)
+  regular_tasks.sort_by!(&:first)
+
   combined_tasks = []
-  (daily_tasks + carryover_tasks).each do |task|
+  (daily_tasks + regular_tasks).each do |(_, task)|
     combined_tasks << task unless combined_tasks.include?(task)
   end
 
