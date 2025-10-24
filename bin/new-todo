@@ -81,7 +81,8 @@ end
 
 def extract_tasks(path, include_moved:)
   lines = File.readlines(path, chomp: false)
-  tasks = []
+  daily_tasks = []
+  carryover_tasks = []
   updated_lines = []
   modified = false
 
@@ -97,21 +98,30 @@ def extract_tasks(path, include_moved:)
     indent = match[:indent]
     marker = match[:marker]
     body = match[:body]
+    task_text = "#{indent}[ ]#{body}"
+    daily = body.include?("[daily]")
 
     case marker
     when " "
-      tasks << "#{indent}[ ]#{body}"
+      carryover_tasks << task_text
       updated_lines << "#{indent}[>]#{body}#{newline}"
       modified = true
     when ">"
-      tasks << "#{indent}[ ]#{body}" if include_moved
+      carryover_tasks << task_text if include_moved
       updated_lines << "#{indent}[>]#{body}#{newline}"
     else
       updated_lines << line
     end
+
+    daily_tasks << task_text if daily
   end
 
-  [tasks, modified ? updated_lines.join : nil]
+  combined_tasks = []
+  (daily_tasks + carryover_tasks).each do |task|
+    combined_tasks << task unless combined_tasks.include?(task)
+  end
+
+  [combined_tasks, modified ? updated_lines.join : nil]
 end
 
 def build_todo_content(tasks)
