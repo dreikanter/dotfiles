@@ -117,6 +117,45 @@ function repeat() {
   done
 }
 
+wez_rename_tab() {
+  # Usage:
+  #   wez_rename_tab "Title"
+  #   wez_rename_tab N "Title"   (0-based)
+
+  local idx title win tab
+
+  if [[ "$1" == <-> ]]; then
+    idx="$1"
+    shift
+  else
+    idx=""
+  fi
+  title="$*"
+
+  # Rename current tab
+  if [[ -z "$idx" ]]; then
+    wezterm cli set-tab-title "$title"
+    return
+  fi
+
+  # Resolve current window via current pane
+  win="$(
+    wezterm cli list |
+    awk -v p="$WEZTERM_PANE" '$1 == p { print $3; exit }'
+  )" || return 1
+
+  # Resolve tab-id by order within window
+  tab="$(
+    wezterm cli list |
+    awk -v w="$win" '$3 == w { print $2 }' |
+    awk '!seen[$1]++' |
+    sed -n "$((idx + 1))p"
+  )" || return 1
+
+  [[ -n "$tab" ]] || return 1
+  wezterm cli set-tab-title --tab-id "$tab" "$title"
+}
+
 #
 # Keybinding
 #
