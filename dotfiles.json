@@ -89,5 +89,14 @@
   ],
   "zsh": [
     "~/.zshrc"
+  ],
+  "claude": [
+    "~/.claude/skills/firefox-bookmarks/SKILL.md",
+    "~/.claude/skills/firefox-bookmarks/README.md",
+    "~/.claude/skills/firefox-bookmarks/REFERENCE.md",
+    "~/.claude/skills/firefox-bookmarks/EXAMPLES.md",
+    "~/.claude/skills/firefox-bookmarks/scripts/extract_bookmarks.rb",
+    "~/.claude/skills/firefox-bookmarks/scripts/analyze_tags.rb",
+    "~/.claude/skills/firefox-bookmarks/scripts/explore_db.rb"
   ]
 }
