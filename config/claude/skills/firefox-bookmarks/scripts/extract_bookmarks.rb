@@ -24,17 +24,18 @@ class FirefoxBookmarkExtractor
       db.results_as_hash = true
 
       query = <<~SQL
-        SELECT 
+        SELECT
           p.url,
           p.title,
           datetime(b.dateAdded/1000000, 'unixepoch', 'localtime') as date_added,
           datetime(p.last_visit_date/1000000, 'unixepoch', 'localtime') as last_visited
         FROM moz_bookmarks b
         JOIN moz_places p ON b.fk = p.id
-        WHERE b.type = 1 
-          AND p.url IS NOT NULL 
+        WHERE b.type = 1
+          AND p.url IS NOT NULL
           AND p.url != ''
           AND p.url NOT LIKE 'place:%'
+          AND b.parent NOT IN (SELECT id FROM moz_bookmarks WHERE parent = 4)
         ORDER BY b.dateAdded DESC
         LIMIT ?
       SQL
