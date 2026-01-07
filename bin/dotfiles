@@ -3,6 +3,7 @@
 require "fileutils"
 require "optparse"
 require "json"
+require "set"
 
 CONFIG_PATH = File.expand_path("~/.dotfiles/dotfiles.json").freeze
 
@@ -18,19 +19,81 @@ def colorize(text, color)
   "#{color}#{text}#{Colors::RESET}"
 end
 
-def load_configuration
+def load_configuration(direction: :save)
   raw_config = JSON.parse(File.read(CONFIG_PATH))
   config_map = {}
+  managed_dest_roots = []
+  managed_dest_files = []
+  expected_dest_files = Set.new
 
   raw_config.each do |dotfile_dir, local_paths|
     local_paths.each do |local_path|
-      src_filename = File.basename(local_path)
-      dotfile_path = File.expand_path("~/.dotfiles/config/#{dotfile_dir}/#{src_filename}")
-      config_map[File.expand_path(local_path)] = dotfile_path
+      expanded_path = File.expand_path(local_path.sub(%r{/\*$}, "").sub(%r{/$}, ""))
+      dotfiles_root = File.expand_path("~/.dotfiles/config/#{dotfile_dir}")
+
+      local_base_dir = expanded_path
+      local_root = File.dirname(local_base_dir)
+      rel_prefix = local_base_dir.sub("#{local_root}/", "")
+      dotfiles_base_dir = File.join(dotfiles_root, rel_prefix)
+
+      # Treat as directory sync if the path is a directory on the source side,
+      # or if the entry is explicitly marked with a trailing /* or /.
+      is_dir_entry = local_path.end_with?("/*") || local_path.end_with?("/") || File.directory?(local_base_dir)
+      is_dir_entry ||= (direction == :load && File.directory?(dotfiles_base_dir))
+
+      if is_dir_entry
+
+        if direction == :save
+          managed_dest_roots << dotfiles_base_dir
+
+          if File.directory?(local_base_dir)
+            Dir.glob("#{local_base_dir}/**/*").each do |file|
+              next unless File.file?(file)
+
+              # Preserve the relative path structure
+              rel_path = file.sub("#{local_root}/", "")
+              dotfile_path = File.join(dotfiles_root, rel_path)
+              config_map[file] = dotfile_path
+              expected_dest_files << dotfile_path
+            end
+          end
+        else
+          managed_dest_roots << local_base_dir
+
+          if File.directory?(dotfiles_base_dir)
+            Dir.glob("#{dotfiles_base_dir}/**/*").each do |file|
+              next unless File.file?(file)
+
+              # Preserve the relative path structure
+              rel_path = file.sub("#{dotfiles_root}/", "")
+              local_file = File.join(local_root, rel_path)
+              config_map[local_file] = file
+              expected_dest_files << local_file
+            end
+          end
+        end
+      else
+        # Single file - use original behavior
+        src_filename = File.basename(local_path)
+        dotfile_path = File.expand_path("~/.dotfiles/config/#{dotfile_dir}/#{src_filename}")
+        config_map[expanded_path] = dotfile_path
+
+        if direction == :save
+          managed_dest_files << dotfile_path
+          expected_dest_files << dotfile_path if File.file?(expanded_path)
+        else
+          managed_dest_files << expanded_path
+          expected_dest_files << expanded_path if File.file?(dotfile_path)
+        end
+      end
     end
   end
 
-  config_map
+  [config_map, {
+    managed_dest_roots: managed_dest_roots,
+    managed_dest_files: managed_dest_files,
+    expected_dest_files: expected_dest_files
+  }]
 rescue Errno::ENOENT
   puts colorize("Error:", Colors::RED) + " Configuration file not found: #{CONFIG_PATH}"
   exit 1
@@ -67,7 +130,48 @@ def copy_file(src, dest, dry_run: false, verbose: false)
   end
 end
 
-def save_dotfiles(config_files, dry_run: false, verbose: false)
+def prune_destinations(managed_dest_roots:, managed_dest_files:, expected_dest_files:, dry_run: false, verbose: false)
+  removed = 0
+  removed_paths = Set.new
+
+  managed_dest_roots.each do |root|
+    next unless File.directory?(root)
+
+    Dir.glob("#{root}/**/*").each do |path|
+      next unless File.file?(path) || File.symlink?(path)
+      next if expected_dest_files.include?(path)
+      next if removed_paths.include?(path)
+
+      if dry_run
+        puts colorize("PRUNE", Colors::RED) + " #{path}" if verbose
+      else
+        FileUtils.rm_f(path)
+      end
+
+      removed_paths << path
+      removed += 1
+    end
+  end
+
+  managed_dest_files.each do |path|
+    next unless File.exist?(path) || File.symlink?(path)
+    next if expected_dest_files.include?(path)
+    next if removed_paths.include?(path)
+
+    if dry_run
+      puts colorize("PRUNE", Colors::RED) + " #{path}" if verbose
+    else
+      FileUtils.rm_f(path)
+    end
+
+    removed_paths << path
+    removed += 1
+  end
+
+  removed
+end
+
+def save_dotfiles(config_files, prune_meta, dry_run: false, verbose: false, prune: false)
   puts "local environment -> dotfiles#{" [DRY RUN]" if dry_run}" + "\n\n"
 
   success_count = 0
@@ -81,11 +185,14 @@ def save_dotfiles(config_files, dry_run: false, verbose: false)
     end
   end
 
+  pruned_count = prune ? prune_destinations(**prune_meta, dry_run: dry_run, verbose: verbose) : 0
+
   puts "Files copied: #{success_count}; errors: #{errors_count}"
+  puts "Files removed: #{pruned_count}" if prune
   puts "All good" if errors_count.zero?
 end
 
-def load_dotfiles(config_files, dry_run: false, verbose: false)
+def load_dotfiles(config_files, prune_meta, dry_run: false, verbose: false, prune: false)
   puts "dotfiles -> local environment#{" [DRY RUN]" if dry_run}" + "\n\n"
 
   success_count = 0
@@ -99,7 +206,10 @@ def load_dotfiles(config_files, dry_run: false, verbose: false)
     end
   end
 
+  pruned_count = prune ? prune_destinations(**prune_meta, dry_run: dry_run, verbose: verbose) : 0
+
   puts "Files copied: #{success_count}; errors: #{errors_count}"
+  puts "Files removed: #{pruned_count}" if prune
   puts "All good" if errors_count.zero?
 end
 
@@ -171,6 +281,10 @@ parser = OptionParser.new do |opts|
     options[:verbose] = true
   end
 
+  opts.on("-p", "--prune", "Remove destination files missing from source") do
+    options[:prune] = true
+  end
+
   opts.on("-h", "--help", "Show this help message") do
     puts opts
     exit 0
@@ -191,13 +305,14 @@ if ARGV.empty?
 end
 
 command = ARGV[0]
-config_files = load_configuration
+direction = command == "load" ? :load : :save
+config_files, prune_meta = load_configuration(direction: direction)
 
 case command
 when "save"
-  save_dotfiles(config_files, **options)
+  save_dotfiles(config_files, prune_meta, **options)
 when "load"
-  load_dotfiles(config_files, **options)
+  load_dotfiles(config_files, prune_meta, **options)
 when "ls", "status"
   show_status(config_files)
 when "config"
