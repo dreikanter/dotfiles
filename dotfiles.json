@@ -92,5 +92,8 @@
   ],
   "claude": [
     "~/.claude/skills/*"
+  ],
+  "codex": [
+    "~/.codex/prompts"
   ]
 }
