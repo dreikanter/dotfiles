@@ -158,8 +158,8 @@ Examples of useful analyses:
 - Requires Firefox to be closed for reliable database access (scripts use temp copies)
 - Tag analysis only works if user has created tags in Firefox
 
-## See Also
+## Scripts
 
-- REFERENCE.md: Detailed database schema documentation
-- EXAMPLES.md: Complete usage examples with sample outputs
-- scripts/: Ruby implementation files
+- `scripts/extract_bookmarks.rb` - Extract recent bookmarks with metadata
+- `scripts/analyze_tags.rb` - Analyze tag popularity and usage
+- `scripts/explore_db.rb` - Explore Firefox database structure
