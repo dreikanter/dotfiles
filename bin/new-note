@@ -3,7 +3,6 @@
 require "fileutils"
 require "json"
 require "optparse"
-require "yaml"
 
 NOTES_PATH = ENV["NOTES_PATH"] || File.expand_path("~/Dropbox/Notes")
 VISUAL_EDITOR = ENV["NOTES_EDITOR"] || "/opt/homebrew/bin/subl --add"
@@ -69,12 +68,12 @@ rescue StandardError
 end
 
 def generate_frontmatter(options)
-  frontmatter = {}
-  frontmatter["tags"] = options[:tags] unless options[:tags].empty?
-  frontmatter["location"] = options[:location] if options[:location]
-  return "" if frontmatter.empty?
+  lines = []
+  lines << "tags: [#{options[:tags].join(", ")}]" unless options[:tags].empty?
+  lines << "location: #{options[:location]}" if options[:location]
+  return "" if lines.empty?
 
-  "---\n#{frontmatter.to_yaml.lines.drop(1).join}---\n\n"
+  "---\n#{lines.join("\n")}\n---\n\n"
 end
 
 file_name = new_note_path(Time.now, slug: options[:slug])
