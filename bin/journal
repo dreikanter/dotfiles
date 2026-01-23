@@ -1,0 +1,66 @@
+#!/usr/bin/env ruby
+
+require "fileutils"
+require "net/http"
+require "json"
+require "uri"
+
+NOTES_PATH = ENV["NOTES_PATH"] || File.expand_path("~/Dropbox/Notes")
+VISUAL_EDITOR = ENV["NOTES_EDITOR"] || "/opt/homebrew/bin/subl --add"
+NEW_NOTE_PATH = File.expand_path("../new-note", __FILE__)
+
+def today_str
+  Time.now.strftime("%Y%m%d")
+end
+
+def notes_dir_for_today
+  time = Time.now
+  File.join(NOTES_PATH, time.strftime("%Y"), time.strftime("%m"))
+end
+
+def find_existing_journal
+  dir = notes_dir_for_today
+  return nil unless Dir.exist?(dir)
+
+  pattern = File.join(dir, "#{today_str}_*_journal.md")
+  matches = Dir.glob(pattern)
+  matches.first
+end
+
+def fetch_location
+  uri = URI("http://ip-api.com/json/?fields=city,country")
+  http = Net::HTTP.new(uri.host, uri.port)
+  http.open_timeout = 2
+  http.read_timeout = 2
+
+  response = http.get(uri.request_uri)
+  data = JSON.parse(response.body)
+
+  city = data["city"]
+  country = data["country"]
+
+  if city && country && !city.empty? && !country.empty?
+    "#{city}, #{country}"
+  else
+    "undetected"
+  end
+rescue StandardError
+  "undetected"
+end
+
+def open_in_editor(file_path)
+  pid = Process.spawn("#{VISUAL_EDITOR} #{NOTES_PATH} #{file_path}")
+  Process.detach(pid)
+rescue StandardError => e
+  warn "Failed to launch editor (#{VISUAL_EDITOR}): #{e.message}"
+end
+
+existing = find_existing_journal
+
+if existing
+  puts existing
+  open_in_editor(existing)
+else
+  location = fetch_location
+  exec(NEW_NOTE_PATH, "--tag=journal", "--location=#{location}", "--slug=journal")
+end
