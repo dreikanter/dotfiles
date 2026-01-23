@@ -2,16 +2,57 @@
 
 require "fileutils"
 require "json"
+require "optparse"
+require "yaml"
 
 NOTES_PATH = ENV["NOTES_PATH"] || File.expand_path("~/Dropbox/Notes")
 VISUAL_EDITOR = ENV["NOTES_EDITOR"] || "/opt/homebrew/bin/subl --add"
 
 ID_PATH = File.join(NOTES_PATH, "id.json")
 
-def new_note_path(time)
+options = { tags: [] }
+
+parser = OptionParser.new do |opts|
+  opts.banner = "Usage: new-note [options]"
+  opts.separator ""
+  opts.separator "Creates a new note with auto-incremented ID and opens it in the editor."
+  opts.separator ""
+  opts.separator "Options:"
+
+  opts.on("--tag=TAG", "Add a tag (can be used multiple times)") do |tag|
+    options[:tags] << tag
+  end
+
+  opts.on("--location=LOCATION", "Set location in frontmatter") do |loc|
+    options[:location] = loc
+  end
+
+  opts.on("--slug=SLUG", "Add slug suffix to filename") do |slug|
+    options[:slug] = slug
+  end
+
+  opts.on("-h", "--help", "Show this help message") do
+    puts opts
+    puts ""
+    puts "Examples:"
+    puts "  new-note"
+    puts "  new-note --tag=journal --location=\"Berlin, Germany\" --slug=journal"
+    puts "  new-note --tag=idea --tag=project"
+    puts ""
+    puts "Environment variables:"
+    puts "  NOTES_PATH    Notes directory (default: ~/Dropbox/Notes)"
+    puts "  NOTES_EDITOR  Editor command (default: /opt/homebrew/bin/subl --add)"
+    exit
+  end
+end
+
+parser.parse!
+
+def new_note_path(time, slug: nil)
+  suffix = slug ? "_#{slug}" : ""
   File.join(
     File.join(NOTES_PATH, time.strftime("%Y"), time.strftime("%m")),
-    "#{time.strftime("%Y%m%d")}_#{generate_new_id}.md"
+    "#{time.strftime("%Y%m%d")}_#{generate_new_id}#{suffix}.md"
   )
 end
 
@@ -27,9 +68,22 @@ rescue StandardError
   Dir.glob(File.join(NOTES_PATH, "**/*.md")).count
 end
 
-file_name = new_note_path(Time.now)
+def generate_frontmatter(options)
+  frontmatter = {}
+  frontmatter["tags"] = options[:tags] unless options[:tags].empty?
+  frontmatter["location"] = options[:location] if options[:location]
+  return "" if frontmatter.empty?
+
+  "---\n#{frontmatter.to_yaml.lines.drop(1).join}---\n\n"
+end
+
+file_name = new_note_path(Time.now, slug: options[:slug])
 puts file_name
 FileUtils.mkdir_p(File.dirname(file_name))
+
+frontmatter = generate_frontmatter(options)
+File.write(file_name, frontmatter) unless frontmatter.empty?
+
 begin
   pid = Process.spawn("#{VISUAL_EDITOR} #{NOTES_PATH} #{file_name}")
   Process.detach(pid)
