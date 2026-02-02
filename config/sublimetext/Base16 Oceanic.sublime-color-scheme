@@ -1,0 +1,10 @@
+{
+	"rules": [
+		{
+			"name": "Bold",
+			"scope": "markup.bold, punctuation.definition.bold",
+			"font_style": "bold",
+			"foreground": "#ffffff"
+		}
+	]
+}
