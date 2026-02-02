@@ -9,7 +9,7 @@ NOTES_PATH = ENV["NOTES_PATH"] || File.expand_path("~/Dropbox/Notes")
 VISUAL_EDITOR = ENV["NOTES_EDITOR"] || "/opt/homebrew/bin/subl --add"
 ID_PATH = File.join(NOTES_PATH, "id.json")
 
-TASK_REGEX = /^(?<indent>\s*)\[(?<marker>.?)\](?<body>.*)$/
+TASK_REGEX = /^(?<indent>\s*)(?<bullet>- )?\[(?<marker>.?)\](?<body>.*)$/
 
 def pinned?(path)
   File.basename(path) =~ /^9+_/
@@ -96,19 +96,20 @@ def extract_tasks(path, include_moved:)
     end
 
     indent = match[:indent]
+    bullet = match[:bullet] || ""
     marker = match[:marker]
     body = match[:body]
-    task_text = "#{indent}[ ]#{body}"
+    task_text = "#{indent}- [ ]#{body}"
     daily = body.include?("[daily]")
 
     case marker
     when " "
       regular_tasks << [index, task_text]
-      updated_lines << "#{indent}[>]#{body}#{newline}"
+      updated_lines << "#{indent}#{bullet}[>]#{body}#{newline}"
       modified = true
     when ">"
       regular_tasks << [index, task_text] if include_moved
-      updated_lines << "#{indent}[>]#{body}#{newline}"
+      updated_lines << "#{indent}#{bullet}[>]#{body}#{newline}"
     else
       updated_lines << line
     end
