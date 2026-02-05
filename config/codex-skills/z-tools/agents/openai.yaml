@@ -1,0 +1,4 @@
+interface:
+  display_name: "Z Tools"
+  short_description: "Review PRs with Jira context"
+  default_prompt: "Review a GitHub PR using prdump/jiradump and gh pr diff; pull Jira tickets referenced in the PR."
