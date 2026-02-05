@@ -1,0 +1,142 @@
+#!/usr/bin/env ruby
+
+require "json"
+require "open3"
+require "uri"
+
+USAGE = "Usage: prdump https://github.com/OWNER/REPO/pull/123"
+
+
+def run(*cmd)
+  out, err, status = Open3.capture3(*cmd)
+  unless status.success?
+    if err.include?("not logged into any GitHub hosts") || err.include?("authentication") || err.include?("HTTP 401") || err.include?("HTTP 403")
+      warn "GitHub CLI not authenticated. Run: gh auth login"
+    end
+    warn(err.empty? ? "Command failed: #{cmd.join(" ")}" : err)
+    exit(status.exitstatus || 1)
+  end
+  out
+end
+
+
+def parse_input(input)
+  return [nil, nil] unless input
+
+  if input.include?("github.com/") && (input.include?("/pull/") || input.include?("/pulls/"))
+    repo = input.sub(%r{^.*github.com/}, "")
+    repo = repo.sub(%r{/pull/.*$}, "")
+    repo = repo.sub(%r{/pulls/.*$}, "")
+    pr = input.split("/").last
+    return [repo, pr]
+  end
+
+  [nil, nil]
+end
+
+
+def format_body(text)
+  return "" if text.nil? || text.strip.empty?
+  text.rstrip + "\n"
+end
+
+def indent_block(text, spaces: 2)
+  return "" if text.nil? || text.empty?
+  prefix = " " * spaces
+  text.lines.map { |line| "#{prefix}#{line.rstrip}" }.join("\n") + "\n"
+end
+
+def fetch_review_comments(repo, pr)
+  comments = []
+  page = 1
+
+  loop do
+    json = run("gh", "api", "-H", "Accept: application/vnd.github+json",
+               "repos/#{repo}/pulls/#{pr}/comments?per_page=100&page=#{page}")
+    batch = JSON.parse(json)
+    break if batch.empty?
+
+    comments.concat(batch)
+    break if batch.length < 100
+
+    page += 1
+  end
+
+  comments
+end
+
+
+repo, pr = parse_input(ARGV[0])
+if repo.nil? || pr.nil?
+  warn USAGE
+  exit 2
+end
+
+unless system("command -v gh >/dev/null 2>&1")
+  warn "gh not found. Install with: brew install gh"
+  warn "Then authenticate with: gh auth login"
+  exit 127
+end
+
+pr_json = run("gh", "pr", "view", pr, "--repo", repo,
+              "--json", "title,body,headRefName,author,comments,reviews,url")
+pr_data = JSON.parse(pr_json)
+
+puts "# #{pr_data.fetch("title", "")}"
+puts
+puts "Branch: `#{pr_data.fetch("headRefName", "")}`"
+puts "URL: #{pr_data.fetch("url", "")}"
+puts "Author: **#{pr_data.dig("author", "login") || ""}**"
+puts
+puts "## Description"
+puts
+puts format_body(pr_data.fetch("body", ""))
+puts
+puts "## Discussion"
+puts
+
+comments = pr_data.fetch("comments", [])
+comments.each do |comment|
+  author = comment.dig("author", "login") || ""
+  created_at = comment["createdAt"] || ""
+  body = comment["body"] || ""
+
+  puts "- **#{author}** (#{created_at})"
+  puts indent_block(format_body(body))
+end
+
+reviews = pr_data.fetch("reviews", [])
+reviews.each do |review|
+  author = review.dig("author", "login") || ""
+  state = review["state"] || ""
+  submitted_at = review["submittedAt"] || ""
+  body = review["body"] || ""
+
+  puts "- **#{author}** review (#{state}, #{submitted_at})"
+  if body.nil? || body.strip.empty?
+    puts indent_block("(no review body; see Review Comments)\n")
+  else
+    puts indent_block(format_body(body))
+  end
+end
+
+review_comments = fetch_review_comments(repo, pr)
+review_comments.sort_by! { |item| item["created_at"].to_s }
+
+unless review_comments.empty?
+  puts "## Review Comments"
+  puts
+
+  review_comments.each do |comment|
+    author = comment.dig("user", "login") || ""
+    created_at = comment["created_at"] || ""
+    path = comment["path"] || ""
+    line = comment["line"] || comment["original_line"]
+    location = path.empty? ? "" : " `#{path}"
+    location += line ? ":#{line}`" : "`"
+    body = comment["body"] || ""
+
+    puts "- **#{author}** (#{created_at})#{location}"
+    puts indent_block(format_body(body))
+  end
+end

@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if ! command -v jira >/dev/null 2>&1; then
+  echo "jira CLI not found. Install with: brew install jira-cli" >&2
+  echo "Then initialize with: jira init" >&2
+  exit 127
+fi
+
+input="${1:-}"
+if [[ -z "$input" ]]; then
+  echo "Usage: jiradump https://jira.example.com/browse/ABC-123 or ABC-123" >&2
+  exit 2
+fi
+
+key="${input##*/}"
+jira issue view "$key" --comments 9999 --plain \
+  | sed -E $'s/\x1B\[[0-9;]*[mK]//g; s/^[[:space:]]+//'

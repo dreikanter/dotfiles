@@ -117,13 +117,6 @@ function repeat() {
   done
 }
 
-jira_md() {
-  local input="$1"
-  local key="${input##*/}"
-  jira issue view "$key" --comments 9999 --plain \
-    | sed -E $'s/\x1B\\[[0-9;]*[mK]//g' > "${key}.md"
-}
-
 wez_rename_tab() {
   # Usage:
   #   wez_rename_tab "Title"

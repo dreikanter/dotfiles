@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if ! command -v prdump >/dev/null 2>&1; then
+  echo "prdump not found in PATH" >&2
+  exit 1
+fi
+if ! command -v pbcopy >/dev/null 2>&1; then
+  echo "pbcopy not found" >&2
+  exit 1
+fi
+
+prdump "$@" | pbcopy
