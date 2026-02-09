@@ -1,3 +1,8 @@
+# Disable terminal echo during initialization to prevent input artifacts
+if [[ -o interactive ]] && [[ -t 0 ]]; then
+  stty -echo 2>/dev/null
+fi
+
 #
 # Path
 #
@@ -216,3 +221,8 @@ unsetopt correct_all
 # opencode
 export PATH=/Users/alex/.opencode/bin:$PATH
 export PATH="$(brew --prefix llvm)/bin:$PATH"
+
+# Re-enable terminal echo after initialization completes
+if [[ -o interactive ]] && [[ -t 0 ]]; then
+  stty echo 2>/dev/null
+fi
