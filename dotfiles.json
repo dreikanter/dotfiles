@@ -92,7 +92,8 @@
     "~/.zshrc"
   ],
   "claude": [
-    "~/.claude/skills/*"
+    "~/.claude/skills/*",
+    "~/.claude/commands/*"
   ],
   "codex": [
     "~/.codex/prompts"
