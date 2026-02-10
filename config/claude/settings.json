@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git status*)",
+      "Bash(git diff*)",
+      "Bash(git log*)",
+      "Bash(gh pr list*)",
+      "Bash(source ~/.zshenv && prdump *)",
+      "Bash(source ~/.zshenv && jiradump *)",
+      "Bash(bundle exec rubocop --parallel --force-exclusion *)"
+    ]
+  }
+}

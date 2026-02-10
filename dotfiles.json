@@ -93,7 +93,8 @@
   ],
   "claude": [
     "~/.claude/skills/*",
-    "~/.claude/commands/*"
+    "~/.claude/commands/*",
+    "~/.claude/settings.json"
   ],
   "codex": [
     "~/.codex/prompts"
