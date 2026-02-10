@@ -1,0 +1,198 @@
+#!/usr/bin/env ruby
+# Extract first user messages from Claude Code sessions for the past N days
+
+require 'json'
+require 'time'
+require 'pathname'
+
+def show_help
+  puts <<~HELP
+    Usage: claudehistory [OPTIONS] [DAYS]
+
+    Extract first user messages from Claude Code sessions.
+
+    Arguments:
+      DAYS                Number of days to look back (default: 7)
+
+    Options:
+      -h, --help          Show this help message
+      --truncate LENGTH   Truncate messages longer than LENGTH characters (default: 5000)
+      --no-truncate       Don't truncate long messages
+
+    Examples:
+      claudehistory              # Show sessions from past 7 days
+      claudehistory 30           # Show sessions from past 30 days
+      claudehistory --help       # Show this help message
+      claudehistory --no-truncate 14  # Show 14 days, don't truncate
+
+    Output:
+      - Session ID, timestamps, project path, git branch
+      - First user message from each session
+      - Summary statistics
+
+    Session files location: ~/.claude/projects/
+  HELP
+  exit 0
+end
+
+# Parse arguments
+TRUNCATE_LENGTH = 5000
+days = 7
+truncate = true
+truncate_length = TRUNCATE_LENGTH
+
+ARGV.each do |arg|
+  case arg
+  when '-h', '--help'
+    show_help
+  when '--no-truncate'
+    truncate = false
+  when /--truncate=(\d+)/
+    truncate_length = $1.to_i
+  when /^\d+$/
+    days = arg.to_i
+  else
+    puts "Unknown option: #{arg}"
+    puts "Use --help for usage information"
+    exit 1
+  end
+end
+
+# Configuration
+PROJECTS_DIR = File.expand_path("~/.claude/projects")
+CUTOFF_TIME = Time.now - (days * 24 * 60 * 60)
+
+# Session data structure
+Session = Struct.new(:id, :file, :created_at, :project_path, :git_branch, :first_message, :modified_at)
+
+def extract_sessions(cutoff_time)
+  sessions = []
+  projects_dir = File.expand_path("~/.claude/projects")
+
+  # Find all JSONL files
+  Dir.glob("#{projects_dir}/**/*.jsonl").each do |file|
+    # Skip subagent files
+    next if file.include?('/subagents/')
+
+    # Check file modification time
+    mtime = File.mtime(file)
+    next if mtime < cutoff_time
+
+    # Extract session data
+    session = extract_session_data(file, mtime)
+    sessions << session if session
+  end
+
+  # Sort by modification time, most recent first
+  sessions.sort_by { |s| -s.modified_at.to_i }
+end
+
+def extract_session_data(file, mtime)
+  session_id = File.basename(file, '.jsonl')
+  first_message = nil
+  created_at = nil
+  project_path = nil
+  git_branch = nil
+
+  # Read JSONL file line by line
+  File.open(file, 'r') do |f|
+    f.each_line do |line|
+      begin
+        data = JSON.parse(line)
+
+        # Extract metadata from first user message
+        if data['type'] == 'user' && data.dig('message', 'role') == 'user'
+          first_message = data.dig('message', 'content')
+          created_at = data['timestamp']
+          project_path = data['cwd']
+          git_branch = data['gitBranch']
+          break
+        end
+      rescue JSON::ParserError
+        # Skip malformed lines
+        next
+      end
+    end
+  end
+
+  return nil unless first_message
+
+  Session.new(
+    session_id,
+    file,
+    created_at ? Time.parse(created_at) : mtime,
+    project_path,
+    git_branch,
+    first_message,
+    mtime
+  )
+end
+
+def format_output(sessions, days, truncate, truncate_length)
+  puts "=" * 80
+  puts "CLAUDE CODE SESSION MESSAGES - PAST #{days} DAYS"
+  puts "Found #{sessions.length} sessions"
+  puts "=" * 80
+  puts
+
+  sessions.each_with_index do |session, idx|
+    puts "#{idx + 1}. " + "=" * 76
+    puts "Session ID:  #{session.id}"
+    puts "Created:     #{session.created_at.strftime('%Y-%m-%d %H:%M:%S')}"
+    puts "Modified:    #{session.modified_at.strftime('%Y-%m-%d %H:%M:%S')}"
+    puts "Project:     #{session.project_path}"
+    puts "Branch:      #{session.git_branch}" if session.git_branch
+    puts "-" * 80
+    puts
+
+    # Format the message with indentation for readability
+    message_text = session.first_message
+
+    # Truncate very long messages (optional)
+    if truncate && message_text.length > truncate_length
+      puts message_text[0...truncate_length]
+      puts
+      puts "[... message truncated, #{message_text.length} total characters ...]"
+    else
+      puts message_text
+    end
+
+    puts
+    puts "=" * 80
+    puts
+  end
+end
+
+def main(days, truncate, truncate_length)
+  puts "Extracting sessions from past #{days} days..."
+  puts "Projects directory: #{PROJECTS_DIR}"
+  puts "Cutoff time: #{CUTOFF_TIME.strftime('%Y-%m-%d %H:%M:%S')}"
+  puts
+
+  sessions = extract_sessions(CUTOFF_TIME)
+
+  if sessions.empty?
+    puts "No sessions found in the past #{days} days."
+    exit 0
+  end
+
+  format_output(sessions, days, truncate, truncate_length)
+
+  # Summary statistics
+  puts
+  puts "SUMMARY"
+  puts "-" * 80
+  puts "Total sessions: #{sessions.length}"
+  puts "Date range: #{sessions.last.modified_at.strftime('%Y-%m-%d')} to #{sessions.first.modified_at.strftime('%Y-%m-%d')}"
+
+  # Project breakdown
+  projects = sessions.group_by { |s| s.project_path }.transform_values(&:count)
+  puts
+  puts "By project:"
+  projects.sort_by { |_, count| -count }.each do |project, count|
+    puts "  #{project}: #{count}"
+  end
+end
+
+# Run the script
+main(days, truncate, truncate_length)
