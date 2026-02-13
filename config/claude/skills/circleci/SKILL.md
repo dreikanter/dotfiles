@@ -12,8 +12,20 @@ Fetch CircleCI pipeline status, failed job details, and test failure messages fo
 ## Prerequisites
 
 - `gh` CLI authenticated with the target GitHub org
-- `$CIRCLECI_TOKEN` environment variable set (a `CCIPAT_...` personal API token, sourced from `~/.zshenv`)
+- `CIRCLECI_TOKEN` defined in `~/.zshenv` (a `CCIPAT_...` personal API token)
 - `jq` for JSON parsing
+
+## Authentication
+
+The `$CIRCLECI_TOKEN` env var often does not expand in the Claude Code shell. To work around this, read the token directly from `~/.zshenv` before making API calls:
+
+```bash
+CIRCLECI_TOKEN=$(grep CIRCLECI_TOKEN ~/.zshenv | sed 's/.*=//')
+```
+
+Run this once at the start, then use `$CIRCLECI_TOKEN` in subsequent curl commands within the same Bash invocation.
+
+All curl commands below assume `CIRCLECI_TOKEN` has been set this way. Always use `/usr/bin/curl` (absolute path) to avoid PATH issues.
 
 ## Workflow
 
@@ -29,6 +41,8 @@ Output is tab-separated: `check_name \t status \t duration \t url`. Look for che
 
 ### 2. Extract workflow ID from failed checks
 
+Parse the workflow ID from the CircleCI URL in step 1 — it's the UUID in `.../workflows/{workflow_id}`.
+
 If the `gh pr checks` output doesn't clearly show the workflow URL, use the GitHub API:
 
 ```bash
@@ -36,11 +50,10 @@ gh api repos/{owner}/{repo}/commits/$(gh pr view <pr_number> --repo {owner}/{rep
   --jq '.check_runs[] | select(.conclusion == "failure") | {name: .name, details_url: .details_url}'
 ```
 
-Extract the workflow ID from the `details_url` — it's the UUID in the path: `.../workflows/{workflow_id}`.
-
 ### 3. List failed jobs in the workflow
 
 ```bash
+CIRCLECI_TOKEN=$(grep CIRCLECI_TOKEN ~/.zshenv | sed 's/.*=//') && \
 /usr/bin/curl -s -H "Circle-Token: $CIRCLECI_TOKEN" \
   "https://circleci.com/api/v2/workflow/{workflow_id}/job" | \
   jq -r '.items[] | select(.status == "failed") | "\(.name): \(.job_number)"'
@@ -49,16 +62,18 @@ Extract the workflow ID from the `details_url` — it's the UUID in the path: `.
 ### 4. Get test failures from a failed job
 
 ```bash
+CIRCLECI_TOKEN=$(grep CIRCLECI_TOKEN ~/.zshenv | sed 's/.*=//') && \
 /usr/bin/curl -s -H "Circle-Token: $CIRCLECI_TOKEN" \
   "https://circleci.com/api/v2/project/{project_slug}/{job_number}/tests" | \
   jq -r '.items[] | select(.result == "failure") | "FAILED: \(.classname) - \(.name)\nMessage: \(.message)\n"'
 ```
 
-**Project slug format**: `gh/{org}/{repo}` (e.g., `gh/retailzipline/zipline-app`)
+**Project slug format**: `gh/{org}/{repo}`
 
 ### 5. (Optional) Check if a failure is a known flaky test
 
 ```bash
+CIRCLECI_TOKEN=$(grep CIRCLECI_TOKEN ~/.zshenv | sed 's/.*=//') && \
 /usr/bin/curl -s -H "Circle-Token: $CIRCLECI_TOKEN" \
   "https://circleci.com/api/v2/insights/{project_slug}/flaky-tests" | \
   jq -r '.flaky_tests[] | select(.test_name | test("{search_pattern}")) | "\(.test_name) - \(.times_flaked) flakes"'
@@ -72,7 +87,7 @@ Extract the workflow ID from the `details_url` — it's the UUID in the path: `.
 | Get test results for a job | `GET https://circleci.com/api/v2/project/{slug}/{job_number}/tests` |
 | Get flaky test insights    | `GET https://circleci.com/api/v2/insights/{slug}/flaky-tests`  |
 
-**Auth**: `Circle-Token` HTTP header with `$CIRCLECI_TOKEN`.
+**Auth**: `Circle-Token` HTTP header.
 
 **Project slug**: `gh/{org}/{repo}`
 
@@ -89,7 +104,5 @@ Run step 5 after identifying the failing test name.
 
 ## Notes
 
-- Always use `/usr/bin/curl` (absolute path) to avoid shell environment issues.
-- The `$CIRCLECI_TOKEN` is sourced from `~/.zshenv`.
 - When reporting results, include the test class, test name, and failure message.
 - If no test failures are found but the job failed, the failure may be a build/setup error rather than a test failure — report the job name and status.

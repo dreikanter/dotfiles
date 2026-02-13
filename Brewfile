@@ -71,6 +71,10 @@ brew "oven-sh/bun/bun"
 tap "puma/puma"
 brew "puma/puma/puma-dev"
 
+# CodeRabbit Git PR Tool
+tap "coderabbitai/tap"
+brew "git-gtr"
+
 cask "font-jetbrains-mono"
 
 #
