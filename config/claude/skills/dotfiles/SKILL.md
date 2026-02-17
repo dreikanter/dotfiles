@@ -102,7 +102,7 @@ dotfiles config        # Show configuration mapping as JSON
 **Load**: `dotfiles load -v` (optionally check `dotfiles status` first)
 
 **Push/Pull**: Git operations on `~/.dotfiles` repo
-- **Push** (typically after save): `cd ~/.dotfiles && git add . && git commit -m "..." && git push`
+- **Push** (optionally after save): `cd ~/.dotfiles && git add . && git commit -m "..." && git push`
 - **Pull** (optionally before load): `cd ~/.dotfiles && git pull`
 
 ## Usage Guidelines
