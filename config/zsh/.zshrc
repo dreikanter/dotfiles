@@ -113,15 +113,6 @@ function y() {
 	rm -f -- "$tmp"
 }
 
-function repeat() {
-  count=$1
-  shift
-  for i in $(seq 1 $count); do
-    echo "Run #$i"
-    "$@"
-  done
-}
-
 wez_rename_tab() {
   # Usage:
   #   wez_rename_tab "Title"
