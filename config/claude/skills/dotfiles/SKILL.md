@@ -97,29 +97,13 @@ dotfiles config        # Show configuration mapping as JSON
 
 ## Expected Workflows
 
-When the user says specific commands, follow these workflows:
+**Save**: `dotfiles save -v` (optionally check `dotfiles status` first)
 
-**"Save dotfiles"**:
-1. Optionally run `dotfiles status` to check current state
-2. Optionally run `dotfiles save -n -v` (dry-run) if you see it necessary
-3. Run `dotfiles save -v`
+**Load**: `dotfiles load -v` (optionally check `dotfiles status` first)
 
-**"Load dotfiles"**:
-1. Optionally run `dotfiles status` to check current state
-2. Optionally run `dotfiles load -n -v` (dry-run) for safety if you see it necessary
-3. Run `dotfiles load -v`
-
-**"Push dotfiles"**:
-1. Change to `~/.dotfiles` directory
-2. Run `git add .`
-3. Run `git commit -m "Update dotfiles"`
-4. Run `git push origin main` (or appropriate branch)
-5. Resolve merge conflicts if necessary
-
-**"Pull dotfiles"**:
-1. Change to `~/.dotfiles` directory
-2. Run `git pull origin main` (or appropriate branch)
-3. Resolve merge conflicts if necessary
+**Push/Pull**: Git operations on `~/.dotfiles` repo
+- **Push** (typically after save): `cd ~/.dotfiles && git add . && git commit -m "..." && git push`
+- **Pull** (optionally before load): `cd ~/.dotfiles && git pull`
 
 ## Usage Guidelines
 
