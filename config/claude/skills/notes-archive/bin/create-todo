@@ -1,0 +1,180 @@
+#!/usr/bin/env ruby
+
+require "date"
+require "fileutils"
+require "json"
+require "optparse"
+
+NOTES_PATH = ENV["NOTES_PATH"] || File.expand_path("~/Dropbox/Notes")
+ID_PATH = File.join(NOTES_PATH, "id.json")
+
+TASK_REGEX = /^(?<indent>\s*)(?<bullet>- )?\[(?<marker>.?)\](?<body>.*)$/
+
+def pinned?(path)
+  File.basename(path) =~ /^9+_/
+end
+
+def todo_date_from(path)
+  if (match = File.basename(path).match(/^(\d{8})_\d+_todo\.md$/))
+    Date.strptime(match[1], "%Y%m%d")
+  end
+rescue ArgumentError
+  nil
+end
+
+def find_today_todo_path(date)
+  pattern = File.join(
+    NOTES_PATH,
+    date.strftime("%Y"),
+    date.strftime("%m"),
+    "#{date.strftime("%Y%m%d")}_*_todo.md"
+  )
+
+  Dir.glob(pattern).reject { |path| pinned?(path) }.max
+end
+
+def find_previous_todo(date)
+  pattern = File.join(NOTES_PATH, "*", "*", "*_todo.md")
+  best = nil
+
+  Dir.glob(pattern).reject { |path| pinned?(path) }.each do |path|
+    todo_date = todo_date_from(path)
+    next unless todo_date && todo_date < date
+
+    if best.nil? || todo_date > best.first || (todo_date == best.first && path > best.last)
+      best = [todo_date, path]
+    end
+  end
+
+  best
+end
+
+def last_id
+  Integer(JSON.parse(File.read(ID_PATH))["last_id"])
+rescue StandardError
+  Dir.glob(File.join(NOTES_PATH, "**/*.md")).count
+end
+
+def generate_new_id
+  new_id = last_id.succ
+  File.write(ID_PATH, JSON.generate({ last_id: new_id }))
+  new_id
+end
+
+def build_todo_path(date, id)
+  File.join(
+    File.join(NOTES_PATH, date.strftime("%Y"), date.strftime("%m")),
+    "#{date.strftime("%Y%m%d")}_#{id}_todo.md"
+  )
+end
+
+def split_line_and_newline(line)
+  if line.end_with?("\r\n")
+    [line[0...-2], "\r\n"]
+  elsif line.end_with?("\n")
+    [line[0...-1], "\n"]
+  else
+    [line, ""]
+  end
+end
+
+def extract_tasks(path, include_moved:)
+  lines = File.readlines(path, chomp: false)
+  daily_tasks = []
+  regular_tasks = []
+  updated_lines = []
+  modified = false
+
+  lines.each_with_index do |line, index|
+    content, newline = split_line_and_newline(line)
+    match = content.match(TASK_REGEX)
+
+    unless match
+      updated_lines << line
+      next
+    end
+
+    indent = match[:indent]
+    bullet = match[:bullet] || ""
+    marker = match[:marker]
+    body = match[:body]
+    task_text = "#{indent}- [ ]#{body}"
+    daily = body.include?("[daily]")
+
+    case marker
+    when " "
+      regular_tasks << [index, task_text]
+      updated_lines << "#{indent}#{bullet}[>]#{body}#{newline}"
+      modified = true
+    when ">"
+      regular_tasks << [index, task_text] if include_moved
+      updated_lines << "#{indent}#{bullet}[>]#{body}#{newline}"
+    else
+      updated_lines << line
+    end
+
+    daily_tasks << [index, task_text] if daily
+  end
+
+  daily_tasks.sort_by!(&:first)
+  regular_tasks.sort_by!(&:first)
+
+  combined_tasks = []
+  (daily_tasks + regular_tasks).each do |(_, task)|
+    combined_tasks << task unless combined_tasks.include?(task)
+  end
+
+  [combined_tasks, modified ? updated_lines.join : nil]
+end
+
+def build_todo_content(tasks)
+  body = tasks.join("\n\n")
+  content = +"---\nslug: todo\n---\n\n"
+  content << body unless body.empty?
+  content << "\n" unless content.end_with?("\n")
+  content
+end
+
+options = { force: false }
+
+OptionParser.new do |opts|
+  opts.on("--force", "Regenerate today's todo note") { options[:force] = true }
+end.parse!(ARGV)
+
+today = Date.today
+existing_today_path = find_today_todo_path(today)
+
+if existing_today_path && !options[:force]
+  puts existing_today_path
+  exit 0
+end
+
+previous_todo = find_previous_todo(today)
+
+unless previous_todo
+  warn "Error: No previous todo note found."
+  exit 1
+end
+
+previous_date, previous_path = previous_todo
+tasks_to_copy, updated_previous_content = extract_tasks(previous_path, include_moved: options[:force])
+
+if tasks_to_copy.empty?
+  warn "Warning: No tasks to carry over from #{previous_path}."
+end
+
+today_path = existing_today_path
+
+unless today_path
+  new_id = generate_new_id
+  today_path = build_todo_path(today, new_id)
+end
+
+FileUtils.mkdir_p(File.dirname(today_path))
+File.write(today_path, build_todo_content(tasks_to_copy))
+
+if updated_previous_content
+  File.write(previous_path, updated_previous_content)
+end
+
+puts today_path

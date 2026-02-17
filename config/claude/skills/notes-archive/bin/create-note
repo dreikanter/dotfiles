@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# create-note: Create a new note with auto-incremented ID
+# Usage: create-note [slug]
+#   Reads content from stdin
+#   Outputs created file path to stdout
+
+NOTES_PATH="${NOTES_PATH:-$HOME/Dropbox/Notes}"
+ID_FILE="$NOTES_PATH/id.json"
+
+if [[ ! -d "$NOTES_PATH" ]]; then
+  echo "Error: NOTES_PATH directory not found: $NOTES_PATH" >&2
+  exit 1
+fi
+
+if [[ ! -f "$ID_FILE" ]]; then
+  echo "Error: id.json not found: $ID_FILE" >&2
+  exit 1
+fi
+
+# Read current ID and increment
+CURRENT_ID=$(jq -r '.last_id' "$ID_FILE")
+NEW_ID=$((CURRENT_ID + 1))
+
+# Generate date components
+DATE=$(date +%Y%m%d)
+YEAR=$(date +%Y)
+MONTH=$(date +%m)
+
+# Build filename
+SLUG="${1:-}"
+if [[ -n "$SLUG" ]]; then
+  FILENAME="${DATE}_${NEW_ID}_${SLUG}.md"
+else
+  FILENAME="${DATE}_${NEW_ID}.md"
+fi
+
+# Create directory structure
+DIR="$NOTES_PATH/$YEAR/$MONTH"
+mkdir -p "$DIR"
+
+# Create file
+FILE_PATH="$DIR/$FILENAME"
+
+# Read from stdin if available
+if [[ ! -t 0 ]]; then
+  cat > "$FILE_PATH"
+else
+  touch "$FILE_PATH"
+fi
+
+# Update id.json
+jq --arg new_id "$NEW_ID" '.last_id = ($new_id | tonumber)' "$ID_FILE" > "$ID_FILE.tmp"
+mv "$ID_FILE.tmp" "$ID_FILE"
+
+# Output path
+echo "$FILE_PATH"

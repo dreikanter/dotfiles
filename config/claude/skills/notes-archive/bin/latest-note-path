@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+set -eu
+
+# latest-note-path: Find and output path to the most recent note
+# Skips pinned notes (99999999_*)
+
+NOTES_PATH="${NOTES_PATH:-$HOME/Dropbox/Notes}"
+
+if [[ ! -d "$NOTES_PATH" ]]; then
+  echo "Error: NOTES_PATH directory not found: $NOTES_PATH" >&2
+  exit 1
+fi
+
+cd "$NOTES_PATH"
+
+# Find most recent .md file, excluding pinned notes
+LATEST=$(find . -name "*.md" ! -name "99999999_*" -type f | while read -r file; do
+  echo "$(stat -f %m "$file" 2>/dev/null || stat -c %Y "$file") $file"
+done 2>/dev/null | sort -rn | head -1 | cut -d' ' -f2)
+
+if [[ -z "$LATEST" ]]; then
+  echo "Error: No notes found" >&2
+  exit 1
+fi
+
+echo "$NOTES_PATH/$LATEST"
