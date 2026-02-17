@@ -1,6 +1,6 @@
 ---
 name: notes-archive
-description: Work with personal notes archive stored in date-based directory structure with Markdown files. Navigate notes by date, ID, or slug. Search content and tags.
+description: Create and access notes in date-based archive. Create notes with auto-incremented IDs, generate daily todos with task rollover, find latest notes by type (note/todo/backlog/weekly), search by ID/slug/tags/content.
 ---
 
 # Notes Archive Skill
