@@ -1,0 +1,171 @@
+#!/usr/bin/env ruby
+# dump-chat: Export a Claude Code chat session to a Markdown notes file.
+#
+# Usage:
+#   dump-chat <session-id-or-jsonl-path> <output-notes-path>
+#
+# Arguments:
+#   session-id-or-jsonl-path  Session UUID or full path to a .jsonl file.
+#                             If a UUID is given, the script searches all project
+#                             directories under ~/.claude/projects/.
+#   output-notes-path         Destination Markdown file path (will be overwritten).
+#
+# Examples:
+#   dump-chat ade243b9-7ea3-4fa0-8277-ca95792b5908 ~/Dropbox/Notes/2026/02/20260218_9004_chat-dump.md
+#   dump-chat ~/.claude/projects/-Users-alex-.../session.jsonl ~/notes/chat.md
+
+require "json"
+require "time"
+require "stringio"
+require "fileutils"
+
+# ---------------------------------------------------------------------------
+# Templates — edit these to customise output format
+# ---------------------------------------------------------------------------
+
+# Called once at the top of the file.
+# Variables: title, session_id, model, version, cwd, git_branch, created_at, message_count
+HEADING_TEMPLATE = lambda do |v|
+  lines = []
+  lines << "---"
+  lines << "title: #{v[:title]}"
+  lines << "date: #{v[:created_at].strftime("%Y-%m-%d")}"
+  lines << "slug: #{v[:slug]}" if v[:slug]
+  lines << "tags: [chat-history]"
+  lines << "llm_claude_code_project: #{v[:cwd]}"
+  lines << "llm_git_branch: #{v[:git_branch]}"
+  lines << "message_count: #{v[:message_count]}"
+  lines << "llm_session_id: #{v[:session_id]}"
+  lines << "llm_model: #{v[:model]}"
+  lines << "llm_claude_code_version: #{v[:version]}"
+  lines << "llm_created_at: #{v[:created_at].strftime("%Y-%m-%dT%H:%M:%SZ")}"
+  lines << "---"
+  lines << ""
+  lines << ""
+  lines.join("\n")
+end
+
+# Called for each user/assistant message.
+# Variables: role ("User" or "Assistant"), timestamp, text
+MESSAGE_TEMPLATE = lambda do |v|
+  "[#{v[:timestamp].strftime("%H:%M:%S")}] **#{v[:role]}:** #{v[:text]}\n\n"
+end
+
+# ---------------------------------------------------------------------------
+# Helpers
+# ---------------------------------------------------------------------------
+
+def find_jsonl(session_id_or_path)
+  return session_id_or_path if session_id_or_path.end_with?(".jsonl") && File.exist?(session_id_or_path)
+
+  glob = File.join(Dir.home, ".claude", "projects", "**", "#{session_id_or_path}.jsonl")
+  matches = Dir.glob(glob)
+  abort "Error: no .jsonl file found for session: #{session_id_or_path}" if matches.empty?
+  matches.first
+end
+
+def session_meta(jsonl_path, entries)
+  session_id = File.basename(jsonl_path, ".jsonl")
+
+  # Try sessions-index.json for summary/title
+  index_path = File.join(File.dirname(jsonl_path), "sessions-index.json")
+  title = nil
+  if File.exist?(index_path)
+    index = JSON.parse(File.read(index_path))
+    entry = (index["entries"] || []).find { |e| e["sessionId"] == session_id }
+    title = entry&.dig("summary")
+  end
+
+  # Derive metadata from entries
+  first_user = entries.find { |e| e["type"] == "user" }
+  first_asst = entries.find { |e| e["type"] == "assistant" }
+
+  title ||= begin
+    text = extract_text(first_user&.dig("message", "content") || "")
+    text.strip.split("\n").first&.slice(0, 80) || "Chat Session"
+  end
+
+  model   = first_asst&.dig("message", "model") || "unknown"
+  version = first_user&.dig("version") || first_asst&.dig("version") || "unknown"
+  cwd     = first_user&.dig("cwd") || ""
+  branch  = first_user&.dig("gitBranch") || ""
+
+  timestamps = entries.filter_map { |e| Time.parse(e["timestamp"]) rescue nil }
+  created_at = timestamps.min || Time.now
+
+  msg_count = entries.count { |e| e["type"] == "user" } +
+              entries.count { |e| e["type"] == "assistant" }
+
+  {
+    title: title,
+    session_id: session_id,
+    model: model,
+    version: version,
+    cwd: cwd,
+    git_branch: branch,
+    created_at: created_at,
+    message_count: msg_count,
+  }
+end
+
+def extract_text(content)
+  case content
+  when String
+    content
+  when Array
+    content
+      .select { |b| b.is_a?(Hash) && b["type"] == "text" }
+      .map { |b| b["text"].to_s }
+      .join("\n")
+  else
+    ""
+  end
+end
+
+def load_entries(jsonl_path)
+  File.readlines(jsonl_path, chomp: true).filter_map do |line|
+    next if line.strip.empty?
+    JSON.parse(line) rescue nil
+  end
+end
+
+# ---------------------------------------------------------------------------
+# Main
+# ---------------------------------------------------------------------------
+
+abort "Usage: dump-chat <session-id-or-jsonl-path> <output-notes-path>" unless ARGV.length == 2
+
+jsonl_path  = find_jsonl(ARGV[0])
+output_path = ARGV[1]
+
+entries = load_entries(jsonl_path)
+meta    = session_meta(jsonl_path, entries)
+
+# Extract slug from output filename: YYYYMMDD_ID_slug.md -> slug (nil if absent)
+basename = File.basename(output_path, ".md")
+meta[:slug] = basename.split("_", 3)[2]
+
+output = StringIO.new
+output << HEADING_TEMPLATE.call(meta)
+
+entries.each do |entry|
+  type = entry["type"]
+  next unless type == "user" || type == "assistant"
+
+  # Skip tool-result echo messages (isMeta) and sidechain entries
+  next if entry["isMeta"]
+  next if entry["isSidechain"]
+
+  content = entry.dig("message", "content")
+  text    = extract_text(content).strip
+  next if text.empty?
+
+  role = type == "user" ? "User" : "Assistant"
+  ts   = Time.parse(entry["timestamp"]) rescue Time.now
+
+  output << MESSAGE_TEMPLATE.call(role: role, timestamp: ts, text: text)
+end
+
+FileUtils.mkdir_p(File.dirname(output_path))
+File.write(output_path, output.string)
+puts output_path
