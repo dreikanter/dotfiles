@@ -94,7 +94,8 @@
   "claude": [
     "~/.claude/skills/*",
     "~/.claude/commands/*",
-    "~/.claude/settings.json"
+    "~/.claude/settings.json",
+    "~/.claude/statusline.sh"
   ],
   "codex": [
     "~/.codex/prompts"
