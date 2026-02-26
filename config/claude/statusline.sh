@@ -8,4 +8,5 @@ lines=$(echo "$input" | jq -r '"\u001b[32m+\(.cost.total_lines_added // 0)\u001b
 ms=$(echo "$input" | jq -r '.cost.total_duration_ms // 0 | floor')
 hours=$((ms / 3600000)); mins=$(((ms % 3600000) / 60000))
 if [ "$hours" -gt 0 ]; then duration="${hours}h${mins}m"; else duration="${mins}m"; fi
-printf '\033[32m%s\033[0m  \033[34m%s\033[0m  %s  %s  %s  %s\n' "$(pwd)" "$branch" "$ctx_pct" "$cost" "$lines" "$duration"
+model=$(echo "$input" | jq -r '.model.display_name // ""')
+printf '\033[32m%s\033[0m  \033[34m%s\033[0m  %s  %s  %s  %s  %s\n' "$(pwd)" "$branch" "$model" "$ctx_pct" "$cost" "$lines" "$duration"
