@@ -26,12 +26,17 @@ description: Create and access notes in date-based archive. Create notes with au
 ```yaml
 ---
 title: Note title
-date: YYYY-MM-DD
 tags: [tag1, tag2, tag3]
 slug: short-name
 description: Brief description
 ---
 ```
+
+**Frontmatter rules**:
+- Only include fields that are explicitly requested or clearly applicable
+- Do NOT add a `date` field — date is already encoded in the filename
+- Add `description` when there is clear context behind the note (e.g., responding to a message, capturing a decision, summarizing a conversation) — use it to record the context/intention, not a summary of the body content
+- If there is no clear context/intention behind the new note, prefer not to include `description` field (avoid generic/non-informative descriptions)
 
 **Task Syntax** (in `*_todo.md` notes):
 - `[+]` - Completed
