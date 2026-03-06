@@ -1,0 +1,12 @@
+<snippet>
+    <tabTrigger>eod</tabTrigger>
+    <scope>text.html.markdown</scope>
+    <description>Add frontmatter for EOD report</description>
+    <content><![CDATA[---
+slug: eod
+tags: [eod, zipline, reports]
+---
+
+$0
+]]></content>
+</snippet>
