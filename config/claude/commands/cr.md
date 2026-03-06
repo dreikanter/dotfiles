@@ -23,8 +23,19 @@ Run these commands using Bash and capture their full output:
 1. `prdump <pr_url>` — captures PR title, branch, description, discussion, reviews, and inline comments.
 2. `gh pr diff <pr_url>` — captures the full diff. Extract the list of changed file paths from the diff headers (`diff --git a/... b/...` lines) — no separate API call needed.
 
-From the PR URL, extract `{owner}` and `{repo}`. From the `prdump` output, extract the `{branch}` name. These are used to construct per-finding source links in the format:
-`https://github.com/{owner}/{repo}/blob/{branch}/{path}#L{line}` (use `#L{start}-L{end}` for ranges).
+From the PR URL, extract `{owner}`, `{repo}`, and `{pr_number}`. These are used to construct per-finding source links that open the PR diff with the relevant lines selected.
+
+The link format is:
+`https://github.com/{owner}/{repo}/pull/{pr_number}/changes#diff-{sha256hex}R{line}`
+
+For line ranges: `#diff-{sha256hex}R{start}-R{end}`
+
+`{sha256hex}` is the SHA-256 hash of the file path (no leading slash). Compute it with:
+```bash
+echo -n "{filepath}" | shasum -a 256
+```
+
+Compute hashes for all changed files upfront in a single Bash call so they are ready when writing findings.
 
 ## Phase 2: Gather Jira Context (Task sub-agent)
 
@@ -72,7 +83,7 @@ With all data gathered, analyze the PR holistically and produce a structured rev
 <Each finding uses this block format. Repeat for every issue, bug, and question.>
 
 `path:line`
-[View source](https://github.com/{owner}/{repo}/blob/{branch}/{path}#L{line})
+[View source](https://github.com/{owner}/{repo}/pull/{pr_number}/changes#diff-{sha256hex}R{line})
 **{type}**
 
 Description. Lead with the problem statement. State the fix if obvious.
