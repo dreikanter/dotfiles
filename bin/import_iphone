@@ -1,0 +1,88 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require 'mini_exiftool'
+require 'fileutils'
+require 'optparse'
+
+DEST = File.join(ENV['HOME'], 'Photo')
+SOURCE = File.join(ENV['HOME'], 'Pictures', 'iPhone_Import')
+
+dry_run = false
+
+OptionParser.new do |opts|
+  opts.banner = "Usage: import_iphone [options]"
+  opts.on("-n", "--dry-run", "Show what would be copied without copying") do
+    dry_run = true
+  end
+end.parse!
+
+unless Dir.exist?(SOURCE) && !Dir.empty?(SOURCE)
+  puts "No photos found in #{SOURCE}"
+  exit 1
+end
+
+puts "Found photos in: #{SOURCE}"
+puts "Dry run - no files will be copied" if dry_run
+
+copied = 0
+skipped = 0
+errors = 0
+
+Dir.glob(File.join(SOURCE, '**', '*')).each do |file|
+  next unless File.file?(file)
+
+  begin
+    photo = MiniExiftool.new(file)
+
+    # Try DateTimeOriginal first, fall back to CreateDate
+    date = photo.date_time_original || photo.create_date
+
+    unless date
+      puts "Warning: No date metadata found - #{file}"
+      errors += 1
+      next
+    end
+
+    # Format: DEST/YYYY/MM/YYYYMMdd_HHMMSS_originalname.ext
+    date_str = date.strftime('%Y%m%d_%H%M%S')
+    year = date.strftime('%Y')
+    month = date.strftime('%m')
+    basename = File.basename(file)
+
+    dest_dir = File.join(DEST, year, month)
+    dest_file = File.join(dest_dir, "#{date_str}_#{basename}")
+
+    if File.exist?(dest_file)
+      puts "Skipped (already exists): #{dest_file}"
+      skipped += 1
+      next
+    end
+
+    if dry_run
+      puts "Would copy: #{file} -> #{dest_file}"
+      copied += 1
+    else
+      FileUtils.mkdir_p(dest_dir)
+      FileUtils.cp(file, dest_file, preserve: true)
+      puts "Copied: #{file} -> #{dest_file}"
+      copied += 1
+    end
+
+  rescue MiniExiftool::Error => e
+    puts "Error reading metadata from #{file}: #{e.message}"
+    errors += 1
+  rescue StandardError => e
+    puts "Error processing #{file}: #{e.message}"
+    errors += 1
+  end
+end
+
+puts "\nSummary:"
+puts "  #{copied} file(s) #{dry_run ? 'would be' : ''} copied"
+puts "  #{skipped} file(s) skipped (already exist)"
+puts "  #{errors} file(s) with errors"
+
+unless dry_run
+  puts "\nImport complete"
+end

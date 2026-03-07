@@ -1,0 +1,28 @@
+#!/bin/bash
+
+DEST="$HOME/Photo"
+DRY_RUN=false
+
+while getopts "n" opt; do
+    case $opt in
+        n) DRY_RUN=true ;;
+    esac
+done
+
+# Find mounted volumes that look like camera cards (contain DCIM folder)
+CARD=$(find /Volumes -maxdepth 2 -type d -name "DCIM" 2>/dev/null | head -1)
+
+if [[ -z "$CARD" ]]; then
+    echo "No camera card detected"
+    exit 1
+fi
+
+echo "Found card: $CARD"
+
+if $DRY_RUN; then
+    echo "Dry run - no files will be copied"
+    exiftool '-TestName<${DateTimeOriginal;$_||=$$CreateDate}' -d "$DEST/%Y/%m/%Y%m%d_%H%M%S_%%f.%%e" -r "$CARD/"
+else
+    exiftool -v -o . '-FileName<${DateTimeOriginal;$_||=$$CreateDate}' -d "$DEST/%Y/%m/%Y%m%d_%H%M%S_%%f.%%e" -r "$CARD/"
+    echo "Import complete"
+fi
