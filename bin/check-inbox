@@ -37,16 +37,25 @@ end
 
 notifications = gh_api("/notifications?participating=true")
 
-notifications.each do |notif|
-  entry = {
-    reason: notif["reason"],
-    subject: notif.dig("subject", "title"),
-    type: notif.dig("subject", "type"),
-    repo: notif.dig("repository", "full_name"),
-    updated: notif["updated_at"],
-    url: subject_html_url(notif),
-    comment_url: comment_html_url(notif),
-  }
+if notifications.empty?
+  puts "No unread GitHub participating notifications."
+  exit
+end
 
-  puts JSON.generate(entry)
+puts "# GitHub Participating Notifications (#{notifications.size} unread)\n\n"
+
+notifications.each_with_index do |notif, i|
+  title = notif.dig("subject", "title")
+  type = notif.dig("subject", "type")
+  repo = notif.dig("repository", "full_name")
+  reason = notif["reason"].tr("_", " ")
+  updated = notif["updated_at"]
+  url = subject_html_url(notif)
+  comment_url = comment_html_url(notif)
+
+  link = comment_url || url
+  puts "(#{i + 1}) [#{type}] #{title}"
+  puts "Repo: #{repo} | Reason: #{reason} | Updated: #{updated}"
+  puts "URL: #{link}" if link
+  puts
 end
