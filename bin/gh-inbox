@@ -1,8 +1,18 @@
 #!/usr/bin/env ruby
-# Fetches unread GitHub participating notifications using `gh api`.
+# Fetches unread GitHub participating notifications.
+#
+# Setup: brew install gh && gh auth login
+# Usage: gh-inbox
+#
+# Output includes notification ID, PR/issue URL, comment URL, and actor.
+# To mark a notification as read: gh api -X PATCH /notifications/threads/{ID}
 
 require "json"
 require "open3"
+
+unless system("gh", "auth", "status", out: File::NULL, err: File::NULL)
+  abort "gh CLI not authenticated. Run: gh auth login"
+end
 
 def gh_api(path)
   stdout, stderr, status = Open3.capture3("gh", "api", path, "--paginate")
@@ -27,12 +37,27 @@ def subject_html_url(notif)
     .gsub("/pulls/", "/pull/")
 end
 
-def comment_html_url(notif)
+def resolve_comment(notif)
   comment_api_url = notif.dig("subject", "latest_comment_url")
-  return nil if comment_api_url.nil? || comment_api_url.empty?
+  return [nil, nil] if comment_api_url.nil? || comment_api_url.empty?
 
   data = gh_api_silent(comment_api_url)
-  data&.fetch("html_url", nil)
+  return [nil, nil] unless data
+
+  [data["html_url"], data.dig("user", "login")]
+end
+
+def resolve_actor(notif, comment_user)
+  return comment_user if comment_user
+
+  subject_url = notif.dig("subject", "url")
+  return nil unless subject_url
+
+  reason = notif["reason"]
+  if reason == "review_requested" || reason == "author"
+    data = gh_api_silent(subject_url)
+    data&.dig("user", "login")
+  end
 end
 
 notifications = gh_api("/notifications?participating=true")
@@ -51,13 +76,15 @@ notifications.each_with_index do |notif, i|
   reason = notif["reason"].tr("_", " ")
   updated = notif["updated_at"]
   url = subject_html_url(notif)
-  comment_url = comment_html_url(notif)
+  comment_url, comment_user = resolve_comment(notif)
+  actor = resolve_actor(notif, comment_user)
   link = comment_url || url
 
   puts "---" unless i.zero?
   puts "[#{type}] #{title}"
   puts "ID: #{notif["id"]}"
   puts "Repo: #{repo}"
+  puts "From: #{actor}" if actor
   puts "Reason: #{reason}"
   puts "Updated: #{updated}"
   puts "URL: #{link}" if link

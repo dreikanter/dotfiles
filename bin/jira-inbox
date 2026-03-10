@@ -1,0 +1,85 @@
+#!/usr/bin/env ruby
+# Fetches Jira issues requiring attention via the Jira REST API.
+#
+# Setup: export JIRA_API_TOKEN=... (Atlassian API token from https://id.atlassian.net/manage-profile/security/api-tokens)
+# Usage: jira-inbox
+#
+# Shows two sections:
+#   1. Assigned to me (unresolved)
+#   2. Watching (updated in the last 7 days, unresolved)
+
+require "net/http"
+require "uri"
+require "json"
+
+JIRA_BASE_URL = "https://zipline.atlassian.net"
+JIRA_EMAIL = "alex.musayev@zipline.inc"
+JIRA_TOKEN = ENV.fetch("JIRA_API_TOKEN") { abort "JIRA_API_TOKEN not set. See: https://id.atlassian.net/manage-profile/security/api-tokens" }
+
+def jira_search(jql)
+  uri = URI("#{JIRA_BASE_URL}/rest/api/3/search/jql")
+  uri.query = URI.encode_www_form(
+    jql: jql,
+    fields: "issuetype,summary,status,assignee,reporter,priority",
+    maxResults: 100
+  )
+
+  req = Net::HTTP::Get.new(uri)
+  req.basic_auth(JIRA_EMAIL, JIRA_TOKEN)
+  req["Accept"] = "application/json"
+
+  res = Net::HTTP.start(uri.host, uri.port, use_ssl: true) { |http| http.request(req) }
+  abort "Jira API error: #{res.code} #{res.body}" unless res.is_a?(Net::HTTPSuccess)
+
+  JSON.parse(res.body)["issues"].map do |item|
+    f = item["fields"]
+    {
+      type: f.dig("issuetype", "name"),
+      key: item["key"],
+      summary: f["summary"],
+      status: f.dig("status", "name"),
+      assignee: f.dig("assignee", "displayName"),
+      reporter: f.dig("reporter", "displayName"),
+      priority: f.dig("priority", "name"),
+    }
+  end
+end
+
+assigned = jira_search("assignee = currentUser() AND resolution = Unresolved")
+watched = jira_search("watcher = currentUser() AND updated >= -7d AND resolution = Unresolved")
+
+# Deduplicate by key, assigned takes precedence
+by_key = {}
+assigned.each { |i| by_key[i[:key]] = i.merge(section: "assigned") }
+watched.each { |i| by_key[i[:key]] ||= i.merge(section: "watching") }
+
+issues = by_key.values
+
+if issues.empty?
+  puts "No Jira issues requiring attention."
+  exit
+end
+
+assigned_issues = issues.select { |i| i[:section] == "assigned" }
+watched_issues = issues.select { |i| i[:section] == "watching" }
+
+puts "# Jira Inbox (#{issues.size} issues)\n\n"
+
+[["Assigned to me", assigned_issues], ["Watching (updated last 7 days)", watched_issues]].each do |label, group|
+  next if group.empty?
+
+  puts "## #{label} (#{group.size})\n\n"
+
+  group.each_with_index do |issue, i|
+    puts "---" unless i.zero?
+    puts "[#{issue[:type]}] #{issue[:summary]}"
+    puts "Key: #{issue[:key]}"
+    puts "Status: #{issue[:status]}"
+    puts "Priority: #{issue[:priority]}" unless issue[:priority].to_s.empty?
+    puts "Assignee: #{issue[:assignee]}" unless issue[:assignee].to_s.empty?
+    puts "Reporter: #{issue[:reporter]}" unless issue[:reporter].to_s.empty?
+    puts "URL: #{JIRA_BASE_URL}/browse/#{issue[:key]}"
+  end
+
+  puts
+end
