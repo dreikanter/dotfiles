@@ -46,16 +46,19 @@ puts "# GitHub Participating Notifications (#{notifications.size} unread)\n\n"
 
 notifications.each_with_index do |notif, i|
   title = notif.dig("subject", "title")
-  type = notif.dig("subject", "type")
+  type = notif.dig("subject", "type").then { |t| t == "PullRequest" ? "PR" : t }
   repo = notif.dig("repository", "full_name")
   reason = notif["reason"].tr("_", " ")
   updated = notif["updated_at"]
   url = subject_html_url(notif)
   comment_url = comment_html_url(notif)
-
   link = comment_url || url
-  puts "(#{i + 1}) [#{type}] #{title}"
-  puts "Repo: #{repo} | Reason: #{reason} | Updated: #{updated}"
+
+  puts "---" unless i.zero?
+  puts "[#{type}] #{title}"
+  puts "ID: #{notif["id"]}"
+  puts "Repo: #{repo}"
+  puts "Reason: #{reason}"
+  puts "Updated: #{updated}"
   puts "URL: #{link}" if link
-  puts
 end
