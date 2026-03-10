@@ -16,6 +16,28 @@ JIRA_BASE_URL = "https://zipline.atlassian.net"
 JIRA_EMAIL = "alex.musayev@zipline.inc"
 JIRA_TOKEN = ENV.fetch("JIRA_API_TOKEN") { abort "JIRA_API_TOKEN not set. See: https://id.atlassian.net/manage-profile/security/api-tokens" }
 
+def jira_get(uri)
+  req = Net::HTTP::Get.new(uri)
+  req.basic_auth(JIRA_EMAIL, JIRA_TOKEN)
+  req["Accept"] = "application/json"
+  Net::HTTP.start(uri.host, uri.port, use_ssl: true) { |http| http.request(req) }
+end
+
+def verify_auth!
+  uri = URI("#{JIRA_BASE_URL}/rest/api/3/myself")
+  res = jira_get(uri)
+  case res
+  when Net::HTTPUnauthorized
+    abort "JIRA_API_TOKEN is invalid or expired. Generate a new one: https://id.atlassian.net/manage-profile/security/api-tokens"
+  when Net::HTTPForbidden
+    abort "JIRA_API_TOKEN lacks permission. Check token scopes: https://id.atlassian.net/manage-profile/security/api-tokens"
+  when Net::HTTPSuccess
+    # ok
+  else
+    abort "Jira auth check failed (HTTP #{res.code}): #{res.body}"
+  end
+end
+
 def jira_search(jql)
   uri = URI("#{JIRA_BASE_URL}/rest/api/3/search/jql")
   uri.query = URI.encode_www_form(
@@ -24,12 +46,8 @@ def jira_search(jql)
     maxResults: 100
   )
 
-  req = Net::HTTP::Get.new(uri)
-  req.basic_auth(JIRA_EMAIL, JIRA_TOKEN)
-  req["Accept"] = "application/json"
-
-  res = Net::HTTP.start(uri.host, uri.port, use_ssl: true) { |http| http.request(req) }
-  abort "Jira API error: #{res.code} #{res.body}" unless res.is_a?(Net::HTTPSuccess)
+  res = jira_get(uri)
+  abort "Jira API error (HTTP #{res.code}): #{res.body}" unless res.is_a?(Net::HTTPSuccess)
 
   JSON.parse(res.body)["issues"].map do |item|
     f = item["fields"]
@@ -44,6 +62,8 @@ def jira_search(jql)
     }
   end
 end
+
+verify_auth!
 
 assigned = jira_search("assignee = currentUser() AND resolution = Unresolved")
 watched = jira_search("watcher = currentUser() AND updated >= -7d AND resolution = Unresolved")
