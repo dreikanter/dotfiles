@@ -1,0 +1,52 @@
+#!/usr/bin/env ruby
+# Fetches unread GitHub participating notifications using `gh api`.
+
+require "json"
+require "open3"
+
+def gh_api(path)
+  stdout, stderr, status = Open3.capture3("gh", "api", path, "--paginate")
+  abort "gh api #{path} failed: #{stderr}" unless status.success?
+  JSON.parse(stdout)
+end
+
+def gh_api_silent(path)
+  stdout, _, status = Open3.capture3("gh", "api", path)
+  return nil unless status.success?
+  JSON.parse(stdout)
+rescue JSON::ParserError
+  nil
+end
+
+def subject_html_url(notif)
+  api_url = notif.dig("subject", "url")
+  return nil unless api_url
+
+  api_url
+    .gsub("https://api.github.com/repos", "https://github.com")
+    .gsub("/pulls/", "/pull/")
+end
+
+def comment_html_url(notif)
+  comment_api_url = notif.dig("subject", "latest_comment_url")
+  return nil if comment_api_url.nil? || comment_api_url.empty?
+
+  data = gh_api_silent(comment_api_url)
+  data&.fetch("html_url", nil)
+end
+
+notifications = gh_api("/notifications?participating=true")
+
+notifications.each do |notif|
+  entry = {
+    reason: notif["reason"],
+    subject: notif.dig("subject", "title"),
+    type: notif.dig("subject", "type"),
+    repo: notif.dig("repository", "full_name"),
+    updated: notif["updated_at"],
+    url: subject_html_url(notif),
+    comment_url: comment_html_url(notif),
+  }
+
+  puts JSON.generate(entry)
+end
