@@ -1,0 +1,9 @@
+theme = TokyoNight
+font-family = JetBrains Mono
+font-size = 16
+scrollback-limit = 50000
+confirm-close-surface = false
+mouse-hide-while-typing = true
+window-theme = ghostty
+desktop-notifications = true
+keybind = super+shift+r=reload_config
