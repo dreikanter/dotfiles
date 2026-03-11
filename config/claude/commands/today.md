@@ -104,7 +104,7 @@ gh api repos/<owner>/<repo>/issues/<number>/comments
 
 ```html
 <details open>
-<summary><strong>1. Review <a href="...">#123</a></strong> · <code>SOLE_REVIEWER</code> — Username: Restrict AI summary banner</summary>
+<summary><strong>1. Review <a href="...">#123</a></strong> · <code>SOLE_REVIEWER</code> — jdoe: Fix tooltip alignment on dashboard widgets</summary>
 ```
 
 If multiple signals apply, show the highest-priority one.
@@ -194,14 +194,14 @@ todos:
   - id: "019cdd2f-b695-7741-9dcb-aaefae886552"  # UUID7, sortable
     position: 1
     action: review  # enum: review, respond, merge, write, awareness, prep
-    title: "Restrict AI summary banner to All messages tab only"
+    title: "Fix tooltip alignment on dashboard widgets"
     priority: high  # enum: high, medium, low
     signal: sole_reviewer  # enum: sole_reviewer, author_replied, mentioned, direct_request, team_request, subscribed (omit for non-PR items)
-    blocking: ["username"]  # GitHub usernames of people waiting on me
+    blocking: ["jdoe"]  # GitHub usernames of people waiting on me
     refs:
       pr: "https://github.com/org/project/pull/1"
       jira: "https://org.atlassian.net/browse/PROJECT-NNNN"  # if applicable
-    context: "Small bugfix (22+/1-), no reviews yet. Username is blocked."
+    context: "Small bugfix (22+/1-), no reviews yet. jdoe is blocked."
 
   - id: "019cdd2f-c8a2-7123-abcd-1234567890ab"
     position: 2
@@ -213,7 +213,7 @@ sources:
   github_prs:
     - ref: "#123"
       url: "https://github.com/org/project/pull/123"
-      description: "Restrict AI summary banner"
+      description: "Fix tooltip alignment on dashboard widgets"
     # ...
   github_notifications:
     total_scanned: 50
