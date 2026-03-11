@@ -18,28 +18,29 @@ If no GitHub PR URL is found among the arguments, ask the user for it before pro
 
 ## Phase 1: Gather PR Data
 
-Run these commands using Bash and capture their full output:
+From the PR URL, extract `{owner}`, `{repo}`, and `{pr_number}`. These are used to construct per-finding source links that open the PR diff with the relevant lines selected.
+
+**Run `prdump` and `gh pr diff` as parallel Bash calls** (they are independent):
 
 1. `prdump <pr_url>` — captures PR title, branch, description, discussion, reviews, and inline comments.
 2. `gh pr diff <pr_url>` — captures the full diff. Extract the list of changed file paths from the diff headers (`diff --git a/... b/...` lines) — no separate API call needed.
 
-From the PR URL, extract `{owner}`, `{repo}`, and `{pr_number}`. These are used to construct per-finding source links that open the PR diff with the relevant lines selected.
+Once both return, compute SHA-256 hashes for all changed files in a single Bash call:
 
-The link format is:
-`https://github.com/{owner}/{repo}/pull/{pr_number}/changes#diff-{sha256hex}R{line}`
-
-For line ranges: `#diff-{sha256hex}R{start}-R{end}`
-
-`{sha256hex}` is the SHA-256 hash of the file path (no leading slash). Compute it with:
 ```bash
 echo -n "{filepath}" | shasum -a 256
 ```
 
-Compute hashes for all changed files upfront in a single Bash call so they are ready when writing findings.
+The link format for per-finding source links is:
+`https://github.com/{owner}/{repo}/pull/{pr_number}/changes#diff-{sha256hex}R{line}`
 
-## Phase 2: Gather Jira Context (Task sub-agent)
+For line ranges: `#diff-{sha256hex}R{start}-R{end}`
 
-Launch a **Task sub-agent** (subagent_type: Bash) to fetch Jira context in parallel with Phase 3:
+## Phase 2: Gather Jira Context + Read Modified Files (parallel sub-agents)
+
+**Launch BOTH sub-agents in a single message** so they run concurrently:
+
+### 2a: Jira Context (Agent, subagent_type: general-purpose)
 
 - Collect all Jira IDs/URLs from: the user-provided arguments AND the PR description body.
 - De-duplicate the list.
@@ -48,9 +49,7 @@ Launch a **Task sub-agent** (subagent_type: Bash) to fetch Jira context in paral
 
 If no Jira tickets are found anywhere, note this in the review and skip scope assessment.
 
-## Phase 3: Read Modified Files (Task sub-agent)
-
-Launch a **Task sub-agent** (subagent_type: general-purpose) in parallel with Phase 2:
+### 2b: Read Modified Files (Agent, subagent_type: general-purpose)
 
 - Take the list of changed file paths from Phase 1.
 - For each file, use the Read tool to read the full current file content from the local working directory (not just the diff hunks). This provides surrounding context for understanding the changes.
@@ -58,7 +57,7 @@ Launch a **Task sub-agent** (subagent_type: general-purpose) in parallel with Ph
 - If a file does not exist locally (new file only in the PR branch), note it and rely on the diff for context.
 - Return all file contents with their paths.
 
-## Phase 4: Analyze and Produce Review
+## Phase 3: Analyze and Produce Review
 
 With all data gathered, analyze the PR holistically and produce a structured review in Markdown. Use the following exact format:
 

@@ -36,7 +36,11 @@ UTC_SEARCH_FROM=$(date -v-1d -j -f "%Y-%m-%d" "$LOCAL_DATE" +%Y-%m-%d 2>/dev/nul
 
 All subsequent steps use `$LOCAL_DATE` as the target date for display, and `$UTC_SEARCH_FROM` as the lower bound for API queries.
 
-## Phase 1: Gather GitHub Activity (Bash)
+## Phase 1: Gather Data (GitHub + Jira + Slack IN PARALLEL)
+
+**CRITICAL**: Phases 1a, 1b, and 1c are independent. Launch ALL THREE as parallel tool calls in a single message. Do NOT run them sequentially.
+
+### 1a: GitHub Activity (Bash)
 
 ```bash
 LOCAL_DATE=<resolved above>
@@ -88,7 +92,7 @@ for n in ns:
 " 2>/dev/null || true
 ```
 
-## Phase 2: Gather Jira Activity (Bash)
+### 1b: Jira Activity (Bash — run in parallel with 1a and 1c)
 
 ```bash
 acli jira --action getIssueList \
@@ -102,13 +106,13 @@ acli jira --action getIssueList \
   --columns "key,summary,status" --limit 10 2>/dev/null || true
 ```
 
-## Phase 3: Gather Slack Activity
+### 1c: Slack Activity (run in parallel with 1a and 1b)
 
 Use `mcp__claude_ai_Slack__slack_search_public_and_private` to find significant discussions from `$LOCAL_DATE`.
 
 **Important**: Do NOT search for `from:me` — that returns your own EOD posts and messages, which are output, not input. Instead, search for discussions and decisions you were involved in or that were significant.
 
-Run these searches (use `after:YYYY-MM-DD` with `$UTC_SEARCH_FROM`):
+Run these searches (use `after:YYYY-MM-DD` with `$UTC_SEARCH_FROM`). Launch both Slack searches as parallel tool calls:
 
 1. Threads you were mentioned in or replied to: `to:me after:$UTC_SEARCH_FROM` and `to:me during:$LOCAL_DATE`
 
@@ -118,7 +122,7 @@ Run these searches (use `after:YYYY-MM-DD` with `$UTC_SEARCH_FROM`):
 
 From the results, pick only items that are genuinely notable: incidents, architectural decisions, notable questions answered, or significant feedback. Skip routine noise and your own stand-alone EOD posts.
 
-## Phase 4: Synthesize the Report
+## Phase 2: Synthesize the Report
 
 Produce a concise bullet-point EOD report for **$LOCAL_DATE**.
 
@@ -152,7 +156,7 @@ Produce a concise bullet-point EOD report for **$LOCAL_DATE**.
 - Include personal notes or requests when relevant (e.g. "needs review", "I'd appreciate feedback")
 - Omit routine noise — only include items that are genuinely worth reporting
 
-## Phase 5: Save as Note
+## Phase 3: Save as Note
 
 1. Compose the note with this YAML frontmatter:
 
