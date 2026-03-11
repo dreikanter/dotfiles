@@ -14,6 +14,14 @@ unless system("gh", "auth", "status", out: File::NULL, err: File::NULL)
   abort "gh CLI not authenticated. Run: gh auth login"
 end
 
+def current_user
+  $current_user ||= begin
+    stdout, _, status = Open3.capture3("gh", "api", "/user", "--jq", ".login")
+    abort "Failed to get current user" unless status.success?
+    stdout.strip
+  end
+end
+
 def gh_api(path)
   stdout, stderr, status = Open3.capture3("gh", "api", path, "--paginate")
   abort "gh api #{path} failed: #{stderr}" unless status.success?
@@ -47,17 +55,47 @@ def resolve_comment(notif)
   [data["html_url"], data.dig("user", "login")]
 end
 
-def resolve_actor(notif, comment_user)
+def resolve_actor(notif, comment_user, pr_data)
   return comment_user if comment_user
 
-  subject_url = notif.dig("subject", "url")
-  return nil unless subject_url
-
   reason = notif["reason"]
-  if reason == "review_requested" || reason == "author"
-    data = gh_api_silent(subject_url)
-    data&.dig("user", "login")
+  if (reason == "review_requested" || reason == "author") && pr_data
+    return pr_data.dig("user", "login")
   end
+
+  nil
+end
+
+# Returns an array of highlight tags for the notification.
+def highlights(notif, pr_data, comment_user)
+  tags = []
+  reason = notif["reason"]
+  me = current_user
+
+  if reason == "review_requested" && pr_data
+    reviewers = (pr_data["requested_reviewers"] || []).map { |r| r["login"] }
+    if reviewers.include?(me)
+      tags << (reviewers.size == 1 ? "SOLE REVIEWER" : "REVIEW REQ")
+    end
+  end
+
+  tags << "MENTIONED" if reason == "mention"
+
+  if comment_user && pr_data
+    pr_author = pr_data.dig("user", "login")
+    if comment_user == pr_author && comment_user != me
+      # Check if I have reviewed this PR (author replying to my review)
+      reviews_url = notif.dig("subject", "url")&.sub(/\z/, "/reviews")
+      if reviews_url
+        reviews = gh_api_silent(reviews_url)
+        if reviews.is_a?(Array) && reviews.any? { |r| r.dig("user", "login") == me }
+          tags << "REPLIED"
+        end
+      end
+    end
+  end
+
+  tags
 end
 
 notifications = gh_api("/notifications?participating=true")
@@ -77,11 +115,20 @@ notifications.each_with_index do |notif, i|
   updated = notif["updated_at"]
   url = subject_html_url(notif)
   comment_url, comment_user = resolve_comment(notif)
-  actor = resolve_actor(notif, comment_user)
   link = comment_url || url
 
+  # Fetch PR data for highlight detection and actor resolution
+  pr_data = nil
+  if type == "PR" && notif.dig("subject", "url")
+    pr_data = gh_api_silent(notif.dig("subject", "url"))
+  end
+
+  actor = resolve_actor(notif, comment_user, pr_data)
+  tags = highlights(notif, pr_data, comment_user)
+  tag_str = tags.empty? ? "" : " " + tags.map { |t| "[#{t}]" }.join(" ")
+
   puts "---" unless i.zero?
-  puts "[#{type}] #{title}"
+  puts "[#{type}] #{title}#{tag_str}"
   puts "ID: #{notif["id"]}"
   puts "Repo: #{repo}"
   puts "From: #{actor}" if actor
