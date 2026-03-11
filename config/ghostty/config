@@ -4,6 +4,8 @@ font-size = 16
 scrollback-limit = 50000
 confirm-close-surface = false
 mouse-hide-while-typing = true
-window-theme = ghostty
 desktop-notifications = true
 keybind = super+shift+r=reload_config
+
+window-title-font-family = JetBrains Mono
+window-subtitle = working-directory
