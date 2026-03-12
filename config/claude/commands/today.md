@@ -1,21 +1,20 @@
 ---
-description: "Aggregate a prioritized daily todo from Slack, Jira, GitHub PRs, and notifications. Optional arg: notes-archive UID referencing a context note (e.g. '20260309_9174')."
+description: "Aggregate a prioritized daily todo from Slack, Jira, GitHub PRs, and notifications. Optional arg: notes UID referencing a context note (e.g. '20260309_9174')."
 ---
 
 Aggregate an easy-to-read flat prioritized todo list for today, based on the most recent context from all available sources.
 
 ## Phase 0: Context Note (Optional)
 
-If an argument was provided, it is a **notes-archive UID** (e.g. `20260309_9174`) referencing a context note with background information for today's work.
+If an argument was provided, it is a **notes UID** (e.g. `20260309_9174`) referencing a context note with background information for today's work.
 
 Find and read the note:
 
 ```bash
-NOTES_PATH="${NOTES_PATH:-$HOME/Dropbox/Notes}"
-find "$NOTES_PATH" -name "*$ARGUMENT*" -type f | head -1
+notes read $ARGUMENT
 ```
 
-Read the note and use its content as additional context when prioritizing and synthesizing the todo list. Do NOT include raw context note content in the output — use it to inform priorities and fill gaps.
+Use its content as additional context when prioritizing and synthesizing the todo list. Do NOT include raw context note content in the output — use it to inform priorities and fill gaps.
 
 If no argument was provided, skip this step.
 

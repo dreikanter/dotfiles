@@ -172,7 +172,7 @@ Followed by `EOD report:` and the bullet list.
 2. Save it:
 
 ```bash
-printf '%s' "<note_content>" | ~/.claude/skills/notes-archive/bin/create-note eod
+printf '%s' "<note_content>" | notes new --slug eod
 ```
 
 3. Report the saved file path.

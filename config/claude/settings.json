@@ -19,7 +19,7 @@
       "Bash(acli jira*)",
       "Bash(date*)",
       "Bash(printf*)",
-      "Bash(~/.claude/skills/notes-archive/bin/*)",
+      "Bash(notes *)",
       "mcp__claude_ai_Slack__slack_search_public_and_private",
       "Bash(source ~/.zshenv && prdump *)",
       "Bash(source ~/.zshenv && jiradump *)",
