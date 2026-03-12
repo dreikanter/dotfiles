@@ -16,6 +16,7 @@ path=(
   $HOME/.local/bin
   $HOME/.opencode/bin
   $HOME/bin
+  $HOME/go/bin
   $path
 )
 
