@@ -249,24 +249,38 @@ todos:
     title: "Fix tooltip alignment on dashboard widgets"
     priority: high  # enum: high, medium, low
     signal: sole_reviewer  # enum: sole_reviewer, author_replied, mentioned, direct_request, team_request, subscribed (omit for non-PR items)
-    source: todo_note  # enum: github, jira, slack, todo_note (omit or use most specific source when task comes from multiple)
-    category: personal  # enum: work, personal (omit for work — it's the default)
+    source: github  # enum: github, jira, slack, todo_note (omit or use most specific source when task comes from multiple)
+    # category omitted — defaults to work
     blocking: ["jdoe"]  # GitHub usernames of people waiting on me
     refs:
-      pr: "https://github.com/org/project/pull/1"
-      jira: "https://org.atlassian.net/browse/PROJECT-NNNN"  # if applicable
+      pr: "https://github.com/org/project/pull/123"
     refs_map:
-      "1": "https://github.com/org/project/pull/1"
-      "PROJECT-NNNN": "https://org.atlassian.net/browse/PROJECT-NNNN"
+      "123": "https://github.com/org/project/pull/123"
     usernames_map:
       "jdoe": "https://github.com/jdoe"
-    context: "Small bugfix (22+/1-), no reviews yet. jdoe is blocked."
+    context: "Small bugfix (22+/1-), no other reviewers. jdoe is blocked."
 
   - id: "019cdd2f-c8a2-7123-abcd-1234567890ab"
     position: 2
-    action: respond
-    signal: author_replied
-    # ... etc
+    action: write
+    title: "Finish API migration for PROJECT-1234"
+    priority: medium
+    source: todo_note
+    # category omitted — defaults to work
+    refs:
+      jira: "https://org.atlassian.net/browse/PROJECT-1234"
+    refs_map:
+      "PROJECT-1234": "https://org.atlassian.net/browse/PROJECT-1234"
+    context: "In progress since yesterday. Need to update endpoint handlers and tests."
+
+  - id: "019cdd2f-d4b3-7456-efab-567890abcdef"
+    position: 3
+    action: prep
+    title: "Renew gym membership"
+    priority: low
+    source: todo_note
+    category: personal  # enum: work, personal (omit for work — it's the default)
+    context: "Expires end of week."
 
 sources:
   todo_note:
@@ -290,7 +304,7 @@ sources:
   jira_tickets:
     - ref: "PROJECT-1234"
       url: "https://org.atlassian.net/browse/PROJECT-1234"
-      description: "Example ticket description"
+      description: "API migration for dashboard service"
     # ...
 ```
 
