@@ -26,7 +26,7 @@ Parse all task lines (`- [ ]`, `- [+]`, `- [>]`).
 
 Categorize each open task:
 
-- **Work tasks**: anything related to code, PRs, Jira, reviews, deploys, team syncs, EOD, or work-related activities. The `[daily]` tag indicates a recurring work task.
+- **Work tasks**: anything related to code, PRs, Jira, reviews, deploys, team syncs, EOD, or work-related activities.
 - **Personal tasks**: items tagged `[Private]` or clearly unrelated to work (billing, personal errands, etc.).
 
 **Include all tasks** — both work and personal. Personal tasks are classified with `category: personal` in the YAML.
@@ -149,7 +149,7 @@ gh api repos/<owner>/<repo>/issues/<number>/comments
 
 ```html
 <details open>
-<summary><strong>1. Review <a href="...">#123</a></strong> · <code>SOLE_REVIEWER</code> — jdoe: Fix tooltip alignment on dashboard widgets</summary>
+<summary><strong>1. Review <a href="...">123</a></strong> · <code>SOLE_REVIEWER</code> — jdoe: Fix tooltip alignment on dashboard widgets</summary>
 ```
 
 If multiple signals apply, show the highest-priority one.
@@ -167,17 +167,16 @@ Produce a **flat prioritized list** of tasks. Each item should be a collapsible 
 5. **Active feedback on my PRs** — comments needing response
 6. **My PRs ready to merge** — approved, just need the merge button
 7. **Team review requests** — `TEAM_REQUEST`, shared responsibility
-8. **Manual tasks from todo note** — work tasks from the daily todo note (non-recurring, non-`[daily]`)
+8. **Tasks from todo note** — work tasks from the daily todo note
 9. **In-progress Jira work** — tickets I'm actively working on
 10. **Awareness items** — things happening that affect my work (upgrades, team decisions)
-11. **Recurring tasks** — EOD report, team sync prep, etc. (includes `[daily]` items from todo note)
-12. **Personal tasks** — `category: personal` items from the todo note
+11. **Personal tasks** — `category: personal` items from the todo note
 
 ### Format for each item
 
 ```html
 <details open>
-<summary><strong>N. Action verb <a href="URL">#NUMBER</a></strong> · <code>SIGNAL_TAG</code> — Author/context: Short title</summary>
+<summary><strong>N. Action verb <a href="URL">NUMBER</a></strong> · <code>SIGNAL_TAG</code> — Author/context: Short title</summary>
 
 1-2 sentences of context. What specifically needs doing and why.
 </details>
@@ -189,7 +188,7 @@ For items originating from the todo note, add a `· <code>TODO</code>` badge in 
 
 ### Linking rules
 
-- PRs: `[#NUMBER](url)` or inline `<a href="url">#NUMBER</a>` in summary
+- PRs: `[NUMBER](url)` or inline `<a href="url">NUMBER</a>` in summary
 - Jira: `[PROJECT-NNNN](https://org.atlassian.net/browse/PROJECT-NNNN)`
 - Keep descriptions concise — this is a scannable list, not a report
 
@@ -210,25 +209,16 @@ Include **all** GitHub usernames found in the todo text — PR authors, reviewer
 After the todo list, add a **collapsed** `<details>` section (NOT expanded) listing every resource you processed:
 
 - The todo note (UID and count of work/personal/completed tasks)
-- Every PR you read (with linked number and short description)
+- Every PR you read (with linked PR number and short description)
 - Every Slack channel/DM/search you read
 - Every Jira ticket from the inbox
 - GitHub notifications summary
 
 Format: one resource per line, `<linked id> — short description`.
 
-## Phase 4: Known/Expected Tasks
+## Phase 4: Deduplication
 
-Always include these recurring items at the bottom of the todo list (lower priority unless sources reveal urgency):
-
-- Do code reviews
-- Follow up on active PR feedback
-- Prep status update for team sync
-- Write EOD report for Slack
-
-These may be merged with source-derived items when they overlap (e.g., specific PRs needing review replace the generic "do code reviews" item).
-
-**`[daily]` tasks from the todo note** (e.g., `[daily] Github notifications`, `[daily] Jira`) map naturally to these recurring items or to source-gathering activities. Merge them — do not create duplicate entries. Use `source: todo_note` for merged items where the todo note was the origin.
+When a todo note task overlaps with a source-derived item (e.g., a todo note task references the same PR that was also found in GitHub notifications), merge them into a single item. Use the richer context from the source-derived data, but keep `source: todo_note` to indicate it was explicitly tracked.
 
 ## Phase 5: Save as YAML
 
@@ -268,7 +258,7 @@ todos:
       pr: "https://github.com/org/project/pull/1"
       jira: "https://org.atlassian.net/browse/PROJECT-NNNN"  # if applicable
     refs_map:
-      "#1": "https://github.com/org/project/pull/1"
+      "1": "https://github.com/org/project/pull/1"
       "PROJECT-NNNN": "https://org.atlassian.net/browse/PROJECT-NNNN"
     usernames_map:
       "jdoe": "https://github.com/jdoe"
@@ -287,7 +277,7 @@ sources:
     personal_tasks: 1
     completed_tasks: 3
   github_prs:
-    - ref: "#123"
+    - ref: "123"
       url: "https://github.com/org/project/pull/123"
       description: "Fix tooltip alignment on dashboard widgets"
     # ...
