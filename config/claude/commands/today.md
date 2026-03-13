@@ -8,21 +8,11 @@ Aggregate an easy-to-read flat prioritized todo list for today, based on the mos
 
 ### 0a. Context Note
 
-If an argument was provided, it is a **notes UID** (e.g. `20260309_9174`) referencing a context note with background information for today's work.
-
-If no argument was provided, use the default slug `today-context` — find the most recent note with this slug:
-
 ```bash
-notes read today-context
+notes read ${ARGUMENT:-today-context}
 ```
 
-If the note is not found, skip this step entirely.
-
-If a UID or default note was found, read it:
-
-```bash
-notes read $ARGUMENT  # or the resolved UID
-```
+Read the context note — either the argument (UID or slug) or `today-context` by default. If the note is not found, skip this step (not an error).
 
 Use its content as additional context when prioritizing and synthesizing the todo list. Do NOT include raw context note content in the output — use it to inform priorities and fill gaps.
 
