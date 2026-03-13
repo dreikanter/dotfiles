@@ -10,10 +10,10 @@ Aggregate an easy-to-read flat prioritized todo list for today, based on the mos
 
 If an argument was provided, it is a **notes UID** (e.g. `20260309_9174`) referencing a context note with background information for today's work.
 
-If no argument was provided, use the default slug `dailies-context` — find the most recent note with this slug:
+If no argument was provided, use the default slug `today-context` — find the most recent note with this slug:
 
 ```bash
-notes read dailies-context
+notes read today-context
 ```
 
 If the note is not found, skip this step entirely.
