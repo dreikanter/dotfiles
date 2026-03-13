@@ -37,7 +37,7 @@ Parse all task lines (`- [ ]`, `- [+]`, `- [>]`).
 Categorize each open task:
 
 - **Work tasks**: anything related to code, PRs, Jira, reviews, deploys, team syncs, EOD, or work-related activities.
-- **Personal tasks**: items tagged `[Private]` or clearly unrelated to work (billing, personal errands, etc.).
+- **Personal tasks**: items tagged `[Private]` or `[Personal]`, or clearly unrelated to work (billing, personal errands, etc.).
 
 **Include all tasks** — both work and personal. Personal tasks are classified with `category: personal` in the YAML.
 
