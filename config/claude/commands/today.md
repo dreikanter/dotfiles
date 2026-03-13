@@ -4,19 +4,61 @@ description: "Aggregate a prioritized daily todo from Slack, Jira, GitHub PRs, a
 
 Aggregate an easy-to-read flat prioritized todo list for today, based on the most recent context from all available sources.
 
-## Phase 0: Context Note (Optional)
+## Phase 0: Context Note + Todo Note
 
-If an argument was provided, it is a **notes UID** (e.g. `20260309_9174`) referencing a context note with background information for today's work.
-
-Find and read the note:
+### 0a. Context Note
 
 ```bash
-notes read $ARGUMENT
+notes read ${ARGUMENT:-today-context}
 ```
+
+Read the context note — either the argument (UID or slug) or `today-context` by default. If the note is not found, skip this step (not an error).
 
 Use its content as additional context when prioritizing and synthesizing the todo list. Do NOT include raw context note content in the output — use it to inform priorities and fill gaps.
 
-If no argument was provided, skip this step.
+### 0b. Ensure today's todo note exists
+
+Create today's todo note if missing (idempotent — skips if already exists, carries over pending tasks from previous day):
+
+```bash
+notes new-todo
+```
+
+Then read it:
+
+```bash
+notes read todo
+```
+
+Parse all task lines (`- [ ]`, `- [+]`, `- [>]`).
+
+**Skip completed (`[+]`) and moved (`[>]`) tasks** — only process open (`[ ]`) tasks.
+
+Categorize each open task:
+
+- **Work tasks**: anything related to code, PRs, Jira, reviews, deploys, team syncs, EOD, or work-related activities.
+- **Personal tasks**: items tagged `[Private]` or clearly unrelated to work (billing, personal errands, etc.).
+
+**Include all tasks** — both work and personal. Personal tasks are classified with `category: personal` in the YAML.
+
+### 0c. Enrich todo note tasks
+
+**Work tasks** — enrich with external context:
+
+1. **Extract references** — find GitHub PR URLs, Jira ticket IDs, note UIDs (e.g. `[20260313_9235]`) in the task text.
+2. **Fetch context for GitHub URLs** — for each PR URL found, run:
+   ```bash
+   gh pr view <number> --repo <owner>/<repo> --json title,author,url,state,reviewDecision,additions,deletions,isDraft
+   ```
+3. **Fetch context for note UIDs** — for each `[YYYYMMDD_NNNN]` reference, run:
+   ```bash
+   notes read <UID>
+   ```
+4. **Keep the task concise** — use fetched context to write a better `context` field in the YAML, but do not bloat the task. Match the shape/length of other todo items.
+
+**Personal tasks** — only enrich if the context/origin is clearly understood (e.g. a URL in the task text). Otherwise lift the task text as-is into `title` and leave `context` empty or minimal.
+
+All tasks from the todo note use `source: todo_note` in the YAML. Work tasks use `category: work`. Personal tasks use `category: personal`. Always set `category` explicitly — undefined is treated as personal.
 
 ## Phase 1: Gather Sources (in parallel where possible)
 
@@ -56,10 +98,12 @@ For each PR that is `review_requested` from me or authored by me: fetch title, a
 
 ### 1c. Slack
 
+**Prerequisite**: This step requires a Slack user ID. If the context note provides one, use it. If not and the Slack MCP tools cannot resolve the current user's ID, skip all Slack searches.
+
 Use Slack MCP tools to search:
 
 1. `to:me after:<yesterday>` — DMs and mentions
-2. `<@MY_SLACK_ID> after:<2 days ago>` — broader mentions
+2. `<@SLACK_USER_ID> after:<2 days ago>` — broader mentions
 3. Read the project team channel (`#project-team`) for today's messages
 4. Read the team channel (`#team-updates`) for recent updates
 5. Read `#dev-general` for today's messages
@@ -103,12 +147,14 @@ gh api repos/<owner>/<repo>/issues/<number>/comments
 
 ```html
 <details open>
-<summary><strong>1. Review <a href="...">#123</a></strong> · <code>SOLE_REVIEWER</code> — jdoe: Fix tooltip alignment on dashboard widgets</summary>
+<summary><strong>1. Review <a href="...">123</a></strong> · <code>SOLE_REVIEWER</code> — jdoe: Fix tooltip alignment on dashboard widgets</summary>
 ```
 
 If multiple signals apply, show the highest-priority one.
 
-## Phase 2: Synthesize the Todo List
+## Phase 2: Deduplicate and Synthesize the Todo List
+
+**Deduplication**: When a todo note task overlaps with a source-derived item (e.g., a todo note task references the same PR that was also found in GitHub notifications), merge them into a single item. Use the richer context from the source-derived data, but keep `source: todo_note` to indicate it was explicitly tracked. Deduplicate before prioritizing.
 
 Produce a **flat prioritized list** of tasks. Each item should be a collapsible `<details open>` block (expanded by default).
 
@@ -121,51 +167,56 @@ Produce a **flat prioritized list** of tasks. Each item should be a collapsible 
 5. **Active feedback on my PRs** — comments needing response
 6. **My PRs ready to merge** — approved, just need the merge button
 7. **Team review requests** — `TEAM_REQUEST`, shared responsibility
-8. **In-progress Jira work** — tickets I'm actively working on
-9. **Awareness items** — things happening that affect my work (upgrades, team decisions)
-10. **Recurring tasks** — EOD report, team sync prep, etc.
+8. **Tasks from todo note** — work tasks from the daily todo note
+9. **In-progress Jira work** — tickets I'm actively working on
+10. **Awareness items** — things happening that affect my work (upgrades, team decisions)
+11. **Personal tasks** — `category: personal` items from the todo note
 
 ### Format for each item
 
 ```html
 <details open>
-<summary><strong>N. Action verb <a href="URL">#NUMBER</a></strong> · <code>SIGNAL_TAG</code> — Author/context: Short title</summary>
+<summary><strong>N. Action verb <a href="URL">NUMBER</a></strong> · <code>SIGNAL_TAG</code> — Author/context: Short title</summary>
 
 1-2 sentences of context. What specifically needs doing and why.
 </details>
 ```
 
-The `· <code>SIGNAL_TAG</code>` part is only included for GitHub PR items that have a classified signal. Non-PR items (Jira work, recurring tasks, etc.) omit it.
+The `· <code>SIGNAL_TAG</code>` part is only included for GitHub PR items that have a classified signal. Non-PR items (Jira work, todo note tasks, etc.) omit it.
+
+For items originating from the todo note, add a `· <code>TODO</code>` badge in the summary line (same position as `SIGNAL_TAG`). If a todo note task also has a PR signal (e.g., a task with a PR URL that maps to a `SOLE_REVIEWER` signal), show the PR signal instead — it's more informative. The `TODO` badge is only for tasks that have no other signal.
 
 ### Linking rules
 
-- PRs: `[#NUMBER](url)` or inline `<a href="url">#NUMBER</a>` in summary
+- PRs: `[NUMBER](url)` or inline `<a href="url">NUMBER</a>` in summary
 - Jira: `[PROJECT-NNNN](https://org.atlassian.net/browse/PROJECT-NNNN)`
 - Keep descriptions concise — this is a scannable list, not a report
+
+### Username mapping rules
+
+For each todo item, collect **every GitHub username** mentioned anywhere in its `title`, `context`, or `blocking` fields — regardless of whether the username appears with an `@` prefix or not. Map each to its GitHub profile URL in a `usernames_map` dictionary on the todo item. Keys are bare usernames (no `@` prefix):
+
+```yaml
+usernames_map:
+  "jdoe": "https://github.com/jdoe"
+  "asmith": "https://github.com/asmith"
+```
+
+Include **all** GitHub usernames found in the todo text — PR authors, reviewers, people mentioned in discussion, blocking users, etc. When unsure whether a name is a GitHub username, include it if it was obtained from GitHub data (PR author, reviewer, commenter).
 
 ## Phase 3: Processed Sources Reference
 
 After the todo list, add a **collapsed** `<details>` section (NOT expanded) listing every resource you processed:
 
-- Every PR you read (with linked number and short description)
+- The todo note (UID and count of work/personal/completed tasks)
+- Every PR you read (with linked PR number and short description)
 - Every Slack channel/DM/search you read
 - Every Jira ticket from the inbox
 - GitHub notifications summary
 
 Format: one resource per line, `<linked id> — short description`.
 
-## Phase 4: Known/Expected Tasks
-
-Always include these recurring items at the bottom of the todo list (lower priority unless sources reveal urgency):
-
-- Do code reviews
-- Follow up on active PR feedback
-- Prep status update for team sync
-- Write EOD report for Slack
-
-These may be merged with source-derived items when they overlap (e.g., specific PRs needing review replace the generic "do code reviews" item).
-
-## Phase 5: Save as YAML
+## Phase 4: Save as YAML
 
 Generate a UUID7 for each todo item:
 
@@ -191,26 +242,49 @@ sources_processed: <total count of items scanned>
 
 todos:
   - id: "019cdd2f-b695-7741-9dcb-aaefae886552"  # UUID7, sortable
-    position: 1
     action: review  # enum: review, respond, merge, write, awareness, prep
     title: "Fix tooltip alignment on dashboard widgets"
     priority: high  # enum: high, medium, low
     signal: sole_reviewer  # enum: sole_reviewer, author_replied, mentioned, direct_request, team_request, subscribed (omit for non-PR items)
+    source: github  # enum: github, jira, slack, todo_note (omit or use most specific source when task comes from multiple)
+    category: work  # enum: work, personal (always set explicitly — undefined is treated as personal)
     blocking: ["jdoe"]  # GitHub usernames of people waiting on me
     refs:
-      pr: "https://github.com/org/project/pull/1"
-      jira: "https://org.atlassian.net/browse/PROJECT-NNNN"  # if applicable
-    context: "Small bugfix (22+/1-), no reviews yet. jdoe is blocked."
+      pr: "https://github.com/org/project/pull/123"
+    refs_map:
+      "123": "https://github.com/org/project/pull/123"
+    usernames_map:
+      "jdoe": "https://github.com/jdoe"
+    context: "Small bugfix (22+/1-), no other reviewers. jdoe is blocked."
 
   - id: "019cdd2f-c8a2-7123-abcd-1234567890ab"
-    position: 2
-    action: respond
-    signal: author_replied
-    # ... etc
+    action: write
+    title: "Finish API migration for PROJECT-1234"
+    priority: medium
+    source: todo_note
+    category: work
+    refs:
+      jira: "https://org.atlassian.net/browse/PROJECT-1234"
+    refs_map:
+      "PROJECT-1234": "https://org.atlassian.net/browse/PROJECT-1234"
+    context: "In progress since yesterday. Need to update endpoint handlers and tests."
+
+  - id: "019cdd2f-d4b3-7456-efab-567890abcdef"
+    action: prep
+    title: "Renew gym membership"
+    priority: low
+    source: todo_note
+    category: personal
+    context: "Expires end of week."
 
 sources:
+  todo_note:
+    uid: "20260311_9200"
+    work_tasks: 8
+    personal_tasks: 1
+    completed_tasks: 3
   github_prs:
-    - ref: "#123"
+    - ref: "123"
       url: "https://github.com/org/project/pull/123"
       description: "Fix tooltip alignment on dashboard widgets"
     # ...
@@ -225,7 +299,7 @@ sources:
   jira_tickets:
     - ref: "PROJECT-1234"
       url: "https://org.atlassian.net/browse/PROJECT-1234"
-      description: "Example ticket description"
+      description: "API migration for dashboard service"
     # ...
 ```
 

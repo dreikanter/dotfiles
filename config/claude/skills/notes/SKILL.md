@@ -40,7 +40,7 @@ description: Brief description
 
 **Task Syntax** (in `*_todo.md` notes):
 - `[+]` - Completed
-- `[>]` - In progress
+- `[>]` - Moved to future date
 - `[ ]` - Pending
 - `[daily]` - Tag for daily recurring tasks
 
