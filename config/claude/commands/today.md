@@ -8,15 +8,13 @@ Aggregate an easy-to-read flat prioritized todo list for today, based on the mos
 
 ### 0a. Ensure today's todo note exists
 
-Run `new-todo` to create today's todo note (safe — returns existing path if already created):
+Run `new-todo` to ensure today's todo note exists (idempotent — returns the existing path without overwriting):
 
 ```bash
-TODO_PATH=$(new-todo)
+new-todo
 ```
 
-### 0b. Read and categorize todo tasks
-
-Read the todo note at `$TODO_PATH`. Parse all task lines (`- [ ]`, `- [+]`, `- [>]`).
+Then read today's todo note. The path follows the pattern `$NOTES_PATH/YYYY/MM/YYYYMMDD_*_todo.md` where the date matches today. Parse all task lines (`- [ ]`, `- [+]`, `- [>]`).
 
 **Skip completed (`[+]`) and moved (`[>]`) tasks** — only process open (`[ ]`) tasks.
 
