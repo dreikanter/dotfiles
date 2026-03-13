@@ -6,19 +6,25 @@ Aggregate an easy-to-read flat prioritized todo list for today, based on the mos
 
 ## Phase 0: Context Note + Todo Note
 
-### 0a. Context Note (Optional)
+### 0a. Context Note
 
 If an argument was provided, it is a **notes UID** (e.g. `20260309_9174`) referencing a context note with background information for today's work.
 
-Find and read the note:
+If no argument was provided, use the default slug `dailies-context` — find the most recent note with this slug:
 
 ```bash
-notes read $ARGUMENT
+notes read dailies-context
+```
+
+If the note is not found, skip this step entirely.
+
+If a UID or default note was found, read it:
+
+```bash
+notes read $ARGUMENT  # or the resolved UID
 ```
 
 Use its content as additional context when prioritizing and synthesizing the todo list. Do NOT include raw context note content in the output — use it to inform priorities and fill gaps.
-
-If no argument was provided, skip this step.
 
 ### 0b. Ensure today's todo note exists
 
@@ -62,7 +68,7 @@ Categorize each open task:
 
 **Personal tasks** — only enrich if the context/origin is clearly understood (e.g. a URL in the task text). Otherwise lift the task text as-is into `title` and leave `context` empty or minimal.
 
-All tasks from the todo note use `source: todo_note` in the YAML. Work tasks use `category: work` (default, can be omitted). Personal tasks use `category: personal`.
+All tasks from the todo note use `source: todo_note` in the YAML. Work tasks use `category: work`. Personal tasks use `category: personal`. Always set `category` explicitly — undefined is treated as personal.
 
 ## Phase 1: Gather Sources (in parallel where possible)
 
@@ -102,10 +108,12 @@ For each PR that is `review_requested` from me or authored by me: fetch title, a
 
 ### 1c. Slack
 
+**Prerequisite**: This step requires a Slack user ID. If the context note provides one, use it. If not and the Slack MCP tools cannot resolve the current user's ID, skip all Slack searches.
+
 Use Slack MCP tools to search:
 
 1. `to:me after:<yesterday>` — DMs and mentions
-2. `<@MY_SLACK_ID> after:<2 days ago>` — broader mentions
+2. `<@SLACK_USER_ID> after:<2 days ago>` — broader mentions
 3. Read the project team channel (`#project-team`) for today's messages
 4. Read the team channel (`#team-updates`) for recent updates
 5. Read `#dev-general` for today's messages
@@ -184,7 +192,7 @@ Produce a **flat prioritized list** of tasks. Each item should be a collapsible 
 </details>
 ```
 
-The `· <code>SIGNAL_TAG</code>` part is only included for GitHub PR items that have a classified signal. Non-PR items (Jira work, recurring tasks, etc.) omit it.
+The `· <code>SIGNAL_TAG</code>` part is only included for GitHub PR items that have a classified signal. Non-PR items (Jira work, todo note tasks, etc.) omit it.
 
 For items originating from the todo note, add a `· <code>TODO</code>` badge in the summary line (same position as `SIGNAL_TAG`). If a todo note task also has a PR signal (e.g., a task with a PR URL that maps to a `SOLE_REVIEWER` signal), show the PR signal instead — it's more informative. The `TODO` badge is only for tasks that have no other signal.
 
@@ -249,7 +257,7 @@ todos:
     priority: high  # enum: high, medium, low
     signal: sole_reviewer  # enum: sole_reviewer, author_replied, mentioned, direct_request, team_request, subscribed (omit for non-PR items)
     source: github  # enum: github, jira, slack, todo_note (omit or use most specific source when task comes from multiple)
-    # category omitted — defaults to work
+    category: work  # enum: work, personal (always set explicitly — undefined is treated as personal)
     blocking: ["jdoe"]  # GitHub usernames of people waiting on me
     refs:
       pr: "https://github.com/org/project/pull/123"
@@ -264,7 +272,7 @@ todos:
     title: "Finish API migration for PROJECT-1234"
     priority: medium
     source: todo_note
-    # category omitted — defaults to work
+    category: work
     refs:
       jira: "https://org.atlassian.net/browse/PROJECT-1234"
     refs_map:
@@ -276,7 +284,7 @@ todos:
     title: "Renew gym membership"
     priority: low
     source: todo_note
-    category: personal  # enum: work, personal (omit for work — it's the default)
+    category: personal
     context: "Expires end of week."
 
 sources:
