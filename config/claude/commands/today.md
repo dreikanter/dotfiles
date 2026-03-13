@@ -4,9 +4,23 @@ description: "Aggregate a prioritized daily todo from Slack, Jira, GitHub PRs, a
 
 Aggregate an easy-to-read flat prioritized todo list for today, based on the most recent context from all available sources.
 
-## Phase 0: Todo Note + Context Note
+## Phase 0: Context Note + Todo Note
 
-### 0a. Ensure today's todo note exists
+### 0a. Context Note (Optional)
+
+If an argument was provided, it is a **notes UID** (e.g. `20260309_9174`) referencing a context note with background information for today's work.
+
+Find and read the note:
+
+```bash
+notes read $ARGUMENT
+```
+
+Use its content as additional context when prioritizing and synthesizing the todo list. Do NOT include raw context note content in the output — use it to inform priorities and fill gaps.
+
+If no argument was provided, skip this step.
+
+### 0b. Ensure today's todo note exists
 
 Create today's todo note if missing (idempotent — skips if already exists, carries over pending tasks from previous day):
 
@@ -49,20 +63,6 @@ Categorize each open task:
 **Personal tasks** — only enrich if the context/origin is clearly understood (e.g. a URL in the task text). Otherwise lift the task text as-is into `title` and leave `context` empty or minimal.
 
 All tasks from the todo note use `source: todo_note` in the YAML. Work tasks use `category: work` (default, can be omitted). Personal tasks use `category: personal`.
-
-### 0d. Context Note (Optional)
-
-If an argument was provided, it is a **notes UID** (e.g. `20260309_9174`) referencing a context note with background information for today's work.
-
-Find and read the note:
-
-```bash
-notes read $ARGUMENT
-```
-
-Use its content as additional context when prioritizing and synthesizing the todo list. Do NOT include raw context note content in the output — use it to inform priorities and fill gaps.
-
-If no argument was provided, skip this step.
 
 ## Phase 1: Gather Sources (in parallel where possible)
 
@@ -251,7 +251,7 @@ todos:
     title: "Fix tooltip alignment on dashboard widgets"
     priority: high  # enum: high, medium, low
     signal: sole_reviewer  # enum: sole_reviewer, author_replied, mentioned, direct_request, team_request, subscribed (omit for non-PR items)
-    source: todo_note  # enum: github, jira, slack, todo_note, recurring (omit or use most specific source when task comes from multiple)
+    source: todo_note  # enum: github, jira, slack, todo_note (omit or use most specific source when task comes from multiple)
     category: personal  # enum: work, personal (omit for work — it's the default)
     blocking: ["jdoe"]  # GitHub usernames of people waiting on me
     refs:
