@@ -8,13 +8,19 @@ Aggregate an easy-to-read flat prioritized todo list for today, based on the mos
 
 ### 0a. Ensure today's todo note exists
 
-Run `new-todo` to ensure today's todo note exists (idempotent — returns the existing path without overwriting):
+Create today's todo note if missing (idempotent — skips if already exists, carries over pending tasks from previous day):
 
 ```bash
-new-todo
+notes new-todo
 ```
 
-Then read today's todo note. The path follows the pattern `$NOTES_PATH/YYYY/MM/YYYYMMDD_*_todo.md` where the date matches today. Parse all task lines (`- [ ]`, `- [+]`, `- [>]`).
+Then read it:
+
+```bash
+notes read todo
+```
+
+Parse all task lines (`- [ ]`, `- [+]`, `- [>]`).
 
 **Skip completed (`[+]`) and moved (`[>]`) tasks** — only process open (`[ ]`) tasks.
 
@@ -203,7 +209,7 @@ Include **all** GitHub usernames found in the todo text — PR authors, reviewer
 
 After the todo list, add a **collapsed** `<details>` section (NOT expanded) listing every resource you processed:
 
-- The todo note (path and count of work/personal/completed tasks)
+- The todo note (UID and count of work/personal/completed tasks)
 - Every PR you read (with linked number and short description)
 - Every Slack channel/DM/search you read
 - Every Jira ticket from the inbox
@@ -276,7 +282,7 @@ todos:
 
 sources:
   todo_note:
-    path: "/Users/alex/Dropbox/Notes/2026/03/20260311_9200_todo.md"
+    uid: "20260311_9200"
     work_tasks: 8
     personal_tasks: 1
     completed_tasks: 3
