@@ -244,7 +244,6 @@ sources_processed: <total count of items scanned>
 
 todos:
   - id: "019cdd2f-b695-7741-9dcb-aaefae886552"  # UUID7, sortable
-    position: 1
     action: review  # enum: review, respond, merge, write, awareness, prep
     title: "Fix tooltip alignment on dashboard widgets"
     priority: high  # enum: high, medium, low
@@ -261,7 +260,6 @@ todos:
     context: "Small bugfix (22+/1-), no other reviewers. jdoe is blocked."
 
   - id: "019cdd2f-c8a2-7123-abcd-1234567890ab"
-    position: 2
     action: write
     title: "Finish API migration for PROJECT-1234"
     priority: medium
@@ -274,7 +272,6 @@ todos:
     context: "In progress since yesterday. Need to update endpoint handlers and tests."
 
   - id: "019cdd2f-d4b3-7456-efab-567890abcdef"
-    position: 3
     action: prep
     title: "Renew gym membership"
     priority: low
