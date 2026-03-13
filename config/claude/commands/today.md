@@ -154,7 +154,9 @@ gh api repos/<owner>/<repo>/issues/<number>/comments
 
 If multiple signals apply, show the highest-priority one.
 
-## Phase 2: Synthesize the Todo List
+## Phase 2: Deduplicate and Synthesize the Todo List
+
+**Deduplication**: When a todo note task overlaps with a source-derived item (e.g., a todo note task references the same PR that was also found in GitHub notifications), merge them into a single item. Use the richer context from the source-derived data, but keep `source: todo_note` to indicate it was explicitly tracked. Deduplicate before prioritizing.
 
 Produce a **flat prioritized list** of tasks. Each item should be a collapsible `<details open>` block (expanded by default).
 
@@ -216,11 +218,7 @@ After the todo list, add a **collapsed** `<details>` section (NOT expanded) list
 
 Format: one resource per line, `<linked id> — short description`.
 
-## Phase 4: Deduplication
-
-When a todo note task overlaps with a source-derived item (e.g., a todo note task references the same PR that was also found in GitHub notifications), merge them into a single item. Use the richer context from the source-derived data, but keep `source: todo_note` to indicate it was explicitly tracked.
-
-## Phase 5: Save as YAML
+## Phase 4: Save as YAML
 
 Generate a UUID7 for each todo item:
 
