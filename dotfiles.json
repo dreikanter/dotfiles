@@ -106,5 +106,8 @@
   ],
   "ghostty": [
     "~/.config/ghostty/config"
+  ],
+  "hammerspoon": [
+    "~/.hammerspoon/init.lua"
   ]
 }

@@ -39,6 +39,7 @@
                     },
                     {
                         "description": "Switch keyboard layouts",
+                        "enabled": false,
                         "manipulators": [
                             {
                                 "from": {
