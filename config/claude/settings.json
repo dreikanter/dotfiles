@@ -31,7 +31,6 @@
     "type": "command",
     "command": "bash ~/.claude/statusline.sh"
   },
-  "effortLevel": "high",
   "enabledPlugins": {
     "ruby-lsp@claude-plugins-official": true
   }
