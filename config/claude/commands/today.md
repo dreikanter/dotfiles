@@ -227,8 +227,8 @@ python3 -c "import uuid; print(uuid.uuid7())"
 Save the todo list as a YAML file:
 
 ```bash
-DAILIES_PATH="${DAILIES_PATH:-$HOME/dailies}"
-mkdir -p "$DAILIES_PATH"
+DAILYDISPATCH_PATH="${DAILYDISPATCH_PATH:-$HOME/dailydispatch}"
+mkdir -p "$DAILYDISPATCH_PATH"
 ```
 
 Filename: `YYYYMMDD.yml` (today's date).
@@ -306,7 +306,7 @@ sources:
 Write the YAML file:
 
 ```bash
-cat > "$DAILIES_PATH/$(date +%Y%m%d).yml" << 'YAML_EOF'
+cat > "$DAILYDISPATCH_PATH/$(date +%Y%m%d).yml" << 'YAML_EOF'
 <generated yaml content>
 YAML_EOF
 ```
