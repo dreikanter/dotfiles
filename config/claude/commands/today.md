@@ -8,7 +8,7 @@ Aggregate an easy-to-read flat prioritized todo list for today, based on the mos
 
 ### 0a. Context Note
 
-```bash
+```
 notes read ${ARGUMENT:-today-context}
 ```
 
@@ -20,13 +20,13 @@ Use its content as additional context when prioritizing and synthesizing the tod
 
 Create today's todo note if missing (idempotent — skips if already exists, carries over pending tasks from previous day):
 
-```bash
+```
 notes new-todo
 ```
 
 Then read it:
 
-```bash
+```
 notes read todo
 ```
 
@@ -47,11 +47,11 @@ Categorize each open task:
 
 1. **Extract references** — find GitHub PR URLs, Jira ticket IDs, note UIDs (e.g. `[20260313_9235]`) in the task text.
 2. **Fetch context for GitHub URLs** — for each PR URL found, run:
-   ```bash
+   ```
    gh pr view <number> --repo <owner>/<repo> --json title,author,url,state,reviewDecision,additions,deletions,isDraft
    ```
 3. **Fetch context for note UIDs** — for each `[YYYYMMDD_NNNN]` reference, run:
-   ```bash
+   ```
    notes read <UID>
    ```
 4. **Keep the task concise** — use fetched context to write a better `context` field in the YAML, but do not bloat the task. Match the shape/length of other todo items.
@@ -64,13 +64,13 @@ All tasks from the todo note use `source: todo_note` in the YAML. Work tasks use
 
 ### 1a. Jira Inbox
 
-```bash
+```
 jira-inbox 2>/dev/null
 ```
 
 If `jira-inbox` fails, fall back to `acli`:
 
-```bash
+```
 acli jira --action getIssueList \
   --jql "assignee = currentUser() AND resolution = Unresolved ORDER BY priority ASC, updated DESC" \
   --columns "key,issuetype,summary,status,priority" --limit 30 2>/dev/null
@@ -80,7 +80,7 @@ acli jira --action getIssueList \
 
 Run these in parallel:
 
-```bash
+```
 # Notifications
 gh api notifications --paginate 2>/dev/null | python3 -c "
 import json, sys
@@ -115,13 +115,13 @@ Extract: action items, follow-up requests, decisions, announcements affecting my
 
 For each PR found in 1b that needs my attention (review requested, or my PR with new comments), fetch:
 
-```bash
+```
 gh pr view <number> --repo <repo> --json title,author,url,createdAt,additions,deletions,reviewDecision,reviews,isDraft,reviewRequests
 ```
 
 For PRs with active discussions, also fetch review comments:
 
-```bash
+```
 gh api repos/<owner>/<repo>/pulls/<number>/comments --paginate
 gh api repos/<owner>/<repo>/issues/<number>/comments
 ```
@@ -220,13 +220,13 @@ Format: one resource per line, `<linked id> — short description`.
 
 Generate a UUID7 for each todo item:
 
-```bash
+```
 python3 -c "import uuid; print(uuid.uuid7())"
 ```
 
 Save the todo list as a YAML file:
 
-```bash
+```
 DAILYDISPATCH_PATH="${DAILYDISPATCH_PATH:-$HOME/dailydispatch}"
 mkdir -p "$DAILYDISPATCH_PATH"
 ```
@@ -305,7 +305,7 @@ sources:
 
 Write the YAML file:
 
-```bash
+```
 cat > "$DAILYDISPATCH_PATH/$(date +%Y%m%d).yml" << 'YAML_EOF'
 <generated yaml content>
 YAML_EOF
