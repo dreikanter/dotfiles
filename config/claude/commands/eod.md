@@ -18,7 +18,7 @@ All subsequent steps use `$LOCAL_DATE` for display, and `$SEARCH_FROM` as the lo
 
 ## Phase 1: Gather Data (GitHub + Jira + Slack IN PARALLEL)
 
-**CRITICAL**: Phases 1a, 1b, and 1c are independent. Launch ALL THREE as parallel tool calls in a single message.
+**CRITICAL**: Phases 1a–1d are independent. Launch ALL FOUR as parallel tool calls in a single message.
 
 ### 1a: GitHub Activity (Bash)
 
@@ -73,6 +73,16 @@ Use `mcp__claude_ai_Slack__slack_search_public_and_private` to find significant 
 Run this search: `to:me during:$LOCAL_DATE`
 
 From the results, pick only items that are genuinely notable: incidents, architectural decisions, notable questions answered, or significant feedback. Skip routine noise and your own stand-alone EOD posts.
+
+### 1d: Personal Notes (Bash — run in parallel with 1a, 1b, 1c)
+
+List today's notes and read any that look relevant (e.g. todo, note, backlog):
+
+```
+notes ls --limit 10
+```
+
+Read notes from `$LOCAL_DATE` (filter by date prefix, e.g. `notes filter $LOCAL_DATE`). Include any tasks completed, personal observations, or context that would enrich the EOD report.
 
 ## Phase 2: Synthesize the Report
 
