@@ -56,7 +56,7 @@ for p in prs:
 "
 ```
 
-### 1b: Jira Activity (Bash — run in parallel with 1a and 1c)
+### 1b: Jira Activity (Bash)
 
 ```
 acli jira --action getIssueList \
@@ -64,7 +64,7 @@ acli jira --action getIssueList \
   --columns "key,summary,status" --limit 15 2>/dev/null || true
 ```
 
-### 1c: Slack Activity (run in parallel with 1a and 1b)
+### 1c: Slack Activity
 
 Use `mcp__claude_ai_Slack__slack_search_public_and_private` to find significant discussions from `$LOCAL_DATE`.
 
@@ -74,7 +74,7 @@ Run this search: `to:me during:$LOCAL_DATE`
 
 From the results, pick only items that are genuinely notable: incidents, architectural decisions, notable questions answered, or significant feedback. Skip routine noise and your own stand-alone EOD posts.
 
-### 1d: Personal Notes (Bash — run in parallel with 1a, 1b, 1c)
+### 1d: Personal Notes (Bash)
 
 List today's notes and read any that look relevant (e.g. todo, note, backlog):
 
