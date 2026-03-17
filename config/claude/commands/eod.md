@@ -104,21 +104,10 @@ Group by **activity or theme**, NOT by data source. Weave all sources into a nar
 
 ## Phase 3: Save as Note
 
-1. Compose the note with this YAML frontmatter:
-
-```yaml
----
-slug: eod
-tags: [eod, reports]
----
-```
-
-Followed by `EOD report:` and the bullet list.
-
-2. Save it:
+Compose the note starting with `EOD report:` followed by the bullet list, then save:
 
 ```
-printf '%s' "<note_content>" | notes new --slug eod
+echo "<note_content>" | notes new --slug eod --tag eod --tag reports
 ```
 
-3. Report the saved file path.
+Report the saved file path.
