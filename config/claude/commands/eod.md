@@ -93,6 +93,8 @@ Group by **activity or theme**, NOT by data source. Weave all sources into a nar
 **Example** (for structure/tone only):
 
 ```
+EOD Report:
+
 - Created ticket with a plan to evaluate vector search upgrade: [PROJ-123](...). I'd appreciate some [feedback](slack_permalink).
 - Reviewed [123](...) and [124](...) for Luis
 - Reviewed [125](...) for Becky
@@ -110,7 +112,7 @@ Group by **activity or theme**, NOT by data source. Weave all sources into a nar
 
 ## Phase 3: Save as Note
 
-Compose the note starting with `EOD report:` followed by the bullet list, then save:
+Save the report to the new note:
 
 ```
 echo "<note_content>" | notes new --slug eod --tag eod --tag reports
