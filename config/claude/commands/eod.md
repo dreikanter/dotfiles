@@ -84,23 +84,19 @@ Group by **activity or theme**, NOT by data source. Weave all sources into a nar
 
 ```
 - Created ticket with a plan to evaluate vector search upgrade: [PROJ-123](...). I'd appreciate some [feedback](slack_permalink).
-- Epic review:
-    - [PROJ-101](...) — corrected AC, scoped to UI only, closed (after [501](...) merge).
-    - [PROJ-102](...) — created new ticket for backend wiring (depends on [498](...)).
-    - [PROJ-103](...) — drafted status update comment.
-- Code reviews: [504](...), [503](...), [499](...)
+- Reviewed [123](...) and [124](...) for Luis
+- Reviewed [125](...) for Becky
 - Watched [New tool intro](video_link)
-- Batching spike is open and needs review: [PROJ-200](...).
+- Batching spike is open and needs review: [PROJ-1000](...).
 - Cycle checkin
 ```
 
 **Style**:
 - First person, concise but informative
-- Links: PRs as `[504](url)`, Jira as `[PROJ-123](url)`, everything else with descriptive anchor text
-- Use sub-bullets (4-space indent) to group related items under a theme
-- Code reviews go on one line: `Code reviews: [504](...), [503](...)`
-- Include non-code activities: meetings, checkins, videos, discussions
-- Omit routine noise
+- Links: PRs as `[123](url)`, Jira as `[PROJ-123](url)`, everything else with descriptive anchor text
+- Prefer flat lists with no nesting. But use sub-bullets (4-space indent) if it makes sense to group related items under a theme.
+- Include non-code activities: meetings, checkins, discussions
+- Omit low-value items and routine noise
 
 ## Phase 3: Save as Note
 
