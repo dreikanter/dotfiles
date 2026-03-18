@@ -49,17 +49,40 @@ for p in prs:
 "
 
 echo "=== REVIEWED ==="
-gh search prs --reviewed-by @me --updated ">=$SEARCH_FROM" --limit 20 \
-  --json number,title,url,updatedAt \
-  | python3 -c "
-import sys, json
+# Use the events API to get actual review submission timestamps (not PR update dates).
+# Paginate up to 3 pages to cover ~1 week of activity.
+python3 -c "
+import subprocess, json
 search_from = '$SEARCH_FROM'
 target = '$LOCAL_DATE'
-prs = json.load(sys.stdin)
-for p in prs:
-    d = p['updatedAt'][:10]
-    if search_from <= d <= target:
-        print(p['number'], p['title'], p['url'])
+seen = set()
+matches = []
+for page in range(1, 4):
+    result = subprocess.run(
+        ['gh', 'api', f'/users/dreikanter/events?per_page=100&page={page}'],
+        capture_output=True, text=True)
+    if result.returncode != 0: break
+    for e in json.loads(result.stdout):
+        if e['type'] != 'PullRequestReviewEvent': continue
+        reviewed = e['created_at'][:10]
+        if reviewed < search_from: break
+        if reviewed > target: continue
+        repo = e['repo']['name']
+        num = e['payload']['pull_request']['number']
+        key = (repo, num)
+        if key in seen: continue
+        seen.add(key)
+        matches.append((repo, num))
+    else: continue
+    break
+# Fetch titles for matched PRs
+for repo, num in matches:
+    result = subprocess.run(
+        ['gh', 'api', f'/repos/{repo}/pulls/{num}', '--jq', '.title'],
+        capture_output=True, text=True)
+    title = result.stdout.strip() if result.returncode == 0 else '(unknown)'
+    url = f'https://github.com/{repo}/pull/{num}'
+    print(num, title, url)
 "
 ```
 
