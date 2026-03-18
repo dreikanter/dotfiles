@@ -55,7 +55,26 @@ If no Jira tickets are found anywhere, note this in the review and skip scope as
 - For each file, use the Read tool to read the full current file content from the local working directory (not just the diff hunks). This provides surrounding context for understanding the changes.
 - If a file was deleted in the PR, note it but skip reading.
 - If a file does not exist locally (new file only in the PR branch), note it and rely on the diff for context.
+- If the PR branch is not checked out locally, note this limitation and rely on the diff for context where local files diverge.
 - Return all file contents with their paths.
+
+## Review Principles
+
+### Architecture First
+
+Before reviewing individual lines, assess the overall approach:
+
+- Is this the right pattern? Are there existing conventions in the codebase that should be used instead?
+- Does the controller/service/engine split make sense?
+- Are module/package boundaries respected — no inappropriate cross-boundary dependencies?
+
+If the architecture is wrong, focus the review on that. Do not polish tactical details on code that needs a fundamentally different approach.
+
+### Do No Harm
+
+- **Never suggest broken code.** Before proposing any code snippet, verify it is syntactically valid in the target language. If unsure, describe the idea in prose instead.
+- **Understand the domain before flagging issues.** Do not apply generic patterns (race conditions, naming conventions, fragile coupling) without understanding WHY the code is written that way. If code looks intentional, consider that the author understands their domain.
+- **Do not flag hypothetical problems that cannot happen.** "What if X happens?" is only useful if X can actually happen given the architecture. Trace actual code paths before raising concerns.
 
 ## Phase 3: Analyze and Produce Review
 
