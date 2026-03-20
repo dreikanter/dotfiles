@@ -2,29 +2,13 @@
 
 set -euo pipefail
 
-VISUAL_EDITOR="${NOTES_EDITOR:-/opt/homebrew/bin/subl --add}"
-NOTES_PATH="${NOTES_PATH:-$HOME/Dropbox/Notes}"
-
 if ! command -v notes &>/dev/null; then
   echo "Error: 'notes' CLI not found in PATH. Install it first." >&2
-  echo "See: https://github.com/dreikanter/notes" >&2
   exit 1
 fi
 
-args=()
-for arg in "$@"; do
-  case "$arg" in
-    --force) args+=(--force) ;;
-    -h|--help)
-      notes new-todo --help
-      exit 0
-      ;;
-    *) echo "Unknown option: $arg" >&2; exit 1 ;;
-  esac
-done
-
-file_path=$(notes new-todo "${args[@]}")
+file_path=$(notes new-todo "$@")
 echo "$file_path"
 
-$VISUAL_EDITOR "$NOTES_PATH" "$file_path" &
+${NOTES_EDITOR:-/opt/homebrew/bin/subl --add} "${NOTES_PATH:-$HOME/Dropbox/Notes}" "$file_path" &
 disown

@@ -2,68 +2,13 @@
 
 set -euo pipefail
 
-VISUAL_EDITOR="${NOTES_EDITOR:-/opt/homebrew/bin/subl --add}"
-NOTES_PATH="${NOTES_PATH:-$HOME/Dropbox/Notes}"
-
 if ! command -v notes &>/dev/null; then
   echo "Error: 'notes' CLI not found in PATH. Install it first." >&2
-  echo "See: https://github.com/dreikanter/notes" >&2
   exit 1
 fi
 
-tags=()
-slug=""
-location=""
-
-while [[ $# -gt 0 ]]; do
-  case "$1" in
-    --tag=*) tags+=("${1#--tag=}"); shift ;;
-    --tag) tags+=("$2"); shift 2 ;;
-    --slug=*) slug="${1#--slug=}"; shift ;;
-    --slug) slug="$2"; shift 2 ;;
-    --location=*) location="${1#--location=}"; shift ;;
-    --location) location="$2"; shift 2 ;;
-    -h|--help)
-      cat <<'EOF'
-Usage: new-note [options]
-
-Creates a new note with auto-incremented ID and opens it in the editor.
-
-Options:
-  --tag=TAG          Add a tag (can be used multiple times)
-  --location=LOC     Set location in frontmatter
-  --slug=SLUG        Add slug suffix to filename
-  -h, --help         Show this help message
-
-Examples:
-  new-note
-  new-note --tag=journal --location="Berlin, Germany" --slug=journal
-  new-note --tag=idea --tag=project
-
-Environment variables:
-  NOTES_PATH    Notes directory (default: ~/Dropbox/Notes)
-  NOTES_EDITOR  Editor command (default: /opt/homebrew/bin/subl --add)
-EOF
-      exit 0
-      ;;
-    *) echo "Unknown option: $1" >&2; exit 1 ;;
-  esac
-done
-
-args=()
-for tag in "${tags[@]}"; do
-  args+=(--tag "$tag")
-done
-[[ -n "$slug" ]] && args+=(--slug "$slug")
-
-if [[ -n "$location" ]]; then
-  # notes CLI doesn't support --location; inject it via stdin frontmatter
-  file_path=$(printf -- '---\nlocation: %s\n---\n' "$location" | notes new "${args[@]}")
-else
-  file_path=$(notes new "${args[@]}")
-fi
-
+file_path=$(notes new "$@")
 echo "$file_path"
 
-$VISUAL_EDITOR "$NOTES_PATH" "$file_path" &
+${NOTES_EDITOR:-/opt/homebrew/bin/subl --add} "${NOTES_PATH:-$HOME/Dropbox/Notes}" "$file_path" &
 disown
