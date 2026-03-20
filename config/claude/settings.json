@@ -26,7 +26,7 @@
       "Bash(bundle exec rubocop --parallel --force-exclusion *)"
     ]
   },
-  "model": "opus",
+  "model": "opus[1m]",
   "statusLine": {
     "type": "command",
     "command": "bash ~/.claude/statusline.sh"
