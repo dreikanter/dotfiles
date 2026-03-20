@@ -2,13 +2,7 @@
 
 set -euo pipefail
 
-if ! command -v notes &>/dev/null; then
-  echo "Error: 'notes' CLI not found in PATH. Install it first." >&2
-  exit 1
-fi
-
-NOTES_PATH="${NOTES_PATH:-$HOME/Dropbox/Notes}"
-file_path="$NOTES_PATH/$(notes ls --limit 1)"
-
-${NOTES_EDITOR:-/opt/homebrew/bin/subl --add} "$NOTES_PATH" "$file_path" &
+NOTES="${GOPATH:-$HOME/go}/bin/notes"
+file_path="$("$NOTES" latest)"
+${NOTES_EDITOR:-/opt/homebrew/bin/subl --add} "$(dirname "$(dirname "$(dirname "$file_path")")")" "$file_path" &
 disown
