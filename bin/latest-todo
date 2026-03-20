@@ -1,18 +1,14 @@
-#!/usr/bin/env ruby
+#!/usr/bin/env bash
 
-NOTES_PATH = ENV["NOTES_PATH"] || File.expand_path("~/Dropbox/Notes")
-VISUAL_EDITOR = ENV["NOTES_EDITOR"] || "/opt/homebrew/bin/subl --add"
+set -euo pipefail
 
-# Skip "99999999_*" notes
-def pinned?(path)
-  File.basename(path) =~ /^9+_/
-end
+if ! command -v notes &>/dev/null; then
+  echo "Error: 'notes' CLI not found in PATH. Install it first." >&2
+  exit 1
+fi
 
-wildcard = File.join(NOTES_PATH, "**", "*_todo.md")
-last_note_path = Dir.glob(wildcard).grep(%r{\d+/\d{2}/.*\.md}).reject { |path| pinned?(path) }.max
-begin
-  pid = Process.spawn("#{VISUAL_EDITOR} #{NOTES_PATH} #{last_note_path}")
-  Process.detach(pid)
-rescue StandardError => e
-  warn "Failed to launch editor (#{VISUAL_EDITOR}): #{e.message}"
-end
+NOTES_PATH="${NOTES_PATH:-$HOME/Dropbox/Notes}"
+file_path="$NOTES_PATH/$(notes ls --type todo --limit 1)"
+
+${NOTES_EDITOR:-/opt/homebrew/bin/subl --add} "$NOTES_PATH" "$file_path" &
+disown
