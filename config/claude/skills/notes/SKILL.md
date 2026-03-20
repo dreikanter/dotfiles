@@ -41,21 +41,25 @@ notes new-todo
 notes new-todo --force
 ```
 
-### Read and Search
+### List and Filter
 
 ```bash
 # List recent notes
 notes ls --limit 10
 
-# Latest todo/backlog/weekly
+# List by type
 notes ls --type todo --limit 1
 notes ls --type backlog --limit 1
 notes ls --type weekly --limit 1
 
-# Path to latest note (optionally by type)
-notes latest
-notes latest todo
+# Find notes matching a fragment in ID, slug, or filename
+notes filter 8823
+notes filter todo
+```
 
+### Read
+
+```bash
 # Read a note by ID, slug, or filename
 notes read 8823
 notes read todo
@@ -63,14 +67,28 @@ notes read todo
 # Read without frontmatter
 notes read todo --no-frontmatter
 
-# Find notes matching a fragment
-notes filter 8823
-notes filter todo
+# Path to latest note (optionally by type)
+notes latest
+notes latest todo
 ```
 
-### Content Search
+### Search
 
-Use the Grep tool against `$NOTES_PATH` for content-level searches (tags, active tasks, keywords).
+```bash
+# Search note contents (passes args to grep)
+notes grep "pattern"
+notes grep -i "case insensitive"
+notes grep -l "files only"
+```
+
+### Path
+
+```bash
+# Print the notes archive directory path
+notes path
+```
+
+Use `notes path` when an agent needs direct access to the notes directory. Always prefer `notes` CLI commands over direct file access.
 
 ## Editing Notes
 
