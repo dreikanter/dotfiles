@@ -29,7 +29,7 @@ Use the `notes` CLI tool for all note operations. All commands respect `$NOTES_P
 echo "# Content" | notes new --slug my-slug
 
 # New note with frontmatter
-echo "# Content" | notes new --tag journal --tag idea --description "Context"
+echo "# Content" | notes new --title "Title" --tag journal --tag idea --description "Context"
 
 # Empty note
 notes new
@@ -52,9 +52,16 @@ notes ls --type todo --limit 1
 notes ls --type backlog --limit 1
 notes ls --type weekly --limit 1
 
+# Path to latest note (optionally by type)
+notes latest
+notes latest todo
+
 # Read a note by ID, slug, or filename
 notes read 8823
 notes read todo
+
+# Read without frontmatter
+notes read todo --no-frontmatter
 
 # Find notes matching a fragment
 notes filter 8823
