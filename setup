@@ -32,8 +32,8 @@ else
 fi
 
 if [ -f ~/.dotfiles/bin/dotfiles ]; then
-    echo "Loading dotfiles..."
-    bash ~/.dotfiles/bin/dotfiles load
+    echo "Applying dotfiles..."
+    bash ~/.dotfiles/bin/dotfiles apply
 else
     echo "Warning: dotfiles script not found at ~/.dotfiles/bin/dotfiles"
 fi

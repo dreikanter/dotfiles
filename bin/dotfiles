@@ -267,7 +267,7 @@ parser = OptionParser.new do |opts|
   opts.separator ""
   opts.separator "Commands:"
   opts.separator "  save        Copy local environment configuration to dotfiles"
-  opts.separator "  load        Load dotfiles configuration to local environment"
+  opts.separator "  apply       Apply dotfiles configuration to local environment"
   opts.separator "  status      Show status of managed files"
   opts.separator "  config      Show configuration mapping as JSON"
   opts.separator ""
@@ -305,13 +305,13 @@ if ARGV.empty?
 end
 
 command = ARGV[0]
-direction = command == "load" ? :load : :save
+direction = %w[load apply].include?(command) ? :load : :save
 config_files, prune_meta = load_configuration(direction: direction)
 
 case command
 when "save"
   save_dotfiles(config_files, prune_meta, **options)
-when "load"
+when "apply", "load"
   load_dotfiles(config_files, prune_meta, **options)
 when "ls", "status"
   show_status(config_files)

@@ -58,12 +58,12 @@ dotfiles save -v       # Verbose output
 dotfiles save -p       # Prune removed files from dotfiles
 ```
 
-**Load (dotfiles → local)**:
+**Apply (dotfiles → local)**:
 ```bash
-dotfiles load          # Restore configs from dotfiles repo
-dotfiles load -n       # Dry run
-dotfiles load -v       # Verbose output
-dotfiles load -p       # Prune removed files from local
+dotfiles apply          # Apply configs from dotfiles repo to local
+dotfiles apply -n       # Dry run
+dotfiles apply -v       # Verbose output
+dotfiles apply -p       # Prune removed files from local
 ```
 
 **Status**:
@@ -99,11 +99,11 @@ dotfiles config        # Show configuration mapping as JSON
 
 **Save**: `dotfiles save -v` (optionally check `dotfiles status` first)
 
-**Load**: `dotfiles load -v` (optionally check `dotfiles status` first)
+**Apply**: `dotfiles apply -v` (optionally check `dotfiles status` first)
 
 **Push/Pull**: Git operations on `~/.dotfiles` repo
 - **Push** (optionally after save): `cd ~/.dotfiles && git add . && git commit -m "..." && git push`
-- **Pull** (optionally before load): `cd ~/.dotfiles && git pull`
+- **Pull** (optionally before apply): `cd ~/.dotfiles && git pull`
 
 ## Usage Guidelines
 
