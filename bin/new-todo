@@ -7,7 +7,7 @@ if ! command -v notes &>/dev/null; then
   exit 1
 fi
 
-file_path=$(notes new-todo "$@")
+file_path=$(notes new-todo)
 echo "$file_path"
 
 ${NOTES_EDITOR:-/opt/homebrew/bin/subl --add} "${NOTES_PATH:-$HOME/Dropbox/Notes}" "$file_path" &
