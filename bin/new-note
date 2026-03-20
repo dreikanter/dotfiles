@@ -1,91 +1,69 @@
-#!/usr/bin/env ruby
+#!/usr/bin/env bash
 
-require "fileutils"
-require "json"
-require "optparse"
+set -euo pipefail
 
-NOTES_PATH = ENV["NOTES_PATH"] || File.expand_path("~/Dropbox/Notes")
-VISUAL_EDITOR = ENV["NOTES_EDITOR"] || "/opt/homebrew/bin/subl --add"
+VISUAL_EDITOR="${NOTES_EDITOR:-/opt/homebrew/bin/subl --add}"
+NOTES_PATH="${NOTES_PATH:-$HOME/Dropbox/Notes}"
 
-ID_PATH = File.join(NOTES_PATH, "id.json")
+if ! command -v notes &>/dev/null; then
+  echo "Error: 'notes' CLI not found in PATH. Install it first." >&2
+  echo "See: https://github.com/dreikanter/notes" >&2
+  exit 1
+fi
 
-options = { tags: [] }
+tags=()
+slug=""
+location=""
 
-parser = OptionParser.new do |opts|
-  opts.banner = "Usage: new-note [options]"
-  opts.separator ""
-  opts.separator "Creates a new note with auto-incremented ID and opens it in the editor."
-  opts.separator ""
-  opts.separator "Options:"
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --tag=*) tags+=("${1#--tag=}"); shift ;;
+    --tag) tags+=("$2"); shift 2 ;;
+    --slug=*) slug="${1#--slug=}"; shift ;;
+    --slug) slug="$2"; shift 2 ;;
+    --location=*) location="${1#--location=}"; shift ;;
+    --location) location="$2"; shift 2 ;;
+    -h|--help)
+      cat <<'EOF'
+Usage: new-note [options]
 
-  opts.on("--tag=TAG", "Add a tag (can be used multiple times)") do |tag|
-    options[:tags] << tag
-  end
+Creates a new note with auto-incremented ID and opens it in the editor.
 
-  opts.on("--location=LOCATION", "Set location in frontmatter") do |loc|
-    options[:location] = loc
-  end
+Options:
+  --tag=TAG          Add a tag (can be used multiple times)
+  --location=LOC     Set location in frontmatter
+  --slug=SLUG        Add slug suffix to filename
+  -h, --help         Show this help message
 
-  opts.on("--slug=SLUG", "Add slug suffix to filename") do |slug|
-    options[:slug] = slug
-  end
+Examples:
+  new-note
+  new-note --tag=journal --location="Berlin, Germany" --slug=journal
+  new-note --tag=idea --tag=project
 
-  opts.on("-h", "--help", "Show this help message") do
-    puts opts
-    puts ""
-    puts "Examples:"
-    puts "  new-note"
-    puts "  new-note --tag=journal --location=\"Berlin, Germany\" --slug=journal"
-    puts "  new-note --tag=idea --tag=project"
-    puts ""
-    puts "Environment variables:"
-    puts "  NOTES_PATH    Notes directory (default: ~/Dropbox/Notes)"
-    puts "  NOTES_EDITOR  Editor command (default: /opt/homebrew/bin/subl --add)"
-    exit
-  end
-end
+Environment variables:
+  NOTES_PATH    Notes directory (default: ~/Dropbox/Notes)
+  NOTES_EDITOR  Editor command (default: /opt/homebrew/bin/subl --add)
+EOF
+      exit 0
+      ;;
+    *) echo "Unknown option: $1" >&2; exit 1 ;;
+  esac
+done
 
-parser.parse!
+args=()
+for tag in "${tags[@]}"; do
+  args+=(--tag "$tag")
+done
+[[ -n "$slug" ]] && args+=(--slug "$slug")
 
-def new_note_path(time, slug: nil)
-  suffix = slug ? "_#{slug}" : ""
-  File.join(
-    File.join(NOTES_PATH, time.strftime("%Y"), time.strftime("%m")),
-    "#{time.strftime("%Y%m%d")}_#{generate_new_id}#{suffix}.md"
-  )
-end
+if [[ -n "$location" ]]; then
+  # notes CLI doesn't support --location; inject it via stdin frontmatter
+  file_path=$(printf -- '---\nlocation: %s\n---\n' "$location" | notes new "${args[@]}")
+else
+  file_path=$(notes new "${args[@]}")
+fi
 
-def generate_new_id
-  new_id = last_id.succ
-  File.write(ID_PATH, JSON.generate({ last_id: new_id }))
-  new_id
-end
+echo "$file_path"
 
-def last_id
-  Integer(JSON.parse(File.read(ID_PATH))["last_id"])
-rescue StandardError
-  Dir.glob(File.join(NOTES_PATH, "**/*.md")).count
-end
-
-def generate_frontmatter(options)
-  lines = []
-  lines << "tags: [#{options[:tags].join(", ")}]" unless options[:tags].empty?
-  lines << "location: #{options[:location]}" if options[:location]
-  return "" if lines.empty?
-
-  "---\n#{lines.join("\n")}\n---\n\n"
-end
-
-file_name = new_note_path(Time.now, slug: options[:slug])
-puts file_name
-FileUtils.mkdir_p(File.dirname(file_name))
-
-frontmatter = generate_frontmatter(options)
-File.write(file_name, frontmatter) unless frontmatter.empty?
-
-begin
-  pid = Process.spawn("#{VISUAL_EDITOR} #{NOTES_PATH} #{file_name}")
-  Process.detach(pid)
-rescue StandardError => e
-  warn "Failed to launch editor (#{VISUAL_EDITOR}): #{e.message}"
-end
+$VISUAL_EDITOR "$NOTES_PATH" "$file_path" &
+disown
