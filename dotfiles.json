@@ -109,5 +109,9 @@
   ],
   "hammerspoon": [
     "~/.hammerspoon/init.lua"
+  ],
+  "mise": [
+    "~/.config/mise/config.toml",
+    "~/.config/mise/settings.toml"
   ]
 }
