@@ -18,6 +18,7 @@ hs.hotkey.bind({"cmd", "alt"}, "2", function() switchLayout("russian") end)
 
 -- Notes control (Ctrl+Shift)
 local notesPath = os.getenv("NOTES_PATH") or (os.getenv("HOME") .. "/Dropbox/Notes")
+local notes = os.getenv("HOME") .. "/go/bin/notes"
 local subl = "/opt/homebrew/bin/subl"
 
 local function openInSubl(filePath)
@@ -25,13 +26,17 @@ local function openInSubl(filePath)
 end
 
 local function notesRun(args, callback)
-  hs.task.new("/bin/zsh", function(exitCode, stdout, stderr)
+  local cmdArgs = {"--path", notesPath}
+  for word in args:gmatch("%S+") do
+    table.insert(cmdArgs, word)
+  end
+  hs.task.new(notes, function(exitCode, stdout, stderr)
     if exitCode == 0 and callback then
       callback(stdout:gsub("%s+$", ""))
     elseif exitCode ~= 0 then
       print("notes error: " .. (stderr or ""))
     end
-  end, {"-lc", "notes " .. args}):start()
+  end, cmdArgs):start()
 end
 
 local noteKeys = {
