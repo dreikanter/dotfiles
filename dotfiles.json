@@ -90,6 +90,7 @@
     "~/.config/zed/keymap.json"
   ],
   "zsh": [
+    "~/.zshenv",
     "~/.zshrc"
   ],
   "claude": [
