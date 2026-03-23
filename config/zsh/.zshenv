@@ -7,6 +7,7 @@ if [[ -x "/opt/homebrew/bin/brew" ]]; then
 fi
 
 path=(
+  $HOME/.local/share/mise/shims
   /opt/homebrew/opt/llvm/bin
   $HOME/.local/bin
   $HOME/.opencode/bin
