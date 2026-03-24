@@ -47,7 +47,7 @@ notes new-todo --force
 # Append text to a note by ID, slug, or filename
 echo "Additional content" | notes append my-slug
 
-# Append with filters
+# Append to the latest note matching filters
 echo "More text" | notes append --slug report --type note
 
 # Create note if no match found (atomic check-and-create)
