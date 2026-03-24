@@ -47,7 +47,7 @@ notes new-todo --force
 # Append text to a note by ID, slug, or filename
 echo "Additional content" | notes append my-slug
 
-# Append with filters
+# Append with filters (same repeatable flags as latest)
 echo "More text" | notes append --slug report --type note
 ```
 
@@ -82,6 +82,10 @@ notes latest
 notes latest --type todo
 notes latest --slug report
 notes latest --tag journal
+
+# Filters are repeatable (OR within same flag, AND across flags)
+notes latest --slug report --slug todo
+notes latest --type todo --type backlog
 ```
 
 ### Search
