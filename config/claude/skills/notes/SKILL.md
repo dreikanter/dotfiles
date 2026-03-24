@@ -47,8 +47,14 @@ notes new-todo --force
 # Append text to a note by ID, slug, or filename
 echo "Additional content" | notes append my-slug
 
-# Append with filters (same repeatable flags as latest)
+# Append with filters
 echo "More text" | notes append --slug report --type note
+
+# Create note if no match found (atomic check-and-create)
+echo "- [ ] Ship feature" | notes append --type todo --create
+
+# Create with frontmatter (--title and --description require --create)
+echo "- First entry" | notes append --slug report --create --title "Session Report"
 ```
 
 ### List and Filter

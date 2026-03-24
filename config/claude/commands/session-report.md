@@ -28,19 +28,8 @@ Drafted Q2 capacity planning spec
 
 ## Step 2: Append to the report note
 
-Try appending to today's existing report note. If no report note exists for today, create one first.
-
 ```bash
-# Create today's report note if needed
-notes latest --slug report
-# If no note found or date doesn't match today, create:
-notes new --slug report --title "Session Report" --tag reports
-```
-
-Then append:
-
-```bash
-echo "- <summary line>" | notes append --slug report
+echo "- <summary line>" | notes append --slug report --create --title "Session Report" --tag reports
 ```
 
 Report what was appended.
