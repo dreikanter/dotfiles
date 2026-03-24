@@ -41,16 +41,32 @@ notes new-todo
 notes new-todo --force
 ```
 
+### Append
+
+```bash
+# Append text to a note by ID, slug, or filename
+echo "Additional content" | notes append my-slug
+
+# Append to the latest note matching filters
+echo "More text" | notes append --slug report --type note
+
+# Create note if no match found (atomic check-and-create)
+echo "- [ ] Ship feature" | notes append --type todo --create
+
+# Create with frontmatter (--title and --description require --create)
+echo "- First entry" | notes append --slug report --create --title "Session Report"
+```
+
 ### List and Filter
 
 ```bash
 # List recent notes
 notes ls --limit 10
 
-# List by type
+# List by type, slug, or tag
 notes ls --type todo --limit 1
-notes ls --type backlog --limit 1
-notes ls --type weekly --limit 1
+notes ls --slug report
+notes ls --tag journal --tag idea
 
 # Find notes matching a fragment in ID, slug, or filename
 notes filter 8823
@@ -67,9 +83,15 @@ notes read todo
 # Read without frontmatter
 notes read todo --no-frontmatter
 
-# Path to latest note (optionally by type)
+# Path to latest note (optionally filtered by type, slug, or tag)
 notes latest
-notes latest todo
+notes latest --type todo
+notes latest --slug report
+notes latest --tag journal
+
+# Filters are repeatable (OR within same flag, AND across flags)
+notes latest --slug report --slug todo
+notes latest --type todo --type backlog
 ```
 
 ### Search
@@ -79,6 +101,11 @@ notes latest todo
 notes grep "pattern"
 notes grep -i "case insensitive"
 notes grep -l "files only"
+
+# Search note contents using ripgrep
+notes rg "pattern"
+notes rg -i "case insensitive"
+notes rg -l "files only"
 ```
 
 ### Path
