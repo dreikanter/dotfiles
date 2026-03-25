@@ -42,9 +42,9 @@ end
 local noteKeys = {
   n = {cmd = "new"},
   l = {cmd = "latest"},
-  t = {cmd = "latest todo"},
-  b = {cmd = "latest backlog"},
-  w = {cmd = "latest weekly"},
+  t = {cmd = "latest --type todo"},
+  b = {cmd = "latest --type backlog"},
+  w = {cmd = "latest --type weekly"},
 }
 
 for key, cfg in pairs(noteKeys) do
@@ -59,4 +59,3 @@ for key, cfg in pairs(noteKeys) do
     print("FAILED to register ctrl+shift+" .. key)
   end
 end
-
