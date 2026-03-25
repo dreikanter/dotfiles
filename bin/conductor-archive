@@ -3,5 +3,5 @@
 
 # Remove mise trust for this workspace
 if command -v mise &>/dev/null; then
-  mise trust --untrust "$(pwd)" 2>/dev/null
+  mise trust --untrust "$(pwd)/mise.toml" 2>/dev/null
 fi

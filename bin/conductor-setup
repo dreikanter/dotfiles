@@ -3,5 +3,5 @@
 
 # Trust mise config in this workspace
 if command -v mise &>/dev/null; then
-  mise trust --quiet "$(pwd)" 2>/dev/null
+  mise trust --quiet "$(pwd)/mise.toml" 2>/dev/null
 fi
