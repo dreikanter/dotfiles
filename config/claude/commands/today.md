@@ -2,7 +2,7 @@
 description: "Aggregate a prioritized daily todo from Slack, Jira, GitHub PRs, and notifications. Optional arg: notes UID referencing a context note (e.g. '20260309_9174')."
 ---
 
-Aggregate an easy-to-read flat prioritized todo list for today, based on the most recent context from all available sources.
+Aggregate a prioritized todo list for today from all available sources.
 
 ## Phase 0: Context Note + Todo Note
 
@@ -143,14 +143,7 @@ gh api repos/<owner>/<repo>/issues/<number>/comments
 2. Check notification reason from `gh api notifications`: `review_requested` → personal request, `team_mention` → team request, `mention` → mentioned, `comment` → could be author reply.
 3. For `AUTHOR_REPLIED`: in the review comments, check if the PR author posted a reply to a comment thread where I was the original reviewer. Look for `in_reply_to_id` pointing at my comments, or author comments timestamped after my last review.
 
-**Display the signal tag** in the todo item summary line as a short badge, e.g.:
-
-```html
-<details open>
-<summary><strong>1. Review <a href="...">123</a></strong> · <code>SOLE_REVIEWER</code> — jdoe: Fix tooltip alignment on dashboard widgets</summary>
-```
-
-If multiple signals apply, show the highest-priority one.
+If multiple signals apply, use the highest-priority one for the YAML `signal` field.
 
 ## Phase 2: Deduplicate and Prioritize
 
