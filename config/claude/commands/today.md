@@ -2,7 +2,7 @@
 description: "Aggregate a prioritized daily todo from Slack, Jira, GitHub PRs, and notifications. Optional arg: notes UID referencing a context note (e.g. '20260309_9174')."
 ---
 
-Aggregate an easy-to-read flat prioritized todo list for today, based on the most recent context from all available sources.
+Aggregate a prioritized todo list for today from all available sources.
 
 ## Phase 0: Context Note + Todo Note
 
@@ -143,20 +143,11 @@ gh api repos/<owner>/<repo>/issues/<number>/comments
 2. Check notification reason from `gh api notifications`: `review_requested` → personal request, `team_mention` → team request, `mention` → mentioned, `comment` → could be author reply.
 3. For `AUTHOR_REPLIED`: in the review comments, check if the PR author posted a reply to a comment thread where I was the original reviewer. Look for `in_reply_to_id` pointing at my comments, or author comments timestamped after my last review.
 
-**Display the signal tag** in the todo item summary line as a short badge, e.g.:
+If multiple signals apply, use the highest-priority one for the YAML `signal` field.
 
-```html
-<details open>
-<summary><strong>1. Review <a href="...">123</a></strong> · <code>SOLE_REVIEWER</code> — jdoe: Fix tooltip alignment on dashboard widgets</summary>
-```
-
-If multiple signals apply, show the highest-priority one.
-
-## Phase 2: Deduplicate and Synthesize the Todo List
+## Phase 2: Deduplicate and Prioritize
 
 **Deduplication**: When a todo note task overlaps with a source-derived item (e.g., a todo note task references the same PR that was also found in GitHub notifications), merge them into a single item. Use the richer context from the source-derived data, but keep `source: todo_note` to indicate it was explicitly tracked. Deduplicate before prioritizing.
-
-Produce a **flat prioritized list** of tasks. Each item should be a collapsible `<details open>` block (expanded by default).
 
 ### Prioritization rules (highest to lowest)
 
@@ -172,26 +163,6 @@ Produce a **flat prioritized list** of tasks. Each item should be a collapsible 
 10. **Awareness items** — things happening that affect my work (upgrades, team decisions)
 11. **Personal tasks** — `category: personal` items from the todo note
 
-### Format for each item
-
-```html
-<details open>
-<summary><strong>N. Action verb <a href="URL">NUMBER</a></strong> · <code>SIGNAL_TAG</code> — Author/context: Short title</summary>
-
-1-2 sentences of context. What specifically needs doing and why.
-</details>
-```
-
-The `· <code>SIGNAL_TAG</code>` part is only included for GitHub PR items that have a classified signal. Non-PR items (Jira work, todo note tasks, etc.) omit it.
-
-For items originating from the todo note, add a `· <code>TODO</code>` badge in the summary line (same position as `SIGNAL_TAG`). If a todo note task also has a PR signal (e.g., a task with a PR URL that maps to a `SOLE_REVIEWER` signal), show the PR signal instead — it's more informative. The `TODO` badge is only for tasks that have no other signal.
-
-### Linking rules
-
-- PRs: `[NUMBER](url)` or inline `<a href="url">NUMBER</a>` in summary
-- Jira: `[PROJECT-NNNN](https://org.atlassian.net/browse/PROJECT-NNNN)`
-- Keep descriptions concise — this is a scannable list, not a report
-
 ### Username mapping rules
 
 For each todo item, collect **every GitHub username** mentioned anywhere in its `title`, `context`, or `blocking` fields — regardless of whether the username appears with an `@` prefix or not. Map each to its GitHub profile URL in a `usernames_map` dictionary on the todo item. Keys are bare usernames (no `@` prefix):
@@ -204,19 +175,7 @@ usernames_map:
 
 Include **all** GitHub usernames found in the todo text — PR authors, reviewers, people mentioned in discussion, blocking users, etc. When unsure whether a name is a GitHub username, include it if it was obtained from GitHub data (PR author, reviewer, commenter).
 
-## Phase 3: Processed Sources Reference
-
-After the todo list, add a **collapsed** `<details>` section (NOT expanded) listing every resource you processed:
-
-- The todo note (UID and count of work/personal/completed tasks)
-- Every PR you read (with linked PR number and short description)
-- Every Slack channel/DM/search you read
-- Every Jira ticket from the inbox
-- GitHub notifications summary
-
-Format: one resource per line, `<linked id> — short description`.
-
-## Phase 4: Save as YAML
+## Phase 3: Save as YAML
 
 Generate a UUID7 for each todo item:
 
@@ -311,4 +270,9 @@ cat > "$DAILYDISPATCH_PATH/$(date +%Y%m%d).yml" << 'YAML_EOF'
 YAML_EOF
 ```
 
-Report the saved file path at the end of the response.
+## Output
+
+Do NOT echo the full report to the chat. Only output:
+
+1. The saved YAML file path.
+2. A one-line summary: total todo count and how many are high priority.

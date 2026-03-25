@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# Conductor workspace teardown/archive hook
+
+# Remove mise trust for this workspace
+if command -v mise &>/dev/null; then
+  mise trust --untrust "$(pwd)" 2>/dev/null
+fi
