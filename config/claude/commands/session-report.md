@@ -40,7 +40,7 @@ notes latest --slug report 2>/dev/null | grep -q "$(date +%Y%m%d)" && echo "EXIS
 If `MISSING`, create a new report note for today:
 
 ```bash
-notes new --slug report --title "Session Report" --tag reports
+echo "EOD Report:\n" | notes new --slug report --title "EOD Report" --tag reports
 ```
 
 ## Step 3: Append to today's report note
