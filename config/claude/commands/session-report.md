@@ -15,7 +15,10 @@ Produce a **single line** answering "What was done?" in this session.
 - If the session involved a PR, reference it: `[#123](https://github.com/org/repo/pull/123)`
 - If the session involved a Jira ticket, reference it: `[PROJ-123](https://retailzipline.atlassian.net/browse/PROJ-123)`
 - Always link references to their original URLs using Markdown syntax.
-- **Never assume people's names.** If a name is needed (e.g., PR author for a review), use `gh api` to fetch it. Trust only API output.
+- **Never assume or guess people's names from their GitHub username.** When you need a person's real name (e.g., PR author for a review), resolve it as follows:
+  1. Look for `config/engineers.yml` in the current project directory. If the file exists, read it (do not assume its format) and look up the GitHub username. Use the first name if found.
+  2. If the file does not exist or the username is not in it, use `gh api /users/{username}` to fetch the profile name.
+  3. Only use a name you resolved from one of these two sources.
 
 **Examples**:
 
@@ -37,7 +40,7 @@ notes latest --slug report 2>/dev/null | grep -q "$(date +%Y%m%d)" && echo "EXIS
 If `MISSING`, create a new report note for today:
 
 ```bash
-echo "" | notes new --slug report --title "Session Report" --tag reports
+notes new --slug report --title "Session Report" --tag reports
 ```
 
 ## Step 3: Append to today's report note
