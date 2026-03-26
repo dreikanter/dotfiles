@@ -26,10 +26,24 @@ Closed [PROJ-101](https://retailzipline.atlassian.net/browse/PROJ-101)
 Drafted Q2 capacity planning spec
 ```
 
-## Step 2: Append to the report note
+## Step 2: Ensure today's report note exists
+
+Check whether today's report note already exists:
 
 ```bash
-echo "- <summary line>" | notes append --slug report --create --title "Session Report" --tag reports
+notes latest --slug report 2>/dev/null | grep -q "$(date +%Y%m%d)" && echo "EXISTS" || echo "MISSING"
+```
+
+If `MISSING`, create a new report note for today:
+
+```bash
+echo "" | notes new --slug report --title "Session Report" --tag reports
+```
+
+## Step 3: Append to today's report note
+
+```bash
+echo "- <summary line>" | notes append --slug report
 ```
 
 Report what was appended.
