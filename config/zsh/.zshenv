@@ -7,7 +7,6 @@ if [[ -x "/opt/homebrew/bin/brew" ]]; then
 fi
 
 path=(
-  $HOME/.local/share/mise/shims
   /opt/homebrew/opt/llvm/bin
   $HOME/.local/bin
   $HOME/.opencode/bin
@@ -18,6 +17,10 @@ path=(
 
 typeset -U path
 export PATH
+
+if [[ -x "/opt/homebrew/bin/mise" ]]; then
+  eval "$(/opt/homebrew/bin/mise activate zsh --shims)"
+fi
 
 #
 # Env vars
