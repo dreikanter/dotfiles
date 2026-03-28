@@ -12,7 +12,7 @@ Produce a **single line** answering "What was done?" in this session.
 
 - One line only. No bullet points, no headers.
 - First person, past tense.
-- If the session involved a PR, reference it: `[#123](https://github.com/org/repo/pull/123)`
+- If the session involved a PR, reference it: `[123](https://github.com/org/repo/pull/123)`
 - If the session involved a Jira ticket, reference it: `[PROJ-123](https://retailzipline.atlassian.net/browse/PROJ-123)`
 - Always link references to their original URLs using Markdown syntax.
 - **Never assume or guess people's names from their GitHub username.** When you need a person's real name (e.g., PR author for a review), resolve it as follows:
@@ -23,9 +23,12 @@ Produce a **single line** answering "What was done?" in this session.
 **Examples**:
 
 ```
-Reviewed [#456](https://github.com/org/repo/pull/456) for Alice
-Opened [PROJ-789](https://retailzipline.atlassian.net/browse/PROJ-789) — migrate auth tokens to secure storage
-Closed [PROJ-101](https://retailzipline.atlassian.net/browse/PROJ-101)
+Reviewed [456](https://github.com/org/repo/pull/456) for Alice
+
+Opened [PROJ-789](https://retailzipline.atlassian.net/browse/PROJ-789) — Migrate auth tokens to secure storage
+
+Closed [PROJ-101](https://retailzipline.atlassian.net/browse/PROJ-101) — Implement parallel data processing ([458](https://github.com/org/repo/pull/456))
+
 Drafted Q2 capacity planning spec
 ```
 
@@ -34,7 +37,7 @@ Drafted Q2 capacity planning spec
 Check whether today's report note already exists:
 
 ```bash
-notes latest --slug report 2>/dev/null | grep -q "$(date +%Y%m%d)" && echo "EXISTS" || echo "MISSING"
+notes ls --slug report --today 2>/dev/null | grep -q report && echo "EXISTS" || echo "MISSING"
 ```
 
 If `MISSING`, create a new report note for today:
