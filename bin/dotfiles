@@ -227,18 +227,17 @@ end
 def show_status(config_files)
   unsync = config_files.reject { |local_path, dotfile_path| files_equal?(local_path, dotfile_path) }
 
-  if unsync.empty?
-    puts colorize("All files in sync", Colors::GREEN)
-    return
-  end
-
   unsync.each do |local_path, dotfile_path|
     status = status_text(local_path, dotfile_path)
     puts "#{status.ljust(30)} #{local_path}"
   end
 
-  puts
-  puts "#{unsync.size} unsynced, #{config_files.size} total"
+  puts unless unsync.empty?
+  if unsync.empty?
+    puts colorize("#{config_files.size} files in sync", Colors::GREEN)
+  else
+    puts "#{unsync.size} unsynced, #{config_files.size} total"
+  end
 end
 
 def status_text(local_path, dotfile_path)
