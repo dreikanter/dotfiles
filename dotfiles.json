@@ -96,6 +96,8 @@
   "claude": [
     "~/.claude/skills/*",
     "~/.claude/commands/*",
+    "~/.claude/hooks/session-end-test.sh",
+    "~/.claude/hooks/session-end-bg.py",
     "~/.claude/settings.json",
     "~/.claude/statusline.sh"
   ],
