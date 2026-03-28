@@ -101,7 +101,7 @@ def extract_context(path: Path, max_messages: int = 5) -> str:
 
 PR_RE = re.compile(r'https://github\.com/[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+/pull/(\d+)')
 JIRA_URL_RE = re.compile(r'https?://[A-Za-z0-9._-]+/browse/([A-Z][A-Z0-9]+-\d+)')
-JIRA_BARE_RE = re.compile(r'\b([A-Z][A-Z0-9]+-\d+)\b')
+JIRA_BARE_RE = re.compile(r'\b([A-Z]{2,10}-\d+)\b')
 
 
 def extract_refs(path: Path) -> list[tuple[str, str]]:
