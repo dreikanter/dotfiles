@@ -27,6 +27,17 @@ def load_configuration(direction: :save)
   expected_dest_files = Set.new
 
   raw_config.each do |dotfile_dir, local_paths|
+    # Compute common local root for this tool's entries to preserve subdirectory structure
+    entry_dirs = local_paths.map do |p|
+      File.dirname(File.expand_path(p.sub(%r{/\*$}, "").sub(%r{/$}, "")))
+    end
+    tool_local_root = entry_dirs.reduce do |acc, dir|
+      until dir.start_with?("#{acc}/") || dir == acc || acc == "/"
+        acc = File.dirname(acc)
+      end
+      acc
+    end
+
     local_paths.each do |local_path|
       expanded_path = File.expand_path(local_path.sub(%r{/\*$}, "").sub(%r{/$}, ""))
       dotfiles_root = File.expand_path("~/.dotfiles/config/#{dotfile_dir}")
@@ -73,9 +84,9 @@ def load_configuration(direction: :save)
           end
         end
       else
-        # Single file - use original behavior
-        src_filename = File.basename(local_path)
-        dotfile_path = File.expand_path("~/.dotfiles/config/#{dotfile_dir}/#{src_filename}")
+        # Single file - preserve subdirectory structure relative to tool root
+        rel_path = expanded_path.sub("#{tool_local_root}/", "")
+        dotfile_path = File.expand_path("~/.dotfiles/config/#{dotfile_dir}/#{rel_path}")
         config_map[expanded_path] = dotfile_path
 
         if direction == :save
