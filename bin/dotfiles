@@ -225,10 +225,14 @@ def load_dotfiles(config_files, prune_meta, dry_run: false, verbose: false, prun
 end
 
 def show_status(config_files)
-  puts "Status of managed files:"
-  puts
+  unsync = config_files.reject { |local_path, dotfile_path| files_equal?(local_path, dotfile_path) }
 
-  config_files.each do |local_path, dotfile_path|
+  if unsync.empty?
+    puts colorize("All files in sync", Colors::GREEN)
+    return
+  end
+
+  unsync.each do |local_path, dotfile_path|
     status = status_text(local_path, dotfile_path)
     puts "#{status.ljust(30)} #{local_path}"
   end
