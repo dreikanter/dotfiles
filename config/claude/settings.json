@@ -30,6 +30,18 @@
     "type": "command",
     "command": "bash ~/.claude/statusline.sh"
   },
+  "hooks": {
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/session-end-test.sh"
+          }
+        ]
+      }
+    ]
+  },
   "enabledPlugins": {
     "ruby-lsp@claude-plugins-official": true,
     "superpowers@claude-plugins-official": true
