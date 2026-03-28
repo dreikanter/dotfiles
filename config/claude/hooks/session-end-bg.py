@@ -6,6 +6,7 @@ Usage: python3 session-end-bg.py <session_id> <cwd> [reason]
 
 import json
 import os
+import re
 import subprocess
 import sys
 from datetime import datetime
@@ -98,6 +99,36 @@ def extract_context(path: Path, max_messages: int = 5) -> str:
     return "\n\n".join(f"{role}: {text}" for role, text in selected)
 
 
+PR_RE = re.compile(r'https://github\.com/[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+/pull/(\d+)')
+JIRA_URL_RE = re.compile(r'https?://[A-Za-z0-9._-]+/browse/([A-Z][A-Z0-9]+-\d+)')
+JIRA_BARE_RE = re.compile(r'\b([A-Z][A-Z0-9]+-\d+)\b')
+
+
+def extract_refs(path: Path) -> list[tuple[str, str]]:
+    """Return list of (link_text, url_or_empty) for PRs and Jira tickets, deduplicated, in order."""
+    pr_seen: dict[str, str] = {}      # pr_number -> url
+    jira_seen: dict[str, str] = {}    # ticket_id -> url (empty if bare)
+
+    with open(path) as f:
+        for line in f:
+            for m in PR_RE.finditer(line):
+                url = m.group(0).rstrip(')"\'.,')
+                pr_seen.setdefault(m.group(1), url)
+            for m in JIRA_URL_RE.finditer(line):
+                url = m.group(0).rstrip(')"\'.,')
+                jira_seen[m.group(1)] = url  # URL overrides bare
+            for m in JIRA_BARE_RE.finditer(line):
+                ticket = m.group(1)
+                jira_seen.setdefault(ticket, "")
+
+    result: list[tuple[str, str]] = []
+    for num, url in pr_seen.items():
+        result.append((num, url))
+    for ticket, url in jira_seen.items():
+        result.append((ticket, url))
+    return result
+
+
 def summarize(context: str) -> str:
     prompt = SUMMARIZE_PROMPT_TEMPLATE.format(context=context)
     result = subprocess.run(
@@ -117,9 +148,13 @@ def summarize(context: str) -> str:
     return "[empty summary]"
 
 
-def append_to_note(summary: str) -> bool:
+def append_to_note(session_id: str, summary: str, refs: list[tuple[str, str]]) -> bool:
     timestamp = datetime.now().strftime("%H:%M")
-    line = f"- {timestamp} {summary}"
+    refs_part = ""
+    if refs:
+        items = [f"[{text}]({url})" if url else text for text, url in refs]
+        refs_part = f" ({', '.join(items)})"
+    line = f"- ({timestamp}) ({session_id}) {summary}{refs_part}"
     result = subprocess.run(
         ["bash", "-lc", "notes append --slug claude-sessions --create --title 'Claude Sessions'"],
         input=line,
@@ -153,8 +188,9 @@ def main() -> None:
         log(f"SKIP no usable messages | sid={session_id} | reason={reason}")
         return
 
+    refs = extract_refs(transcript)
     summary = summarize(context)
-    ok = append_to_note(summary)
+    ok = append_to_note(session_id, summary, refs)
 
     status = "OK" if ok else "NOTE_FAIL"
     log(f"{status} | sid={session_id} | reason={reason} | {summary}")
