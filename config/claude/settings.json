@@ -26,12 +26,12 @@
       "Bash(bundle exec rubocop --parallel --force-exclusion *)"
     ]
   },
-  "model": "opus[1m]",
   "statusLine": {
     "type": "command",
     "command": "bash ~/.claude/statusline.sh"
   },
   "enabledPlugins": {
-    "ruby-lsp@claude-plugins-official": true
+    "ruby-lsp@claude-plugins-official": true,
+    "superpowers@claude-plugins-official": true
   }
 }
