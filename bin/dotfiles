@@ -236,6 +236,9 @@ def show_status(config_files)
     status = status_text(local_path, dotfile_path)
     puts "#{status.ljust(30)} #{local_path}"
   end
+
+  puts
+  puts "#{unsync.size} unsynced, #{config_files.size} total"
 end
 
 def status_text(local_path, dotfile_path)
