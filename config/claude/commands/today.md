@@ -30,9 +30,9 @@ Then read it:
 notes read todo
 ```
 
-Parse all task lines (`- [ ]`, `- [+]`, `- [>]`).
+Parse all task lines (`- [ ]`, `- [+]`).
 
-**Skip completed (`[+]`) and moved (`[>]`) tasks** — only process open (`[ ]`) tasks.
+**Skip completed (`[+]` prefix) and moved (`(moved)` tag) tasks** — only process open (`[ ]`) tasks.
 
 Categorize each open task:
 

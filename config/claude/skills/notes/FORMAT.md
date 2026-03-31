@@ -30,7 +30,7 @@ description: Brief description
 
 Used in `*_todo.md` notes:
 
-- `[+]` — Completed
-- `[>]` — Moved to future date
-- `[ ]` — Pending
-- `[daily]` — Tag for daily recurring tasks
+- `[+]` (prefix) — Completed
+- `[ ]` (prefix) — Pending
+- `[daily]` (tag) — Tag for daily recurring tasks
+- `(moved)` (tag) — Moved to future date
