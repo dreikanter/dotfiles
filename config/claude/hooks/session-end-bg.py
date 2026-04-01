@@ -10,15 +10,12 @@ import os
 import re
 import subprocess
 import sys
-import time
 from datetime import datetime
 from pathlib import Path
 from typing import Optional
 
 LOG = Path.home() / ".claude/hooks/session-end-bg.log"
 SEEN = Path.home() / ".claude/hooks/session-end-seen.txt"
-DEBOUNCE_DIR = Path.home() / ".claude/hooks/debounce"
-DEBOUNCE_SECS = 15
 PROJECTS = Path.home() / ".claude/projects"
 
 SUMMARIZE_PROMPT_TEMPLATE = """\
@@ -57,18 +54,6 @@ def already_seen(session_id: str) -> bool:
         f.flush()
     return False
 
-
-def debounce_wins(session_id: str) -> bool:
-    """Last-writer-wins debounce. Returns True if this invocation should process."""
-    DEBOUNCE_DIR.mkdir(parents=True, exist_ok=True)
-    marker = DEBOUNCE_DIR / session_id
-    my_pid = str(os.getpid())
-    marker.write_text(my_pid)
-    time.sleep(DEBOUNCE_SECS)
-    try:
-        return marker.read_text().strip() == my_pid
-    except FileNotFoundError:
-        return False
 
 
 def find_transcript(session_id: str, cwd: str) -> Optional[Path]:
@@ -233,13 +218,11 @@ def main() -> None:
     cwd = sys.argv[2]
     reason = sys.argv[3] if len(sys.argv) > 3 else "unknown"
 
-    # Debounce: Conductor fires SessionEnd for the parent session on every
-    # subagent completion. Wait and let only the last invocation proceed.
-    if not debounce_wins(session_id):
-        log(f"SKIP debounce | sid={session_id} | reason={reason}")
-        return
-
-    # Prevent re-processing if the session fires again much later.
+    # Deduplicate: Conductor fires SessionEnd on every subagent completion
+    # for the same parent session. Process only the first occurrence.
+    # (Agent-tool subagents have no transcript file, so they get skipped
+    # later by find_transcript. Summarizer subprocesses are blocked by
+    # _SESSION_HOOK_SKIP in the shell wrapper.)
     if already_seen(session_id):
         log(f"SKIP already seen | sid={session_id} | reason={reason}")
         return
