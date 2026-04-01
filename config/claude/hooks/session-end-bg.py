@@ -148,7 +148,33 @@ def summarize(context: str) -> str:
     return "[empty summary]"
 
 
+def ensure_todays_note() -> None:
+    """Create a new claude-sessions note if the latest one isn't from today."""
+    today = datetime.now().strftime("%Y%m%d")
+    result = subprocess.run(
+        ["bash", "-lc", "notes latest --slug claude-sessions"],
+        capture_output=True,
+        text=True,
+        timeout=10,
+    )
+    latest = result.stdout.strip()
+    if result.returncode != 0 or today not in Path(latest).name:
+        res = subprocess.run(
+            ["bash", "-lc", "notes new --slug claude-sessions --title 'Claude Sessions'"],
+            capture_output=True,
+            text=True,
+            timeout=10,
+        )
+        # notes new leaves a trailing blank line; strip it so append
+        # doesn't produce a double-blank gap after frontmatter.
+        note_path = res.stdout.strip()
+        if note_path and Path(note_path).exists():
+            text = Path(note_path).read_text()
+            Path(note_path).write_text(text.rstrip("\n") + "\n")
+
+
 def append_to_note(session_id: str, summary: str, refs: list[tuple[str, str]]) -> bool:
+    ensure_todays_note()
     timestamp = datetime.now().strftime("%H:%M")
     refs_part = ""
     if refs:
@@ -174,8 +200,10 @@ def main() -> None:
     cwd = sys.argv[2]
     reason = sys.argv[3] if len(sys.argv) > 3 else "unknown"
 
-    # Skip subagent/background sessions
+    # Skip subagent/background sessions (they fire with reason=other
+    # and produce noisy, low-value summaries from system instructions)
     if reason == "other":
+        log(f"SKIP subagent | sid={session_id} | reason={reason}")
         return
 
     transcript = find_transcript(session_id, cwd)
