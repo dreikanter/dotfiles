@@ -218,11 +218,10 @@ def main() -> None:
     cwd = sys.argv[2]
     reason = sys.argv[3] if len(sys.argv) > 3 else "unknown"
 
-    # Deduplicate: Conductor fires SessionEnd on every subagent completion
-    # for the same parent session. Process only the first occurrence.
-    # (Agent-tool subagents have no transcript file, so they get skipped
-    # later by find_transcript. Summarizer subprocesses are blocked by
-    # _SESSION_HOOK_SKIP in the shell wrapper.)
+    # Deduplicate: SessionEnd can fire multiple times for the same session
+    # (e.g. per-turn in Conductor). Process only the first occurrence.
+    # Summarizer subprocess recursion is blocked by _SESSION_HOOK_SKIP
+    # in the shell wrapper.
     if already_seen(session_id):
         log(f"SKIP already seen | sid={session_id} | reason={reason}")
         return
