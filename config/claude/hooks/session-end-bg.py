@@ -5,7 +5,6 @@ Usage: python3 session-end-bg.py <session_id> <cwd> [reason]
 """
 
 import json
-import os
 import re
 import subprocess
 import sys
@@ -182,7 +181,7 @@ def append_to_note(session_id: str, summary: str, refs: list[tuple[str, str]]) -
         refs_part = f" ({', '.join(items)})"
     line = f"- ({timestamp}) ({session_id}) {summary}{refs_part}"
     result = subprocess.run(
-        ["bash", "-lc", "notes append --slug claude-sessions --create --title 'Claude Sessions'"],
+        ["bash", "-lc", "notes append --slug claude-sessions"],
         input=line,
         capture_output=True,
         text=True,
