@@ -1,4 +1,8 @@
 #!/bin/bash
+
+# Skip when called from the summarizer subprocess (claude -p).
+[ "$_SESSION_HOOK_SKIP" = "1" ] && exit 0
+
 input=$(cat)
 timestamp=$(date '+%Y-%m-%d %H:%M:%S')
 session_id=$(echo "$input" | jq -r '.session_id // "unknown"')

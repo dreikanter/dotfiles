@@ -4,7 +4,9 @@ Background script: summarize ended Claude session and append to daily claude-ses
 Usage: python3 session-end-bg.py <session_id> <cwd> [reason]
 """
 
+import fcntl
 import json
+import os
 import re
 import subprocess
 import sys
@@ -13,6 +15,7 @@ from pathlib import Path
 from typing import Optional
 
 LOG = Path.home() / ".claude/hooks/session-end-bg.log"
+SEEN = Path.home() / ".claude/hooks/session-end-seen.txt"
 PROJECTS = Path.home() / ".claude/projects"
 
 SUMMARIZE_PROMPT_TEMPLATE = """\
@@ -37,6 +40,20 @@ One-line summary:"""
 def log(msg: str) -> None:
     with open(LOG, "a") as f:
         f.write(f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} | {msg}\n")
+
+
+def already_seen(session_id: str) -> bool:
+    """Atomically check-and-mark session_id; return True if already processed."""
+    with open(SEEN, "a+") as f:
+        fcntl.flock(f, fcntl.LOCK_EX)
+        f.seek(0)
+        seen = set(f.read().splitlines())
+        if session_id in seen:
+            return True
+        f.write(session_id + "\n")
+        f.flush()
+    return False
+
 
 
 def find_transcript(session_id: str, cwd: str) -> Optional[Path]:
@@ -130,12 +147,14 @@ def extract_refs(path: Path) -> list[tuple[str, str]]:
 
 def summarize(context: str) -> str:
     prompt = SUMMARIZE_PROMPT_TEMPLATE.format(context=context)
+    env = {**os.environ, "_SESSION_HOOK_SKIP": "1"}
     result = subprocess.run(
         ["bash", "-lc", "claude -p --model claude-haiku-4-5-20251001"],
         input=prompt,
         capture_output=True,
         text=True,
         timeout=60,
+        env=env,
     )
     if result.returncode != 0:
         return f"[summary error: {result.stderr.strip()[:100]}]"
@@ -199,10 +218,12 @@ def main() -> None:
     cwd = sys.argv[2]
     reason = sys.argv[3] if len(sys.argv) > 3 else "unknown"
 
-    # Skip subagent/background sessions (they fire with reason=other
-    # and produce noisy, low-value summaries from system instructions)
-    if reason == "other":
-        log(f"SKIP subagent | sid={session_id} | reason={reason}")
+    # Deduplicate: SessionEnd can fire multiple times for the same session
+    # (e.g. per-turn in Conductor). Process only the first occurrence.
+    # Summarizer subprocess recursion is blocked by _SESSION_HOOK_SKIP
+    # in the shell wrapper.
+    if already_seen(session_id):
+        log(f"SKIP already seen | sid={session_id} | reason={reason}")
         return
 
     transcript = find_transcript(session_id, cwd)
