@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+DB_NAME="${DATABASE_NAME}"
+BACKUP_DIR="tmp/db_backups"
+
+if [ -n "${1:-}" ]; then
+  BACKUP_FILE="$1"
+else
+  BACKUP_FILE=$(ls -t "$BACKUP_DIR"/${DB_NAME}_*.dump 2>/dev/null | head -1)
+  if [ -z "$BACKUP_FILE" ]; then
+    echo "No backup found in $BACKUP_DIR" >&2
+    exit 1
+  fi
+fi
+
+echo "Restoring $BACKUP_FILE to $DB_NAME"
+dropdb --if-exists "$DB_NAME"
+createdb "$DB_NAME"
+pg_restore --no-owner --no-acl -d "$DB_NAME" "$BACKUP_FILE"
+echo "Done"
