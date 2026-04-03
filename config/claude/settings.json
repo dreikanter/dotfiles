@@ -16,19 +16,23 @@
       "Bash(gh pr view*)",
       "Bash(gh search prs*)",
       "Bash(gh api /notifications*)",
+      "Bash(gh api notifications*)",
       "Bash(acli jira*)",
+      "Bash(jira-inbox*)",
       "Bash(date*)",
       "Bash(printf*)",
       "Bash(notes *)",
       "mcp__claude_ai_Slack__slack_search_public_and_private",
+      "mcp__claude_ai_Slack__slack_read_thread",
+      "mcp__claude_ai_Slack__slack_read_channel",
+      "Read",
+      "Write(/Users/alex/dailydispatch/*)",
       "Bash(source ~/.zshenv && prdump *)",
       "Bash(source ~/.zshenv && jiradump *)",
-      "Bash(bundle exec rubocop --parallel --force-exclusion *)"
+      "Bash(bundle exec rubocop --parallel --force-exclusion *)",
+      "Bash(gh pr diff*)",
+      "Bash(echo -n * | shasum -a 256)"
     ]
-  },
-  "statusLine": {
-    "type": "command",
-    "command": "bash ~/.claude/statusline.sh"
   },
   "hooks": {
     "SessionEnd": [
@@ -42,8 +46,13 @@
       }
     ]
   },
+  "statusLine": {
+    "type": "command",
+    "command": "bash ~/.claude/statusline.sh"
+  },
   "enabledPlugins": {
     "ruby-lsp@claude-plugins-official": true,
     "superpowers@claude-plugins-official": true
-  }
+  },
+  "model": "opus[1m]"
 }

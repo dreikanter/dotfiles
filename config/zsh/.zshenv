@@ -41,5 +41,6 @@ fi
 export NOTES_PATH=~/Dropbox/Notes
 export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git --exclude node_modules'
 export FZF_DEFAULT_OPTS="--reverse --multi"
+export MKEXP_PATH=$HOME/experiments
 
 [[ -r ~/.profile ]] && source ~/.profile

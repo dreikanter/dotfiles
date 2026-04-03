@@ -168,6 +168,11 @@ command -v mise >/dev/null && eval "$(mise activate zsh)"
 
 unsetopt correct_all
 
+# mkexp shell integration
+if command -v mkexp &>/dev/null; then
+  mkx() { cd "$(mkexp new "$@")" }
+fi
+
 # Re-enable terminal echo after initialization completes
 if [[ -o interactive ]] && [[ -t 0 ]]; then
   stty echo 2>/dev/null

@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+git add -A
+claude --model haiku --allowedTools "Bash(git diff:*)" "Bash(git commit:*)" --print \
+  "Run 'git diff --cached' to see staged changes, then commit them with a short meaningful message using 'git commit -m ...'"
