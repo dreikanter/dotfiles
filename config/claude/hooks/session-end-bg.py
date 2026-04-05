@@ -121,19 +121,42 @@ JIRA_BARE_RE = re.compile(r'\b([A-Z]{2,10}-\d+)\b')
 
 
 def extract_refs(path: Path) -> list[tuple[str, str]]:
-    """Return list of (link_text, url_or_empty) for PRs and Jira tickets, deduplicated, in order."""
+    """Return deduplicated PR/Jira refs from user messages only (not tool results)."""
     pr_seen: dict[str, str] = {}      # pr_number -> url
     jira_seen: dict[str, str] = {}    # ticket_id -> url (empty if bare)
 
     with open(path) as f:
-        for line in f:
-            for m in PR_RE.finditer(line):
+        for raw_line in f:
+            raw_line = raw_line.strip()
+            if not raw_line:
+                continue
+            try:
+                obj = json.loads(raw_line)
+            except json.JSONDecodeError:
+                continue
+
+            # Only scan user messages — tool results contain noisy search output
+            if obj.get("type") != "user":
+                continue
+
+            content = obj.get("message", {}).get("content", "")
+            if isinstance(content, list):
+                text = " ".join(
+                    c.get("text", "") for c in content
+                    if isinstance(c, dict) and c.get("type") == "text"
+                )
+            elif isinstance(content, str):
+                text = content
+            else:
+                continue
+
+            for m in PR_RE.finditer(text):
                 url = m.group(0).rstrip(')"\'.,')
                 pr_seen.setdefault(m.group(1), url)
-            for m in JIRA_URL_RE.finditer(line):
+            for m in JIRA_URL_RE.finditer(text):
                 url = m.group(0).rstrip(')"\'.,')
-                jira_seen[m.group(1)] = url  # URL overrides bare
-            for m in JIRA_BARE_RE.finditer(line):
+                jira_seen[m.group(1)] = url
+            for m in JIRA_BARE_RE.finditer(text):
                 ticket = m.group(1)
                 jira_seen.setdefault(ticket, "")
 
@@ -167,28 +190,28 @@ def summarize(context: str) -> str:
 
 
 def ensure_todays_note() -> None:
-    """Create a new claude-sessions note if the latest one isn't from today."""
-    today = datetime.now().strftime("%Y%m%d")
+    """Create a new claude-sessions note if one doesn't already exist for today."""
     result = subprocess.run(
-        ["bash", "-lc", "notes resolve --slug claude-sessions"],
+        ["bash", "-lc", "notes resolve --today --slug claude-sessions"],
         capture_output=True,
         text=True,
         timeout=10,
     )
-    latest = result.stdout.strip()
-    if result.returncode != 0 or today not in Path(latest).name:
-        res = subprocess.run(
-            ["bash", "-lc", "notes new --slug claude-sessions --title 'Claude Sessions'"],
-            capture_output=True,
-            text=True,
-            timeout=10,
-        )
-        # notes new leaves a trailing blank line; strip it so append
-        # doesn't produce a double-blank gap after frontmatter.
-        note_path = res.stdout.strip()
-        if note_path and Path(note_path).exists():
-            text = Path(note_path).read_text()
-            Path(note_path).write_text(text.rstrip("\n") + "\n")
+    if result.returncode == 0 and result.stdout.strip():
+        return  # today's note already exists
+
+    res = subprocess.run(
+        ["bash", "-lc", "notes new --slug claude-sessions --title 'Claude Sessions'"],
+        capture_output=True,
+        text=True,
+        timeout=10,
+    )
+    # notes new leaves a trailing blank line; strip it so append
+    # doesn't produce a double-blank gap after frontmatter.
+    note_path = res.stdout.strip()
+    if note_path and Path(note_path).exists():
+        text = Path(note_path).read_text()
+        Path(note_path).write_text(text.rstrip("\n") + "\n")
 
 
 def append_to_note(session_id: str, summary: str, refs: list[tuple[str, str]]) -> bool:
