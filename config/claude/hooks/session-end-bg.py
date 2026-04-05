@@ -165,7 +165,7 @@ def extract_refs(path: Path) -> list[tuple[str, str]]:
         result.append((num, url))
     for ticket, url in jira_seen.items():
         result.append((ticket, url))
-    return result
+    return result[:3]  # cap to avoid bloated lines from pasted content
 
 
 def summarize(context: str) -> str:
