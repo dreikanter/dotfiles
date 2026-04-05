@@ -97,7 +97,6 @@ notes read --slug report --today
 
 ```bash
 # Resolve path to latest note by ID, type, or query
-notes resolve
 notes resolve todo
 notes resolve 8823
 
