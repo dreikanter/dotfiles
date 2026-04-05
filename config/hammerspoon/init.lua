@@ -41,10 +41,10 @@ end
 
 local noteKeys = {
   n = {cmd = "new"},
-  l = {cmd = "latest"},
-  t = {cmd = "latest --type todo"},
-  b = {cmd = "latest --type backlog"},
-  w = {cmd = "latest --type weekly"},
+  l = {cmd = "resolve"},
+  t = {cmd = "resolve --type todo"},
+  b = {cmd = "resolve --type backlog"},
+  w = {cmd = "resolve --type weekly"},
 }
 
 for key, cfg in pairs(noteKeys) do
