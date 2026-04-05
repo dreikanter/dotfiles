@@ -2,5 +2,13 @@
 set -euo pipefail
 
 git add -A
-claude --model haiku --allowedTools "Bash(git diff:*)" "Bash(git commit:*)" --print \
-  "Run 'git diff --cached' to see staged changes, then commit them with a short meaningful message using 'git commit -m ...'"
+
+if git diff --cached --quiet; then
+  echo "Nothing to commit."
+  exit 0
+fi
+
+msg=$(git diff --cached | claude --model haiku --print \
+  "Here is a git diff. Output ONLY a short meaningful commit message — nothing else, no quotes, no explanation.")
+
+git commit -m "$msg"
