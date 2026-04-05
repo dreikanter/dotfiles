@@ -170,7 +170,7 @@ def ensure_todays_note() -> None:
     """Create a new claude-sessions note if the latest one isn't from today."""
     today = datetime.now().strftime("%Y%m%d")
     result = subprocess.run(
-        ["bash", "-lc", "notes latest --slug claude-sessions"],
+        ["bash", "-lc", "notes resolve --slug claude-sessions"],
         capture_output=True,
         text=True,
         timeout=10,

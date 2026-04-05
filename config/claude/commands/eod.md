@@ -109,7 +109,7 @@ From the results, pick only items that are genuinely notable: incidents, archite
 List notes from the target date and read any that look relevant (e.g. todo, note, backlog):
 
 ```
-notes filter $LOCAL_DATE
+notes ls --name $LOCAL_DATE
 ```
 
 Read matching notes. Include any tasks completed, personal observations, or context that would enrich the EOD report.
