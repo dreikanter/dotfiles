@@ -1,8 +1,3 @@
-# Disable terminal echo during initialization to prevent input artifacts
-if [[ -o interactive ]] && [[ -t 0 ]]; then
-  stty -echo 2>/dev/null
-fi
-
 #
 # Aliases
 #
@@ -178,5 +173,6 @@ bindkey -M viins '^?' backward-delete-char
 
 # Re-enable terminal echo after initialization completes
 if [[ -o interactive ]] && [[ -t 0 ]]; then
+  while read -t 0 -k 1; do : ; done
   stty echo 2>/dev/null
 fi

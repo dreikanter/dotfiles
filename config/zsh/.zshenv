@@ -1,3 +1,6 @@
+# Suppress echo during shell init to prevent keystroke noise
+[[ -o interactive ]] && [[ -t 0 ]] && stty -echo 2>/dev/null
+
 #
 # Path
 #

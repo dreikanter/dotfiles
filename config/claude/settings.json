@@ -32,8 +32,10 @@
       "Bash(bundle exec rubocop --parallel --force-exclusion *)",
       "Bash(gh pr diff*)",
       "Bash(echo -n * | shasum -a 256)"
-    ]
+    ],
+    "defaultMode": "auto"
   },
+  "model": "opus[1m]",
   "hooks": {
     "SessionEnd": [
       {
@@ -52,7 +54,16 @@
   },
   "enabledPlugins": {
     "ruby-lsp@claude-plugins-official": true,
-    "superpowers@claude-plugins-official": true
+    "superpowers@claude-plugins-official": true,
+    "revdiff@revdiff": true
   },
-  "model": "opus[1m]"
+  "extraKnownMarketplaces": {
+    "revdiff": {
+      "source": {
+        "source": "github",
+        "repo": "umputun/revdiff"
+      }
+    }
+  },
+  "skipAutoPermissionPrompt": true
 }
