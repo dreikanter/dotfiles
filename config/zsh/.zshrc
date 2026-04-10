@@ -173,6 +173,9 @@ if command -v mkexp &>/dev/null; then
   mkx() { cd "$(mkexp new "$@")" }
 fi
 
+# Vi mode: ensure Backspace works after returning to insert mode
+bindkey -M viins '^?' backward-delete-char
+
 # Re-enable terminal echo after initialization completes
 if [[ -o interactive ]] && [[ -t 0 ]]; then
   stty echo 2>/dev/null
