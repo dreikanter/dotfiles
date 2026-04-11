@@ -104,9 +104,6 @@
   "codex": [
     "~/.codex/prompts"
   ],
-  "codex-skills": [
-    "~/.codex/skills/z-tools"
-  ],
   "ghostty": [
     "~/.config/ghostty/config"
   ],
