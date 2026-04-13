@@ -8,3 +8,4 @@
 /log
 /tmp
 *_do_not_commit*
+.claude/worktrees

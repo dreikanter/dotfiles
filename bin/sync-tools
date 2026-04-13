@@ -1,14 +1,13 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-cd ~/.dotfiles
-git add .
-git stash
-git checkout main
-git pull --rebase origin main
-
 go install github.com/dreikanter/notes-cli/cmd/notes@latest
+notes --version
+
 go install github.com/dreikanter/notes-pub/cmd/notespub@latest
+notespub --version
+
 go install github.com/dreikanter/notes-view/cmd/notesview@latest
+notesview --version
 
 echo "Done."
