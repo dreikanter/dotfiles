@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+GOPROXY=direct
+
 go install github.com/dreikanter/notes-cli/cmd/notes@latest
 notes --version
 
