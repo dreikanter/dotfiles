@@ -1,0 +1,10 @@
+[
+  {
+    "caption": "Copy note link",
+    "command": "copy_note_link"
+  },
+  {
+    "caption": "Copy short note link",
+    "command": "copy_short_note_link"
+  }
+]
