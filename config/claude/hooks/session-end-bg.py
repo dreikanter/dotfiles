@@ -119,6 +119,18 @@ PR_RE = re.compile(r'https://github\.com/[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+/pull/(\
 JIRA_URL_RE = re.compile(r'https?://[A-Za-z0-9._-]+/browse/([A-Z][A-Z0-9]+-\d+)')
 JIRA_BARE_RE = re.compile(r'\b([A-Z]{2,10}-\d+)\b')
 
+# Strip fenced code blocks and inline code before ref extraction.
+# Slash-command definitions (e.g. /cr, /eod) are expanded into user messages
+# verbatim, and their placeholder IDs (PROJ-123, ABC-42) sit inside code
+# spans — matching them as real refs leaks placeholders into session summaries.
+CODE_FENCE_RE = re.compile(r'```[\s\S]*?```')
+INLINE_CODE_RE = re.compile(r'`[^`\n]*`')
+
+
+def _strip_code(text: str) -> str:
+    text = CODE_FENCE_RE.sub(' ', text)
+    return INLINE_CODE_RE.sub(' ', text)
+
 
 def extract_refs(path: Path) -> list[tuple[str, str]]:
     """Return deduplicated PR/Jira refs from user messages only (not tool results)."""
@@ -149,6 +161,8 @@ def extract_refs(path: Path) -> list[tuple[str, str]]:
                 text = content
             else:
                 continue
+
+            text = _strip_code(text)
 
             for m in PR_RE.finditer(text):
                 url = m.group(0).rstrip(')"\'.,')
