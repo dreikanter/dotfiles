@@ -1,10 +1,14 @@
 [
   {
-    "caption": "Copy note link",
+    "caption": "Note: Copy link",
     "command": "copy_note_link"
   },
   {
-    "caption": "Copy short note link",
+    "caption": "Note: Copy short link",
     "command": "copy_short_note_link"
+  },
+  {
+    "caption": "Note: Copy id",
+    "command": "copy_note_id"
   }
 ]
