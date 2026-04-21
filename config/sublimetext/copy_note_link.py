@@ -39,3 +39,20 @@ class CopyShortNoteLinkCommand(sublime_plugin.TextCommand):
             return None
         match = SHORT_FILENAME_PATTERN.match(os.path.basename(path))
         return f"note://{match.group(1)}" if match else None
+
+
+class CopyNoteIdCommand(sublime_plugin.TextCommand):
+    def run(self, edit):
+        note_id = self._note_id()
+        if note_id:
+            sublime.set_clipboard(note_id)
+            sublime.status_message(f"Copied: {note_id}")
+        else:
+            sublime.status_message("Current file is not a note")
+
+    def _note_id(self):
+        path = self.view.file_name()
+        if not path:
+            return None
+        match = FULL_FILENAME_PATTERN.match(os.path.basename(path))
+        return match.group(1) if match else None

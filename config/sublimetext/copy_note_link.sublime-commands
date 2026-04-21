@@ -6,5 +6,9 @@
   {
     "caption": "Copy short note link",
     "command": "copy_short_note_link"
+  },
+  {
+    "caption": "Copy note id",
+    "command": "copy_note_id"
   }
 ]
