@@ -37,6 +37,17 @@
   },
   "model": "opus[1m]",
   "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash|mcp__github__create_pull_request|mcp__github__update_pull_request",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 ~/.claude/hooks/strip-gh-pr-attribution.py"
+          }
+        ]
+      }
+    ],
     "SessionEnd": [
       {
         "hooks": [
