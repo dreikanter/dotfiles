@@ -3,24 +3,34 @@ import sys
 import json
 import re
 
+PATTERN = re.compile(r'\n*https://claude\.ai/code/session_\S+')
+
 data = json.load(sys.stdin)
+tool_name = data.get('tool_name', '')
+tool_input = data.get('tool_input', {})
 
-if data.get('tool_name') != 'Bash':
-    sys.exit(0)
+if tool_name == 'Bash':
+    command = tool_input.get('command', '')
+    if not re.search(r'\bgh\s+pr\s+(create|edit)\b', command):
+        sys.exit(0)
+    cleaned = PATTERN.sub('', command)
+    if cleaned != command:
+        print(json.dumps({
+            "hookSpecificOutput": {
+                "hookEventName": "PreToolUse",
+                "updatedInput": {"command": cleaned}
+            }
+        }))
 
-command = data.get('tool_input', {}).get('command', '')
-
-if not re.search(r'\bgh\s+pr\s+(create|edit)\b', command):
-    sys.exit(0)
-
-cleaned = re.sub(r'\n*https://claude\.ai/code/session_\S+', '', command)
-
-if cleaned != command:
-    print(json.dumps({
-        "hookSpecificOutput": {
-            "hookEventName": "PreToolUse",
-            "updatedInput": {"command": cleaned}
-        }
-    }))
+elif tool_name in ('mcp__github__create_pull_request', 'mcp__github__update_pull_request'):
+    body = tool_input.get('body', '')
+    cleaned = PATTERN.sub('', body)
+    if cleaned != body:
+        print(json.dumps({
+            "hookSpecificOutput": {
+                "hookEventName": "PreToolUse",
+                "updatedInput": {**tool_input, "body": cleaned}
+            }
+        }))
 
 sys.exit(0)
