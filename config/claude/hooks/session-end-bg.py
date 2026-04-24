@@ -223,7 +223,7 @@ def summarize(context: str) -> str:
 def ensure_todays_note() -> None:
     """Create a new claude-sessions note if one doesn't already exist for today."""
     result = subprocess.run(
-        ["bash", "-lc", "notes resolve --today --slug claude-sessions"],
+        ["bash", "-lc", "notes ls --slug claude-sessions --today --limit=1"],
         capture_output=True,
         text=True,
         timeout=10,
