@@ -3,6 +3,6 @@
 set -euo pipefail
 
 NOTES="${GOPATH:-$HOME/go}/bin/notes"
-file_path="$("$NOTES" resolve weekly)"
+file_path="$("$NOTES" resolve --type weekly)"
 ${NOTES_EDITOR:-/opt/homebrew/bin/subl --add} "$(dirname "$(dirname "$(dirname "$file_path")")")" "$file_path" &
 disown
