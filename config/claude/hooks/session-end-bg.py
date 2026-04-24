@@ -254,7 +254,8 @@ def append_to_note(session_id: str, summary: str, refs: list[tuple[str, str]]) -
         refs_part = f" ({', '.join(items)})"
     line = f"- ({timestamp}) ({session_id}) {summary}{refs_part}"
     result = subprocess.run(
-        ["bash", "-lc", "notes append --slug claude-sessions"],
+        ["bash", "-lc", "notes append \"$(notes ls --slug claude-sessions --limit 1)\""],
+
         input=line,
         capture_output=True,
         text=True,
