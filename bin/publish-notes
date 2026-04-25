@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
-if ! command -v notespub &>/dev/null; then
-  echo "Installing notespub..."
-  go install github.com/dreikanter/notes-pub/cmd/notespub@latest || exit 1
-  command -v notespub &>/dev/null || { echo "notespub installed but not on PATH — add \$GOPATH/bin to your PATH"; exit 1; }
+if ! command -v npub &>/dev/null; then
+  echo "Installing npub..."
+  go install github.com/dreikanter/npub/cmd/npub@latest || exit 1
+  command -v npub &>/dev/null || { echo "npub installed but not on PATH — add \$GOPATH/bin to your PATH"; exit 1; }
 fi
 
-NOTESPUB_CONFIG="${NOTESPUB_CONFIG:-$NOTES_PATH/notespub.yml}" notespub build --out=~/src/alexmusayev.com &&
+npub build --config="${NPUB_CONFIG:-$NOTES_PATH/npub.yml}" &&
 cd ~/src/alexmusayev.com &&
 git status &&
 git add . &&
