@@ -8,8 +8,8 @@ import unicodedata
 
 class FileAutorenameCommand(sublime_plugin.TextCommand):
     """
-    Extract "slug" value from YAML frontmatter in the current tab, and rename
-    the file, while preserving numeric prefix (note UID).
+    Extract "slug" and "type" values from YAML frontmatter in the current tab,
+    and rename the file, while preserving numeric prefix (note UID).
 
     Example:
 
@@ -18,12 +18,20 @@ class FileAutorenameCommand(sublime_plugin.TextCommand):
     Frontmatter:
         ---
         slug: sample-slug
+        type: sample-type
         ---
 
-    New file name: 20230826_1234_sample-slug.md
+    New file name: 20230826_1234_sample-slug.sample-type.md
+
+    Naming format:
+        20230826_1234_slug.type.md  - both type and slug present
+        20230826_1234_slug.md       - only slug
+        20230826_1234.type.md       - only type
+        20230826_1234.md            - neither
     """
     FRONTMATTER_REGEX = re.compile(r'^---\s*$(.*?)^---\s*$', re.DOTALL | re.MULTILINE)
     SLUG_REGEX = re.compile(r"^slug:\s*(.*?)$", re.MULTILINE)
+    TYPE_REGEX = re.compile(r"^type:\s*(.*?)$", re.MULTILINE)
 
     def run(self, edit):
         original_filename = self.view.file_name()
@@ -42,13 +50,13 @@ class FileAutorenameCommand(sublime_plugin.TextCommand):
             return self._status_error("File name is missing UID")
 
         text = self.view.substr(sublime.Region(0, self.view.size()))
-        extracted_slug = self._extract_slug(text)
+        yaml = self._extract_frontmatter(text)
+        slug = self._slugify(self._extract_field(yaml, self.SLUG_REGEX))
+        note_type = self._slugify(self._extract_field(yaml, self.TYPE_REGEX))
 
-        if extracted_slug is None:
-                return self._status_error("Missing or empty slug in frontmatter")
-
-        slug = self._slugify(extracted_slug)
-        new_filename = f"{dirname}/{uid}_{slug}{extension}" if slug else f"{dirname}/{uid}{extension}"
+        stem = f"{uid}_{slug}" if slug else uid
+        suffix = f".{note_type}{extension}" if note_type else extension
+        new_filename = f"{dirname}/{stem}{suffix}"
 
         if original_filename == new_filename:
             return self._status(f"Name unchanged: {new_filename}")
@@ -70,16 +78,15 @@ class FileAutorenameCommand(sublime_plugin.TextCommand):
         value = re.sub(r"[^\w\s-]", "", value).strip().lower()
         return re.sub(r"[-\s]+", "-", value)
 
-    def _extract_slug(self, text):
-        """Parse YAML fragment and extract "slug" value"""
+    def _extract_frontmatter(self, text):
+        """Return YAML fragment between --- markers, or empty string if absent"""
         frontmatter = self.FRONTMATTER_REGEX.search(text)
-        if not frontmatter:
-            return ""
-        yaml = frontmatter.group(1)
-        slug_match = self.SLUG_REGEX.search(yaml)
-        if slug_match:
-            return slug_match.group(1).strip()
-        return ""
+        return frontmatter.group(1) if frontmatter else ""
+
+    def _extract_field(self, yaml, regex):
+        """Extract a scalar field value from YAML fragment by regex"""
+        match = regex.search(yaml)
+        return match.group(1).strip() if match else ""
 
     def _extract_uid(self, basename):
         """Extract UID from a file name. Example: 20230826_1234_slug.md -> 20230826_1234"""
