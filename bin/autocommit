@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# Stage all changes and commit with an AI-generated message.
+# Backend: --codex (default) or --claude.
 set -euo pipefail
 
 backend=codex
