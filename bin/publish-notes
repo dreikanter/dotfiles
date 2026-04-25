@@ -6,13 +6,11 @@ if ! command -v notespub &>/dev/null; then
   command -v notespub &>/dev/null || { echo "notespub installed but not on PATH — add \$GOPATH/bin to your PATH"; exit 1; }
 fi
 
-NOTESPUB_CONFIG="${NOTESPUB_CONFIG:-$NOTES_PATH/notespub.yml}" notespub build &&
+NOTESPUB_CONFIG="${NOTESPUB_CONFIG:-$NOTES_PATH/notespub.yml}" notespub build --out=~/src/alexmusayev.com &&
 cd ~/src/alexmusayev.com &&
 git status &&
 git add . &&
 git commit -m "Autocommit pages update" &&
 
 git push origin main &&
-echo &&
-echo https://github.com/dreikanter/alexmusayev.com/actions &&
-open https://github.com/dreikanter/alexmusayev.com/actions
+echo Done
