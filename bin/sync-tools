@@ -9,7 +9,7 @@ notes --version
 go install github.com/dreikanter/npub/cmd/npub@latest
 npub --version
 
-go install github.com/dreikanter/notes-view/cmd/notesview@latest
-notesview --version
+go install github.com/dreikanter/nview/cmd/nview@latest
+nview --version
 
 echo "Done."
