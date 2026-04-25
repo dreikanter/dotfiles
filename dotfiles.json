@@ -116,5 +116,8 @@
   "mise": [
     "~/.config/mise/config.toml",
     "~/.config/mise/settings.toml"
+  ],
+  "pi": [
+    "~/.pi/agent/extensions/"
   ]
 }
