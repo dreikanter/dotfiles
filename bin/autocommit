@@ -1,6 +1,15 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+backend=codex
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --claude) backend=claude; shift ;;
+    --codex)  backend=codex;  shift ;;
+    *) echo "Unknown option: $1" >&2; exit 2 ;;
+  esac
+done
+
 git add -A
 
 if git diff --cached --quiet; then
@@ -8,7 +17,18 @@ if git diff --cached --quiet; then
   exit 0
 fi
 
-msg=$(git diff --cached | claude --model haiku --print \
-  "Here is a git diff. Output ONLY a short meaningful commit message — nothing else, no quotes, no explanation.")
+prompt="Here is a git diff. Output ONLY a short meaningful commit message — nothing else, no quotes, no explanation."
+
+case "$backend" in
+  claude)
+    msg=$(git diff --cached | claude --model haiku --print "$prompt")
+    ;;
+  codex)
+    out=$(mktemp)
+    trap 'rm -f "$out"' EXIT
+    git diff --cached | codex exec --color never --output-last-message "$out" "$prompt" >/dev/null
+    msg=$(cat "$out")
+    ;;
+esac
 
 git commit -m "$msg"
