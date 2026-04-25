@@ -3,12 +3,26 @@
 # Backend: --codex (default) or --claude.
 set -euo pipefail
 
+usage() {
+  cat <<'EOF'
+Usage: autocommit [--codex|--claude] [-h|--help]
+
+Stage all changes and commit with an AI-generated message.
+
+Options:
+  --codex     Use codex CLI (default)
+  --claude    Use claude CLI (haiku)
+  -h, --help  Show this help and exit
+EOF
+}
+
 backend=codex
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --claude) backend=claude; shift ;;
     --codex)  backend=codex;  shift ;;
-    *) echo "Unknown option: $1" >&2; exit 2 ;;
+    -h|--help) usage; exit 0 ;;
+    *) echo "Unknown option: $1" >&2; usage >&2; exit 2 ;;
   esac
 done
 
