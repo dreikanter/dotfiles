@@ -3,7 +3,7 @@ set -euo pipefail
 
 GOPROXY=direct
 
-go install github.com/dreikanter/notes-cli/cmd/notes@latest
+go install github.com/dreikanter/notesctl/cmd/notes@latest
 notes --version
 
 go install github.com/dreikanter/npub/cmd/npub@latest
