@@ -5,11 +5,14 @@ GOPROXY=direct
 
 go install github.com/dreikanter/notesctl/cmd/notes@latest
 notes --version
+echo
 
 go install github.com/dreikanter/npub/cmd/npub@latest
 npub --version
+echo
 
 go install github.com/dreikanter/nview/cmd/nview@latest
 nview --version
+echo
 
 echo "Done."
