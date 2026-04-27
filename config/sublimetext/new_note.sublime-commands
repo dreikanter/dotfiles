@@ -1,0 +1,10 @@
+[
+  {
+    "caption": "Note: New note",
+    "command": "new_note"
+  },
+  {
+    "caption": "Note: New todo",
+    "command": "new_todo"
+  }
+]
