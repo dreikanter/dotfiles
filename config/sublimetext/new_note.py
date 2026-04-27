@@ -13,6 +13,11 @@ def _notes_binary():
     return shutil.which('notes')
 
 
+def _notes_path():
+    settings = sublime.load_settings('new_note.sublime-settings')
+    return os.path.expanduser(settings.get('notes_path', '~/Dropbox/Notes'))
+
+
 def _run_notes(args):
     binary = _notes_binary()
     if not binary:
@@ -21,6 +26,7 @@ def _run_notes(args):
 
     env = os.environ.copy()
     env['PATH'] = env.get('PATH', '') + ':/opt/homebrew/bin:/usr/local/bin'
+    env['NOTESCTL_PATH'] = _notes_path()
 
     try:
         result = subprocess.run(
