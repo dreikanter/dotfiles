@@ -39,7 +39,7 @@ class ExtractNoteCommand(sublime_plugin.TextCommand):
             f.write("---\n\n")
             f.write(f"{line_content}\n")
 
-        self.view.window().open_file(new_note_file)
+        self.view.window().open_file(f"{new_note_file}:999999:1", sublime.ENCODED_POSITION)
 
     def _get_new_file_path(self, date, note_id):
         year = date[:4]

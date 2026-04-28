@@ -45,11 +45,11 @@ class NewNoteCommand(sublime_plugin.WindowCommand):
     def run(self):
         path = _run_notes(['new'])
         if path:
-            self.window.open_file(path)
+            self.window.open_file(f"{path}:999999:1", sublime.ENCODED_POSITION)
 
 
 class NewTodoCommand(sublime_plugin.WindowCommand):
     def run(self):
         path = _run_notes(['new-todo'])
         if path:
-            self.window.open_file(path)
+            self.window.open_file(f"{path}:999999:1", sublime.ENCODED_POSITION)

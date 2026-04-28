@@ -10,5 +10,5 @@ fi
 file_path=$(notes new-todo)
 echo "$file_path"
 
-${NOTES_EDITOR:-/opt/homebrew/bin/subl --add} "${NOTES_PATH:-$HOME/Dropbox/Notes}" "$file_path" &
+${NOTES_EDITOR:-/opt/homebrew/bin/subl --add} "${NOTES_PATH:-$HOME/Dropbox/Notes}" "$file_path:999999" &
 disown
