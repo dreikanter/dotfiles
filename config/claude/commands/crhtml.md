@@ -78,38 +78,42 @@ If the architecture is wrong, focus the review on that. Do not polish tactical d
 
 ## Phase 3: Analyze and Produce Review
 
-With all data gathered, analyze the PR holistically and produce a structured review in Markdown. Use the following exact format:
+With all data gathered, analyze the PR holistically and produce a structured review in a form of highly readable HTML page. Do not print HTML in chat. Save it as a temp file, and print abs path.
+
+Use the following exact format:
 
 ```
-## Summary of Changes
+(h1) Summary of Changes
 
-<2-4 sentence summary of what this PR does, the approach taken, and key design decisions.>
+{Short summary of what this PR does, max 2 lines of text}
 
-## Scope Assessment
+(h2) Scope Assessment (omit this section if scope is 100% covered, and there are no out-of scope items)
 
-### In-Scope (maps to ticket requirements)
-- <Change or file that directly addresses a specific acceptance criterion. Reference the criterion.>
+(h3) In-Scope (maps to ticket requirements)
+- {Change or file that directly addresses a specific acceptance criterion. Reference the criterion.}
 
-### Out-of-Scope (does not map to ticket requirements)
-- <Change that is not covered by any acceptance criterion. Flag whether it is a reasonable adjacent change or a concern.>
+(h3) Out-of-Scope (does not map to ticket requirements; drop this section if empty) (omit this section if no out-of-scope items)
 
-### Missing from Ticket
-- <Any acceptance criterion from the Jira ticket NOT addressed by this PR.>
+- {Change that is not covered by any acceptance criterion. Flag whether it is a reasonable adjacent change or a concern.}
 
-## Findings
+(h3) Missing from Ticket (omit this section if none missing)
 
-<Each finding uses this block format. Repeat for every issue, bug, and question.>
+- {Any acceptance criterion from the Jira ticket NOT addressed by this PR.}
 
-`path:line`
-[View source](https://github.com/{owner}/{repo}/pull/{pr_number}/changes#diff-{sha256hex}R{line})
-**{type}**
+(h2) Findings
 
-Description. Lead with the problem statement. State the fix if obvious.
+Each finding uses this block format (if no findings, write None):
 
----
+`path:line` (link the path to https://github.com/{owner}/{repo}/pull/{pr_number}/changes#diff-{sha256hex}R{line})
 
-<If none, write "None.">
+<b>{type}</b>: {Problem statement}
+
+{Suggested fix if obvious}
 ```
+
+Presentation requirements:
+
+- Base font size: 16px
 
 ## Finding Types
 
