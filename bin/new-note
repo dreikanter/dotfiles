@@ -5,5 +5,5 @@ set -euo pipefail
 NOTES="${GOPATH:-$HOME/go}/bin/notes"
 file_path="$("$NOTES" new)"
 
-${NOTES_EDITOR:-/opt/homebrew/bin/subl --add} "$(dirname "$(dirname "$(dirname "$file_path")")")" "$file_path" &
+${NOTES_EDITOR:-/opt/homebrew/bin/subl --add} "$(dirname "$(dirname "$(dirname "$file_path")")")" "$file_path:999999" &
 disown
