@@ -6,7 +6,7 @@ if ! command -v npub &>/dev/null; then
   command -v npub &>/dev/null || { echo "npub installed but not on PATH — add \$GOPATH/bin to your PATH"; exit 1; }
 fi
 
-npub build --config="${NPUB_CONFIG:-$NOTES_PATH/npub.yml}" &&
+npub build &&
 cd ~/src/alexmusayev.com &&
 git status &&
 git add . &&

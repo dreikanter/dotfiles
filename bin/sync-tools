@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-GOPROXY=direct
+export GOPROXY=direct
 
 go install github.com/dreikanter/notesctl/cmd/notes@latest
 notes --version
