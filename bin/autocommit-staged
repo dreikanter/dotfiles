@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+# Commit already-staged files with an AI-generated message.
+# Backend: --codex (default) or --claude.
+set -euo pipefail
+
+usage() {
+  cat <<'EOF'
+Usage: autocommit-staged [--codex|--claude] [-h|--help]
+
+Commit already-staged files with an AI-generated message.
+Unlike autocommit, this does NOT stage anything; only what is
+already in the index is committed.
+
+Options:
+  --codex     Use codex CLI (default)
+  --claude    Use claude CLI (haiku)
+  -h, --help  Show this help and exit
+EOF
+}
+
+backend=codex
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --claude) backend=claude; shift ;;
+    --codex)  backend=codex;  shift ;;
+    -h|--help) usage; exit 0 ;;
+    *) echo "Unknown option: $1" >&2; usage >&2; exit 2 ;;
+  esac
+done
+
+if git diff --cached --quiet; then
+  echo "Nothing staged to commit."
+  exit 0
+fi
+
+prompt="Here is a git diff. Output ONLY a short meaningful commit message — nothing else, no quotes, no explanation."
+
+case "$backend" in
+  claude)
+    msg=$(git diff --cached | claude --model haiku --print "$prompt")
+    ;;
+  codex)
+    out=$(mktemp)
+    trap 'rm -f "$out"' EXIT
+    git diff --cached | codex exec --color never --output-last-message "$out" "$prompt" >/dev/null
+    msg=$(cat "$out")
+    ;;
+esac
+
+git commit -m "$msg"
