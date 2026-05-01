@@ -1,16 +1,72 @@
 #!/usr/bin/env bash
+# Build alexmusayev.com via npub and publish the result.
+set -euo pipefail
+
+REPO_URL="https://github.com/dreikanter/alexmusayev.com"
+REPO_DIR="$HOME/tmp/alexmusayev.com"
+
+usage() {
+  cat <<'EOF'
+Usage: publish-notes [--dry-run] [-h|--help]
+
+Clone or update ~/tmp/alexmusayev.com, build the site, then commit and push.
+
+Options:
+  --dry-run   Build only; skip commit and push
+  -h, --help  Show this help and exit
+EOF
+}
+
+dry_run=0
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --dry-run) dry_run=1; shift ;;
+    -h|--help) usage; exit 0 ;;
+    *) echo "Unknown option: $1" >&2; usage >&2; exit 2 ;;
+  esac
+done
 
 if ! command -v npub &>/dev/null; then
   echo "Installing npub..."
-  go install github.com/dreikanter/npub/cmd/npub@latest || exit 1
-  command -v npub &>/dev/null || { echo "npub installed but not on PATH — add \$GOPATH/bin to your PATH"; exit 1; }
+  go install github.com/dreikanter/npub/cmd/npub@latest
+  command -v npub &>/dev/null || { echo "npub installed but not on PATH — add \$GOPATH/bin to your PATH" >&2; exit 1; }
 fi
 
-npub build &&
-cd ~/src/alexmusayev.com &&
-git status &&
-git add . &&
-git commit -m "Autocommit pages update" &&
+if [[ -d "$REPO_DIR" ]]; then
+  if [[ ! -d "$REPO_DIR/.git" ]]; then
+    echo "$REPO_DIR exists but is not a git repository" >&2
+    exit 1
+  fi
+  remote=$(git -C "$REPO_DIR" remote get-url origin 2>/dev/null || true)
+  if [[ "$remote" != "$REPO_URL" && "$remote" != "$REPO_URL.git" ]]; then
+    echo "$REPO_DIR origin is '$remote', expected '$REPO_URL'" >&2
+    exit 1
+  fi
+  echo "Pulling latest changes..."
+  git -C "$REPO_DIR" pull --ff-only
+else
+  echo "Cloning $REPO_URL into $REPO_DIR..."
+  mkdir -p "$(dirname "$REPO_DIR")"
+  git clone "$REPO_URL" "$REPO_DIR"
+fi
 
-git push origin main &&
-echo Done
+echo "Building site..."
+(cd "$REPO_DIR" && npub build)
+
+cd "$REPO_DIR"
+
+if (( dry_run )); then
+  echo "Dry run: skipping commit and push."
+  git status --short
+  exit 0
+fi
+
+if git diff --quiet && git diff --cached --quiet && [[ -z "$(git status --porcelain)" ]]; then
+  echo "No changes to publish."
+  exit 0
+fi
+
+git add .
+git commit -m "Autocommit pages update"
+git push origin main
+echo "Done"
