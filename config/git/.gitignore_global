@@ -10,3 +10,4 @@
 *_do_not_commit*
 .claude/worktrees
 .pi
+.playwright-cli
