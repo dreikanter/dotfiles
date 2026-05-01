@@ -51,7 +51,7 @@ else
 fi
 
 echo "Building site..."
-(cd "$REPO_DIR" && npub build)
+(cd "$REPO_DIR" && npub build --out=$REPO_DIR)
 
 cd "$REPO_DIR"
 
