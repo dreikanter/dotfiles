@@ -27,7 +27,7 @@ PR_URL_RE = %r{\Ahttps?://github\.com/[^/]+/[^/]+/pulls?/\d+\z}
 JIRA_ID_RE = /\A[A-Z][A-Z0-9]+-\d+\z/
 JIRA_URL_RE = %r{atlassian\.net/browse/([A-Z][A-Z0-9]+-\d+)}
 
-CLAUDE_MODEL = ENV.fetch("CR_MODEL", "sonnet")
+CLAUDE_MODEL = ENV.fetch("CR_MODEL", "claude-opus-4-7")
 
 FINDING_TYPES = %w[blocker bug suggestion question nitpick].freeze
 
