@@ -97,6 +97,9 @@
     "~/.zshenv",
     "~/.zshrc"
   ],
+  "agents": [
+    "~/.agents/skills/code-review"
+  ],
   "claude": [
     "~/.claude/skills/",
     "~/.claude/commands/",
