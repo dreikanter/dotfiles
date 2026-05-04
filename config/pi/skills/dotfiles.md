@@ -5,32 +5,23 @@ description: Conventions for working with the user's personal dotfiles repo at ~
 
 # Dotfiles
 
-Personal dotfiles repo at `~/.dotfiles`, managed by a small Ruby CLI at `~/.dotfiles/bin/dotfiles`. Run `~/.dotfiles/bin/dotfiles --help` for the full command surface; it's self-describing. This skill covers the *conventions* that aren't obvious from `--help`.
+Personal dotfiles repo at `~/.dotfiles`, managed by the [`dotfiles-cli`](https://github.com/dreikanter/dotfiles-cli) tool (`dotfiles` on `$PATH`).
+
+For commands and flags, run `dotfiles --help` (and `dotfiles <command> --help`) — it's self-describing.
 
 ## Mapping
 
-`~/.dotfiles/dotfiles.json` maps source paths in `$HOME` to mirrored paths under `~/.dotfiles/config/<tool>/`. Entries can be individual files or directories (e.g. `~/.pi/agent/extensions/` mirrors the whole tree). Adding a new file inside an already-mapped directory needs no config change — just `save`.
+`~/.dotfiles/dotfiles.json` maps source paths in `$HOME` to mirrored paths under `~/.dotfiles/config/<tool>/`. Entries are files or directories (trailing `/` = directory, tracked recursively). Adding a file inside an already-mapped directory needs no manifest change — just `save`.
 
 ## Workflow when editing a tracked file
 
-1. Edit the live file in `$HOME` (e.g. `~/.pi/agent/extensions/foo.ts`), not the copy under `~/.dotfiles/config/`.
-2. `~/.dotfiles/bin/dotfiles status` — confirm the file shows as `dotfile missing` or `local changes`.
-3. `~/.dotfiles/bin/dotfiles save` — copies live → repo.
-4. In `~/.dotfiles`, create a branch and make an **atomic commit** (one logical change per commit).
+1. Edit the live file in `$HOME` (not the copy under `~/.dotfiles/config/`).
+2. `dotfiles status` — confirm drift.
+3. `dotfiles save` — local → repo. Prefer scoping with `--tool` / `--file` (see `dotfiles save --help`) to avoid touching unrelated drift.
+4. In `~/.dotfiles`, branch and make an **atomic commit**.
 
-## Gotchas
+## Conventions (not in `--help`)
 
-- **`save` is repo-wide.** It syncs *every* tracked file with local drift, not just the one you edited. After `save`, `git status` may show unrelated files (e.g. `config/ghostty/config`, `bin/review`) that the user changed earlier. **Never `git add -A`.** Stage only the file(s) for the current task.
-- **Branch prefixes** (same as the user's other repos): `feature/` for new functionality, `internal/` for refactors / dep upgrades, `bugfix/` for fixes.
-- **No commit attribution.** Don't add "Co-authored-by" or agent signatures.
-- **Atomic commits.** One file or one logical change per commit; don't bundle unrelated drift just because `save` surfaced it.
-- **Direction matters.** `save` = local → repo. `apply` (alias `load`) = repo → local. Don't confuse them when reconciling drift; ask the user which side is authoritative if unsure.
-
-## Quick reference
-
-```bash
-~/.dotfiles/bin/dotfiles status   # what's in sync / drifted / missing
-~/.dotfiles/bin/dotfiles save     # local -> repo
-~/.dotfiles/bin/dotfiles apply    # repo -> local
-~/.dotfiles/bin/dotfiles config   # show resolved mapping
-```
+- **Atomic commits, never `git add -A`.** An unscoped `save` syncs every drifted tracked file, so `git status` may surface unrelated changes the user made earlier. Stage only the files for the current logical change — one change per commit.
+- If `apply` vs `save` direction is ambiguous (unexpected drift, possible data loss), ask the user which side is authoritative.
+- **No commit attribution.** No `Co-authored-by`, no agent signatures.

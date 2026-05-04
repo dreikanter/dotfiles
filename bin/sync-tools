@@ -15,4 +15,8 @@ go install github.com/dreikanter/nview/cmd/nview@latest
 nview --version
 echo
 
+go install github.com/dreikanter/dotfiles-cli/cmd/dotfiles@latest
+dotfiles --version
+echo
+
 echo "Done."
