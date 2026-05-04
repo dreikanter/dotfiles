@@ -7,7 +7,7 @@ description: Conventions for working with the user's personal dotfiles repo at ~
 
 Personal dotfiles repo at `~/.dotfiles`, managed by the [`dotfiles-cli`](https://github.com/dreikanter/dotfiles-cli) tool (`dotfiles` on `$PATH`).
 
-For commands and flags, run `dotfiles --help` (and `dotfiles <command> --help`) — it's self-describing.
+For commands and flags, run `dotfiles --help` (and `dotfiles <command> --help`) — it's self-describing. Add `--json` to any command for machine-readable output.
 
 ## Mapping
 
@@ -20,8 +20,10 @@ For commands and flags, run `dotfiles --help` (and `dotfiles <command> --help`) 
 3. `dotfiles save` — local → repo. Prefer scoping with `--tool` / `--file` (see `dotfiles save --help`) to avoid touching unrelated drift.
 4. In `~/.dotfiles`, branch and make an **atomic commit**.
 
+The reverse direction (repo → live) is `dotfiles install`.
+
 ## Conventions (not in `--help`)
 
 - **Atomic commits, never `git add -A`.** An unscoped `save` syncs every drifted tracked file, so `git status` may surface unrelated changes the user made earlier. Stage only the files for the current logical change — one change per commit.
-- If `apply` vs `save` direction is ambiguous (unexpected drift, possible data loss), ask the user which side is authoritative.
+- If `install` vs `save` direction is ambiguous (unexpected drift, possible data loss), ask the user which side is authoritative.
 - **No commit attribution.** No `Co-authored-by`, no agent signatures.
