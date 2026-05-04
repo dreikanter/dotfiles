@@ -98,8 +98,8 @@
     "~/.zshrc"
   ],
   "claude": [
-    "~/.claude/skills/*",
-    "~/.claude/commands/*",
+    "~/.claude/skills/",
+    "~/.claude/commands/",
     "~/.claude/hooks/session-end-test.sh",
     "~/.claude/hooks/session-end-bg.py",
     "~/.claude/hooks/strip-gh-pr-attribution.py",
