@@ -1,115 +1,29 @@
 ---
 name: dotfiles
-description: Manage dotfiles configuration with bidirectional sync between local environment and ~/.dotfiles repository. Understand the automation script, configuration structure, and common commands.
+description: Conventions for working with the user's personal dotfiles repo at ~/.dotfiles. Use when modifying tracked config files (anything mapped in ~/.dotfiles/dotfiles.json) or when the user mentions "dotfiles".
 ---
 
-# Dotfiles Management Skill
+# Dotfiles
 
-## Overview
+Personal dotfiles repo at `~/.dotfiles`, managed by the [`dotfiles-cli`](https://github.com/dreikanter/dotfiles-cli) tool (`dotfiles` on `$PATH`).
 
-The dotfiles automation provides bidirectional sync between local configuration files and a centralized `~/.dotfiles` repository. Configuration is managed via `dotfiles.json` and the `dotfiles` command.
+For commands and flags, run `dotfiles --help` (and `dotfiles <command> --help`) — it's self-describing. Add `--json` to any command for machine-readable output.
 
-## Structure
+## Mapping
 
-**Repository**: `~/.dotfiles/` (git-tracked)
+`~/.dotfiles/dotfiles.json` maps source paths in `$HOME` to mirrored paths under `~/.dotfiles/config/<tool>/`. Entries are files or directories (trailing `/` = directory, tracked recursively). Adding a file inside an already-mapped directory needs no manifest change — just `save`.
 
-**Key Files**:
-- `dotfiles.json` - Configuration mapping (tool → file paths)
-- `config/` - Organized dotfile storage by tool name
-- `bin/dotfiles` - Ruby automation script (also in `~/bin/dotfiles`)
+## Workflow when editing a tracked file
 
-**Storage Pattern**:
-```
-~/.dotfiles/config/{tool_name}/
-```
+1. Edit the live file in `$HOME` (not the copy under `~/.dotfiles/config/`).
+2. `dotfiles status` — confirm drift.
+3. `dotfiles save` — local → repo. Prefer scoping with `--tool` / `--file` (see `dotfiles save --help`) to avoid touching unrelated drift.
+4. In `~/.dotfiles`, branch and make an **atomic commit**.
 
-Examples:
-- `~/.dotfiles/config/git/.gitconfig`
-- `~/.dotfiles/config/zsh/.zshrc`
-- `~/.dotfiles/config/sublimetext/Preferences.sublime-settings`
+The reverse direction (repo → live) is `dotfiles install`.
 
-## Configuration Format
+## Conventions (not in `--help`)
 
-**File**: `~/.dotfiles/dotfiles.json`
-
-**Structure**:
-```json
-{
-  "tool_name": [
-    "~/path/to/config_file",
-    "~/path/to/directory/*",
-    "~/path/to/directory/"
-  ]
-}
-```
-
-**Path Types**:
-- Single file: `~/.gitconfig`
-- Directory (recursive): `~/.config/nvim/*` or `~/.config/nvim/`
-- Preserves relative directory structure
-
-## Commands
-
-**Save (local → dotfiles)**:
-```bash
-dotfiles save          # Copy local configs to dotfiles repo
-dotfiles save -n       # Dry run (show what would be done)
-dotfiles save -v       # Verbose output
-dotfiles save -p       # Prune removed files from dotfiles
-```
-
-**Apply (dotfiles → local)**:
-```bash
-dotfiles apply          # Apply configs from dotfiles repo to local
-dotfiles apply -n       # Dry run
-dotfiles apply -v       # Verbose output
-dotfiles apply -p       # Prune removed files from local
-```
-
-**Status**:
-```bash
-dotfiles status        # Show sync status of managed files
-# Output: in sync, local changes, dotfile changes, missing, etc.
-```
-
-**Config**:
-```bash
-dotfiles config        # Show configuration mapping as JSON
-```
-
-## Status Indicators
-
-| Status | Meaning | Color |
-|--------|---------|-------|
-| `in sync` | Files match | Green |
-| `local changes` | Local file newer | Red |
-| `dotfile changes` | Dotfile newer | Red |
-| `local copy missing` | Only dotfile exists | Gray |
-| `dotfile missing` | Only local exists | Gray |
-| `neither exists` | Both missing | Red |
-
-## Options
-
-- `-n, --dry-run` - Preview changes without applying
-- `-v, --verbose` - Show detailed file operations
-- `-p, --prune` - Remove destination files missing from source
-- `-h, --help` - Show help message
-
-## Expected Workflows
-
-**Save**: `dotfiles save -v` (optionally check `dotfiles status` first)
-
-**Apply**: `dotfiles apply -v` (optionally check `dotfiles status` first)
-
-**Push/Pull**: Git operations on `~/.dotfiles` repo
-- **Push** (optionally after save): `cd ~/.dotfiles && git add . && git commit -m "..." && git push`
-- **Pull** (optionally before apply): `cd ~/.dotfiles && git pull`
-
-## Usage Guidelines
-
-- Check `dotfiles status` when it makes sense before saving/loading
-- Use dry-run (`-n`) for safety when you consider it necessary
-- Edit `dotfiles.json` to add new config files
-- Config stored in `~/.dotfiles/config/{tool_name}/`
-- The `~/.dotfiles` repo is git-tracked
-- Single source of truth for configuration across machines
+- **Atomic commits, never `git add -A`.** An unscoped `save` syncs every drifted tracked file, so `git status` may surface unrelated changes the user made earlier. Stage only the files for the current logical change — one change per commit.
+- If `install` vs `save` direction is ambiguous (unexpected drift, possible data loss), ask the user which side is authoritative.
+- **No commit attribution.** No `Co-authored-by`, no agent signatures.
