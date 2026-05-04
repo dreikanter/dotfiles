@@ -1,6 +1,6 @@
 ---
 name: dotfiles
-description: Conventions and gotchas for working with the user's personal dotfiles repo at ~/.dotfiles. Use when modifying tracked config files (anything mapped in ~/.dotfiles/dotfiles.json, e.g. files under ~/.pi/, ~/.config/, ~/.claude/, etc.) or when the user mentions "dotfiles".
+description: Conventions for working with the user's personal dotfiles repo at ~/.dotfiles. Use when modifying tracked config files (anything mapped in ~/.dotfiles/dotfiles.json) or when the user mentions "dotfiles".
 ---
 
 # Dotfiles
