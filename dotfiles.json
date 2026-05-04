@@ -120,6 +120,7 @@
     "~/.config/mise/settings.toml"
   ],
   "pi": [
-    "~/.pi/agent/extensions/"
+    "~/.pi/agent/extensions/",
+    "~/.pi/agent/skills/"
   ]
 }
