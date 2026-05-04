@@ -1,11 +1,20 @@
+# macOS-specific config files may override XDG configs (~/.config).
+# It is safe to delete these if the primary configuration is in ~/.config:
+#
+# $HOME/Library/Application\ Support/com.mitchellh.ghostty/config.ghostty.
+# $HOME/Library/Application\ Support/com.mitchellh.ghostty/config
+
 theme = TokyoNight
 font-family = JetBrains Mono
 font-size = 16
-scrollback-limit = 50000
+scrollback-limit = 30000000
 confirm-close-surface = false
 mouse-hide-while-typing = true
 desktop-notifications = true
+
 keybind = super+shift+r=reload_config
+keybind = super+v=paste_from_clipboard
 
 window-title-font-family = JetBrains Mono
 window-subtitle = working-directory
+

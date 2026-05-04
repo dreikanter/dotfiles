@@ -41,6 +41,10 @@ def have!(cmd)
   die "Required command not found: #{cmd}"
 end
 
+def to_utf8(str)
+  str.force_encoding("UTF-8").scrub("?")
+end
+
 def run!(*cmd, stdin: nil)
   out, err, status = Open3.capture3(*cmd, stdin_data: stdin || "")
   unless status.success?
@@ -48,7 +52,7 @@ def run!(*cmd, stdin: nil)
     warn err unless err.empty?
     exit(status.exitstatus || 1)
   end
-  out
+  to_utf8(out)
 end
 
 def parse_args(argv)
@@ -89,10 +93,18 @@ def parallel(*tasks)
 end
 
 def gather_pr_data(pr_url)
-  prdump_out, diff_out = parallel(
+  prdump_out, diff_out, head_json = parallel(
     -> { run!("prdump", pr_url) },
-    -> { run!("gh", "pr", "diff", pr_url) }
+    -> { run!("gh", "pr", "diff", pr_url) },
+    -> { run!("gh", "pr", "view", pr_url, "--json", "headRefOid,headRepository,headRepositoryOwner") }
   )
+
+  head = JSON.parse(head_json)
+  head_sha   = head["headRefOid"]
+  head_owner = head.dig("headRepositoryOwner", "login")
+  head_name  = head.dig("headRepository", "name")
+  die "Could not resolve PR head sha/repo." unless head_sha && head_owner && head_name
+  head_full = "#{head_owner}/#{head_name}"
 
   # Extract changed file paths from diff headers (b/PATH).
   files = diff_out.scan(%r{^diff --git a/.+ b/(.+)$}).flatten.uniq
@@ -100,7 +112,7 @@ def gather_pr_data(pr_url)
   # Extract additional Jira references from the PR body section of prdump.
   extra_jira = prdump_out.scan(/\b[A-Z][A-Z0-9]+-\d+\b/).uniq
 
-  [prdump_out, diff_out, files, extra_jira]
+  [prdump_out, diff_out, files, extra_jira, head_full, head_sha]
 end
 
 def gather_jira(jira_ids)
@@ -113,21 +125,31 @@ end
 
 def safe_run(*cmd)
   out, _err, status = Open3.capture3(*cmd)
-  status.success? ? out : ""
+  status.success? ? to_utf8(out) : ""
 end
 
-def read_files(paths, max_bytes: 60_000)
-  paths.map do |path|
-    if File.file?(path)
-      content = File.read(path, mode: "r:BINARY")
-      content = content.byteslice(0, max_bytes) + "\n... (truncated)" if content.bytesize > max_bytes
-      "### #{path}\n\n```\n#{content}\n```\n"
-    elsif File.exist?(path)
-      "### #{path}\n\n(directory or non-regular file; skipped)\n"
-    else
-      "### #{path}\n\n(not present in working tree; rely on diff)\n"
-    end
-  end.join("\n")
+def encode_path(path)
+  path.split("/").map { |seg| URI.encode_www_form_component(seg).gsub("+", "%20") }.join("/")
+end
+
+def fetch_file_at(head_full, sha, path, max_bytes:)
+  api_path = "/repos/#{head_full}/contents/#{encode_path(path)}?ref=#{sha}"
+  out, _err, status = Open3.capture3(
+    "gh", "api", "-H", "Accept: application/vnd.github.raw", api_path
+  )
+  return "### #{path}\n\n(not present at PR head; rely on diff)\n" unless status.success?
+
+  content = out
+  content = content.byteslice(0, max_bytes) + "\n... (truncated)" if content.bytesize > max_bytes
+  content = to_utf8(content)
+  "### #{path}\n\n```\n#{content}\n```\n"
+end
+
+def fetch_files_at(head_full, sha, paths, max_bytes: 60_000)
+  threads = paths.map do |path|
+    Thread.new { fetch_file_at(head_full, sha, path, max_bytes: max_bytes) }
+  end
+  threads.map(&:value).join("\n")
 end
 
 def sha256_hex(str)
@@ -651,14 +673,14 @@ have!("claude")
 owner, repo, pr_number = parse_pr_url(pr_url)
 
 warn "Gathering PR data..."
-prdump_out, diff_out, files, extra_jira = gather_pr_data(pr_url)
+prdump_out, diff_out, files, extra_jira, head_full, head_sha = gather_pr_data(pr_url)
 
 jira_ids = (jira_args + extra_jira).uniq
 warn "Gathering Jira context (#{jira_ids.size} ticket(s))..." unless jira_ids.empty?
 jira_out = gather_jira(jira_ids)
 
-warn "Reading #{files.size} modified file(s)..."
-files_blob = read_files(files)
+warn "Fetching #{files.size} modified file(s) at #{head_sha[0, 7]}..."
+files_blob = fetch_files_at(head_full, head_sha, files)
 
 warn "Calling claude (#{CLAUDE_MODEL})..."
 prompt = build_prompt(pr_url, prdump_out, diff_out, jira_out, files_blob)
