@@ -1,4 +1,9 @@
-# code-review
+---
+name: code-review
+description: "Run a one-shot Claude Code subagent review of the current branch or PR without editing files."
+---
+
+# Code Review
 
 ## Description
 
