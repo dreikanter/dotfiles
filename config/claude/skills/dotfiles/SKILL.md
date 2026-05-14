@@ -1,29 +1,62 @@
 ---
 name: dotfiles
-description: Conventions for working with the user's personal dotfiles repo at ~/.dotfiles. Use when modifying tracked config files (anything mapped in ~/.dotfiles/dotfiles.json) or when the user mentions "dotfiles".
+description: Use when working with the user's dotfiles managed by the `dotfiles` CLI — saving live config into the tracked repository, installing tracked files to live paths, inspecting tracked-file status, or scaffolding a new dotfiles repo.
 ---
 
-# Dotfiles
+# dotfiles
 
-Personal dotfiles repo at `~/.dotfiles`, managed by the [`dotfiles-cli`](https://github.com/dreikanter/dotfiles-cli) tool (`dotfiles` on `$PATH`).
+`dotfiles` manages a checked-in mirror of the user's local config files. A
+JSON manifest (`dotfiles.json`) declares which files to track; the CLI
+copies (not symlinks) them between the live filesystem and the
+git-managed mirror.
 
-For commands and flags, run `dotfiles --help` (and `dotfiles <command> --help`) — it's self-describing. Add `--json` to any command for machine-readable output.
+## Global flags
 
-## Mapping
+| Flag | Description |
+|------|-------------|
+| `--config` | manifest file path (default: <root>/dotfiles.json or $DOTFILES_CONFIG) |
+| `--json` | emit a single JSON object on stdout (non-zero exit on failure) |
+| `--root` | dotfiles repository root (default: $DOTFILES_ROOT or ~/.dotfiles) |
 
-`~/.dotfiles/dotfiles.json` maps source paths in `$HOME` to mirrored paths under `~/.dotfiles/config/<tool>/`. Entries are files or directories (trailing `/` = directory, tracked recursively). Adding a file inside an already-mapped directory needs no manifest change — just `save`.
+## Commands
 
-## Workflow when editing a tracked file
+Each command's full flag list and JSON output shape is documented in
+`dotfiles <command> --help`.
 
-1. Edit the live file in `$HOME` (not the copy under `~/.dotfiles/config/`).
-2. `dotfiles status` — confirm drift.
-3. `dotfiles save` — local → repo. Prefer scoping with `--tool` / `--file` (see `dotfiles save --help`) to avoid touching unrelated drift.
-4. In `~/.dotfiles`, branch and make an **atomic commit**.
+| Command | Purpose |
+|---------|---------|
+| `config` | Print the resolved live-to-saved mapping |
+| `init` | Scaffold a fresh dotfiles repository |
+| `install` | Copy tracked files to their live paths |
+| `save` | Copy tracked files into the dotfiles repository |
+| `skill` | Print an agent-installable skill describing this CLI |
+| `status` | Show the tracked files status |
 
-The reverse direction (repo → live) is `dotfiles install`.
+## Manifest
 
-## Conventions (not in `--help`)
+`dotfiles.json` maps a tool name to a list of paths. A trailing `/`
+marks an entry as a directory whose contents are tracked recursively;
+without a trailing slash the entry is a single file. Paths support `~`
+and absolute paths.
 
-- **Atomic commits, never `git add -A`.** An unscoped `save` syncs every drifted tracked file, so `git status` may surface unrelated changes the user made earlier. Stage only the files for the current logical change — one change per commit.
-- If `install` vs `save` direction is ambiguous (unexpected drift, possible data loss), ask the user which side is authoritative.
-- **No commit attribution.** No `Co-authored-by`, no agent signatures.
+Example:
+
+    {
+      "git":   ["~/.gitconfig", "~/.gitignore_global"],
+      "shell": ["~/.zshrc"],
+      "nvim":  ["~/.config/nvim/"]
+    }
+
+The manifest is the single source of truth: the CLI never touches
+files outside the resolved live-to-saved mapping.
+
+## JSON output and errors
+
+Every command accepts `--json` to emit a single JSON object on stdout.
+Plain text and JSON are never mixed in the same invocation. The exact
+per-command JSON shape is documented in `dotfiles <command> --help`.
+
+On any failure, `--json` mode emits the standard error envelope and
+the process exits non-zero:
+
+    { "error": { "message": "..." } }
