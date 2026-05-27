@@ -1,10 +1,6 @@
 [
   {
     "caption": "Note: Copy link",
-    "command": "copy_note_link"
-  },
-  {
-    "caption": "Note: Copy short link",
     "command": "copy_short_note_link"
   },
   {
