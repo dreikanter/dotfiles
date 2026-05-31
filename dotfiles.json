@@ -98,7 +98,7 @@
     "~/.zshrc"
   ],
   "agents": [
-    "~/.agents/skills/code-review"
+    "~/.agents/skills/code-review/"
   ],
   "claude": [
     "~/.claude/skills/",
@@ -110,7 +110,7 @@
     "~/.claude/statusline.sh"
   ],
   "codex": [
-    "~/.codex/prompts"
+    "~/.codex/prompts/"
   ],
   "ghostty": [
     "~/.config/ghostty/config"
