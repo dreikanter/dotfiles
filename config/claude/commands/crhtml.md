@@ -106,14 +106,15 @@ Each finding uses this block format (if no findings, write None):
 
 `path:line` (link the path to https://github.com/{owner}/{repo}/pull/{pr_number}/changes#diff-{sha256hex}R{line})
 
-<b>{type}</b>: {Problem statement}
+<b>{type}: {one-line problem statement}</b>
 
-{Suggested fix if obvious}
+{Explain the finding fully, in Humanized Writing Style (see below). State the problem, trace the actual mechanism that makes it one, prove it with a concrete case or mutation, and give the fix. The reader should not have to ask "explain this." Short sentences, one idea each, no scaffolding labels — just the prose, with a code block where a snippet is clearer than words.}
 ```
 
 Presentation requirements:
 
 - Base font size: 16px
+- Render finding prose as short, scannable paragraphs (one idea each). Render any code snippet in a monospaced, styled `pre`/`code` block.
 
 ## Finding Types
 
@@ -129,7 +130,19 @@ Every finding must be tagged with one of:
 
 - Be specific: reference file paths and line numbers from the diff.
 - Be proportional: small PRs get concise reviews, large PRs get thorough reviews.
-- Write descriptions in plain declarative sentences. Lead with the problem statement. No hedge language ("might", "could potentially"), no praise. State the fix directly if it is obvious.
+- Each finding must be self-contained and fully explained at the depth of an "explain this" answer: include the mechanism trace, a concrete triggering example or mutation, and the fix. Do not ship terse one-liners that require a follow-up question to understand. The non-obvious *why* is the deliverable.
+
+### Writing Style (Humanized)
+
+Write every finding's prose in this voice:
+
+- Answer first, then the why.
+- Short sentences. One idea per sentence.
+- Avoid nested clauses.
+- No excess. Hemingway in non-fiction.
+- No hedge language ("might", "could potentially"), no praise, no filler, no recap.
+- Prefer a concrete example, mutation, or code snippet over an abstract description.
+- State the fix directly. Show valid code when obvious; never suggest broken code.
 - If the PR has existing review comments or discussion, acknowledge addressed feedback and flag unresolved threads.
 - Do not repeat what the diff already makes obvious. Focus on what a reviewer might miss.
 - The output must be valid Markdown suitable for pasting as a GitHub PR review comment.
