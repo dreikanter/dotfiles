@@ -11,3 +11,4 @@
 .claude/worktrees
 .pi
 .playwright-cli
+storage/*

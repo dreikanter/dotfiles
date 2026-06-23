@@ -33,6 +33,21 @@ playwright-cli close
 Read screenshots back into the conversation with the `Read` tool on the
 file path - they render inline.
 
+**Navigate within a session - don't re-`open`.** `open` starts a fresh
+in-memory browser and drops cookies/auth. Once logged in, go to another URL
+in the SAME session via `run-code`:
+
+```bash
+playwright-cli run-code "async page => { await page.goto(URL); await page.waitForLoadState('networkidle'); }"
+```
+
+**Viewport** - `open` has no viewport flag (default ~1280 wide). Set it via
+`run-code` before navigating/screenshotting:
+
+```bash
+playwright-cli run-code "async page => page.setViewportSize({ width: 1440, height: 1200 })"
+```
+
 ## `--raw` is your friend
 
 Strips the status/code/snapshot/events sections - only the result remains.
@@ -57,6 +72,14 @@ playwright-cli --raw eval \
   "() => [...document.querySelectorAll('link[rel=stylesheet]')].map(l => l.href).join('\\n')"
 ```
 
+`run-code` return values are easy to miss in the command output. To reliably
+read page state, use `--raw eval` returning a JSON string:
+
+```bash
+playwright-cli --raw eval \
+  "() => JSON.stringify({ url: location.href, title: document.title, hasX: document.body.innerText.includes('X') })"
+```
+
 ## Targeting elements
 
 In order of preference:
@@ -79,6 +102,14 @@ playwright-cli screenshot --filename .playwright-cli/page.png
 # specific element (use a stable selector, not a ref, for repeatability)
 playwright-cli screenshot "#some-component" \
   --filename .playwright-cli/component-after.png
+```
+
+A full-page `screenshot` with no selector may anchor at the top of the page.
+For below-the-fold content, pass a stable selector, or scroll it into view
+first:
+
+```bash
+playwright-cli run-code "async page => page.getByText('Section title').first().scrollIntoViewIfNeeded()"
 ```
 
 For before/after comparisons in a PR: `git checkout` the parent commit of
@@ -119,6 +150,22 @@ playwright-cli select e409 "Option that does not exist"
 
 It will eventually time out (60s). Always list the actual options first
 with `--raw eval` (see above) before calling `select`.
+
+### Auth persists across commands
+
+A login persists across subsequent CLI commands (same server-side browser),
+so log in once. To switch users or start clean, clear cookies and re-login:
+
+```bash
+playwright-cli run-code "async page => page.context().clearCookies()"
+```
+
+### Server returns 404/500 instead of expected content
+
+Stop guessing at URLs. Read the source of truth: check the app/server log for
+the exact query or exception, and verify the identifier in your URL matches
+what the server actually looks up (route param vs the column/field the backend
+queries by). One check here saves many failed navigation attempts.
 
 ### Network introspection
 
