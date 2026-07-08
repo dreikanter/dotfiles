@@ -12,3 +12,5 @@
 .pi
 .playwright-cli
 storage/*
+
+**/.claude/settings.local.json

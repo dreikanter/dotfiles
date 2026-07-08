@@ -85,17 +85,6 @@ With all data gathered, analyze the PR holistically and produce a structured rev
 
 <2-4 sentence summary of what this PR does, the approach taken, and key design decisions.>
 
-## Scope Assessment
-
-### In-Scope (maps to ticket requirements)
-- <Change or file that directly addresses a specific acceptance criterion. Reference the criterion.>
-
-### Out-of-Scope (does not map to ticket requirements)
-- <Change that is not covered by any acceptance criterion. Flag whether it is a reasonable adjacent change or a concern.>
-
-### Missing from Ticket
-- <Any acceptance criterion from the Jira ticket NOT addressed by this PR.>
-
 ## Findings
 
 <Each finding uses this block format. Repeat for every issue, bug, and question.>
@@ -109,6 +98,16 @@ With all data gathered, analyze the PR holistically and produce a structured rev
 ---
 
 <If none, write "None.">
+
+## Scope Assessment
+
+<Issues only. Do not list or confirm covered requirements. Omit this whole section if there are no scope issues.>
+
+### Out-of-Scope (does not map to ticket requirements)
+- <Change that is not covered by any acceptance criterion. Flag whether it is a reasonable adjacent change or a concern.>
+
+### Missing from Ticket
+- <Any acceptance criterion from the Jira ticket NOT addressed by this PR.>
 ```
 
 ## Finding Types
@@ -136,6 +135,7 @@ Write every finding's prose in this voice:
 
 - Answer first, then the why.
 - Short sentences. One idea per sentence.
+- Short paragraphs, 2-4 sentences each. Never a wall of text.
 - Avoid nested clauses.
 - No excess. Hemingway in non-fiction.
 - No hedge language ("might", "could potentially"), no praise, no filler, no recap.

@@ -87,19 +87,6 @@ Use the following exact format:
 
 {Short summary of what this PR does, max 2 lines of text}
 
-(h2) Scope Assessment (omit this section if scope is 100% covered, and there are no out-of scope items)
-
-(h3) In-Scope (maps to ticket requirements)
-- {Change or file that directly addresses a specific acceptance criterion. Reference the criterion.}
-
-(h3) Out-of-Scope (does not map to ticket requirements; drop this section if empty) (omit this section if no out-of-scope items)
-
-- {Change that is not covered by any acceptance criterion. Flag whether it is a reasonable adjacent change or a concern.}
-
-(h3) Missing from Ticket (omit this section if none missing)
-
-- {Any acceptance criterion from the Jira ticket NOT addressed by this PR.}
-
 (h2) Findings
 
 Each finding uses this block format (if no findings, write None):
@@ -109,6 +96,16 @@ Each finding uses this block format (if no findings, write None):
 <b>{type}: {one-line problem statement}</b>
 
 {Explain the finding fully, in Humanized Writing Style (see below). State the problem, trace the actual mechanism that makes it one, prove it with a concrete case or mutation, and give the fix. The reader should not have to ask "explain this." Short sentences, one idea each, no scaffolding labels — just the prose, with a code block where a snippet is clearer than words.}
+
+(h2) Scope Assessment (issues only — do not list or confirm covered requirements; omit this whole section if there are no scope issues)
+
+(h3) Out-of-Scope (does not map to ticket requirements; drop this section if empty) (omit this section if no out-of-scope items)
+
+- {Change that is not covered by any acceptance criterion. Flag whether it is a reasonable adjacent change or a concern.}
+
+(h3) Missing from Ticket (omit this section if none missing)
+
+- {Any acceptance criterion from the Jira ticket NOT addressed by this PR.}
 ```
 
 Presentation requirements:
@@ -131,6 +128,8 @@ Every finding must be tagged with one of:
 - Be specific: reference file paths and line numbers from the diff.
 - Be proportional: small PRs get concise reviews, large PRs get thorough reviews.
 - Each finding must be self-contained and fully explained at the depth of an "explain this" answer: include the mechanism trace, a concrete triggering example or mutation, and the fix. Do not ship terse one-liners that require a follow-up question to understand. The non-obvious *why* is the deliverable.
+- If the PR has existing review comments or discussion, acknowledge addressed feedback and flag unresolved threads.
+- Do not repeat what the diff already makes obvious. Focus on what a reviewer might miss.
 
 ### Writing Style (Humanized)
 
@@ -138,11 +137,9 @@ Write every finding's prose in this voice:
 
 - Answer first, then the why.
 - Short sentences. One idea per sentence.
+- Short paragraphs, 2-4 sentences each. Never a wall of text.
 - Avoid nested clauses.
 - No excess. Hemingway in non-fiction.
 - No hedge language ("might", "could potentially"), no praise, no filler, no recap.
 - Prefer a concrete example, mutation, or code snippet over an abstract description.
 - State the fix directly. Show valid code when obvious; never suggest broken code.
-- If the PR has existing review comments or discussion, acknowledge addressed feedback and flag unresolved threads.
-- Do not repeat what the diff already makes obvious. Focus on what a reviewer might miss.
-- The output must be valid Markdown suitable for pasting as a GitHub PR review comment.
