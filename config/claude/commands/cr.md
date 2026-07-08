@@ -2,7 +2,7 @@
 description: "Review a GitHub PR against Jira ticket acceptance criteria. Args: URLs and Jira IDs in any order."
 ---
 
-You are performing a structured code review of a GitHub pull request, cross-referenced against Jira ticket(s) for scope and acceptance criteria.
+Perform a structured code review of a GitHub pull request, cross-referenced against Jira ticket(s) for scope and acceptance criteria.
 
 ## Input
 
