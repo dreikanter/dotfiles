@@ -17,10 +17,12 @@ echo
 
 go install github.com/dreikanter/dotfiles-cli/cmd/dotfiles@latest
 dotfiles --version
+dotfiles skill --install --agent=claude --force
 echo
 
 go install github.com/dreikanter/remail/cmd/remail@latest
 remail --version
+remail skill --install --agent=claude --force
 echo
 
 echo "Done."
