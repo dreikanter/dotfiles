@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+
+# Will be superseded with remail
+
 set -euo pipefail
 
 export NOTMUCH_CONFIG="${NOTMUCH_CONFIG:-$HOME/.notmuch-config}"
