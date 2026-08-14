@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+export NOTMUCH_CONFIG="${NOTMUCH_CONFIG:-$HOME/.notmuch-config}"
+NOTMUCH=/opt/homebrew/bin/notmuch
+
+usage() {
+  cat <<'EOF'
+mailq — read-only mail access
+
+  mailq search <query>       JSON summaries (thread-level)
+  mailq list <query>         JSON summaries (message-level)
+  mailq show <id>            full message as JSON, body included
+  mailq text <id>            plain text body only
+  mailq files <id>           file paths on disk
+  mailq count <query>        integer
+  mailq parts <id>           MIME structure as JSON
+  mailq part <n> <id>        raw bytes of part n, to stdout
+
+Queries are notmuch syntax:
+  folder:INBOX and tag:unread
+  from:github.com and date:7d..
+  subject:"invoice" and not tag:spam
+EOF
+}
+
+cmd="${1:-}"; shift || true
+
+case "$cmd" in
+  search) "$NOTMUCH" search --format=json --output=summary -- "$@" ;;
+  list)   "$NOTMUCH" search --format=json --output=summary --duplicate=1 -- "$@" ;;
+  show)   "$NOTMUCH" show --format=json --body=true --include-html=false -- "$@" ;;
+  text)   "$NOTMUCH" show --format=text --body=true -- "$@" ;;
+  files)  "$NOTMUCH" search --output=files -- "$@" ;;
+  count)  "$NOTMUCH" count -- "$@" ;;
+  parts)  "$NOTMUCH" show --format=json --part=0 --body=true -- "$@" ;;
+  part)   n="$1"; shift; "$NOTMUCH" show --format=raw --part="$n" -- "$@" ;;
+  *)      usage; exit 1 ;;
+esac

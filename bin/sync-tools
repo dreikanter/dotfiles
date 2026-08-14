@@ -19,4 +19,8 @@ go install github.com/dreikanter/dotfiles-cli/cmd/dotfiles@latest
 dotfiles --version
 echo
 
+go install github.com/dreikanter/remail/cmd/remail@latest
+remail --version
+echo
+
 echo "Done."
