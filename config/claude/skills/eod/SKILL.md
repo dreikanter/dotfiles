@@ -62,7 +62,8 @@ Group by **activity or theme**, NOT by data source. Weave all sources into a nar
 EOD Report:
 
 - Created ticket with a plan to evaluate vector search upgrade: [PROJ-123](...). I'd appreciate some [feedback](slack_permalink).
-- Reviewed [123](...) and [124](...) for Luis
+- Reviewed [123](...) for Luis
+- Reviewed [124](...) for Luis
 - Reviewed [125](...) for Becky
 - Watched [New tool intro](video_link)
 - Batching spike is open and needs review: [PROJ-1000](...).
@@ -72,7 +73,8 @@ EOD Report:
 
 **Style**:
 - First person, concise but informative
-- Links: PRs as `[#123](https://github.com/retailzipline/zipline-app/pull/123)`, Jira as `[ZIP-123](https://retailzipline.atlassian.net/browse/ZIP-123)`. Always link every Jira ID mentioned in the text. Use descriptive anchor text for everything else.
+- Links: PRs as `[123](https://github.com/retailzipline/zipline-app/pull/123)` (no `#` prefix in the anchor text), Jira as `[ZIP-123](https://zipline.atlassian.net/browse/ZIP-123)`. Always link every Jira ID mentioned in the text. Use descriptive anchor text for everything else.
+- One PR or Jira ticket per bullet line. Do not combine multiple PRs or tickets into one bullet (a bullet's PR may still reference its own Jira ticket).
 - People: Use real first names from the GitHub script output (resolved via `gh api`). Never guess or override names — trust the API output.
 - Prefer flat lists with no nesting. But use sub-bullets (4-space indent) if it makes sense to group related items under a theme.
 - Include non-code activities: meetings, checkins, discussions
