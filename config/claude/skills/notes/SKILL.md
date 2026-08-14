@@ -58,10 +58,11 @@ notes new-todo
 # Most recent IDs, newest first
 notes ls --limit 10
 
-# Filter by type, slug, or tag (--tag is repeatable; tags AND together)
+# Filter by type, slug, tag, or public status (--tag is repeatable; tags AND together)
 notes ls --type todo --limit 1
 notes ls --slug report
 notes ls --tag journal --tag idea
+notes ls --public
 
 # Only today's notes
 notes ls --today
@@ -71,10 +72,12 @@ notes ls --today
 
 ```sh
 notes read 8823
+notes read 8823 8818
 notes read 8823 --no-frontmatter
+notes read 8823 8818 --json
 ```
 
-`notes read` requires a numeric ID. Compose with `ls` or `resolve` to read a filtered note:
+`notes read` requires one or more numeric IDs. Use `--json` to emit a JSON array containing parsed metadata and Markdown body. Compose with `ls` or `resolve` to read filtered notes:
 
 ```sh
 # Read the most recent todo

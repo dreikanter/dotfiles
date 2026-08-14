@@ -81,6 +81,12 @@
         "source": "github",
         "repo": "microsoft/Webwright"
       }
+    },
+    "retailzipline": {
+      "source": {
+        "source": "github",
+        "repo": "retailzipline/claude-plugins"
+      }
     }
   },
   "outputStyle": "Terse",
