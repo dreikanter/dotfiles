@@ -5,24 +5,25 @@ export GOPROXY=direct
 
 go install github.com/dreikanter/notes/cmd/notes@latest
 notes --version
+notes skill --install --force
 echo
 
 go install github.com/dreikanter/npub/cmd/npub@latest
 npub --version
 echo
 
-go install github.com/dreikanter/nview/cmd/nview@latest
-nview --version
-echo
+# go install github.com/dreikanter/nview/cmd/nview@latest
+# nview --version
+# echo
 
 go install github.com/dreikanter/dotfiles-cli/cmd/dotfiles@latest
 dotfiles --version
-dotfiles skill --install --agent=claude --force
+dotfiles skill --install --force
 echo
 
 go install github.com/dreikanter/remail/cmd/remail@latest
 remail --version
-remail skill --install --agent=claude --force
+remail skill --install --force
 echo
 
 echo "Done."
