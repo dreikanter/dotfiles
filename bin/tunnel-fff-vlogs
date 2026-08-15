@@ -1,0 +1,5 @@
+#!/bin/bash
+
+echo http://localhost:9428/select/vmui/?#/?step=5s
+
+ssh -N -L 9428:127.0.0.1:9428 root@dev.fffeeder.com

@@ -118,7 +118,7 @@ def extract_context(path: Path, max_messages: int = 5) -> str:
     else:
         selected = messages[:1] + messages[-(max_messages - 1):]
 
-    return "\n\n".join(f"{role}: {text}" for role, text in selected)
+    return "\n".join(f"{role}: {text}" for role, text in selected)."\n"
 
 
 PR_RE = re.compile(r'https://github\.com/[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+/pull/(\d+)')
