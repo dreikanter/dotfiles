@@ -1,1 +1,1 @@
-CLAUDE_CONFIG_DIR=~/.claude-personal claude
+CLAUDE_CONFIG_DIR=~/.claude-personal claude "$@"
