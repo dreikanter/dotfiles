@@ -1,12 +1,13 @@
 ---
-description: "Review a GitHub PR against Jira ticket acceptance criteria. Args: URLs and Jira IDs in any order."
+name: cr
+description: "Review a GitHub PR against Jira ticket acceptance criteria and publish the report as a Claude Artifact. Args: PR URL and Jira IDs in any order."
 ---
 
 Perform a structured code review of a GitHub pull request, cross-referenced against Jira ticket(s) for scope and acceptance criteria.
 
 ## Input
 
-Parse all arguments provided after `/cr` in any order. Classify each argument:
+Parse all arguments in any order. Classify each argument:
 
 - **GitHub PR URL**: matches `github.com/.*/pull/\d+`. Exactly one is required.
 - **Jira ticket URL**: matches your Jira domain (e.g., `atlassian.net/browse/PROJ-123`). Treat as a Jira reference.
@@ -52,11 +53,11 @@ If no Jira tickets are found anywhere, note this in the review and skip scope as
 ### 2b: Read Modified Files (Agent, subagent_type: general-purpose)
 
 - Take the list of changed file paths from Phase 1.
-- For each file, use the Read tool to read the full current file content from the local working directory (not just the diff hunks). This provides surrounding context for understanding the changes.
+- Read the full content of each file from the PR branch, not the local working copy, which may be on a different branch: `git show origin/<pr_branch>:<path>` (fetch the branch first if needed).
 - If a file was deleted in the PR, note it but skip reading.
-- If a file does not exist locally (new file only in the PR branch), note it and rely on the diff for context.
-- If the PR branch is not checked out locally, note this limitation and rely on the diff for context where local files diverge.
-- Return all file contents with their paths.
+- If a file is new in the PR, read it from the branch the same way.
+- Also ask the agent for the specific supporting facts the diff depends on: whether the variables/helpers/aliases it uses actually resolve, what the callers and consumers of a changed value are, and what the tests pin. These are what turn a guess into a finding.
+- Return all file contents plus a direct answer per question, with `file:line` references.
 
 ## Review Principles
 
@@ -76,42 +77,36 @@ If the architecture is wrong, focus the review on that. Do not polish tactical d
 - **Understand the domain before flagging issues.** Do not apply generic patterns (race conditions, naming conventions, fragile coupling) without understanding WHY the code is written that way. If code looks intentional, consider that the author understands their domain.
 - **Do not flag hypothetical problems that cannot happen.** "What if X happens?" is only useful if X can actually happen given the architecture. Trace actual code paths before raising concerns.
 
-## Phase 3: Analyze and Produce Review
+## Phase 3: Publish the Review
 
-With all data gathered, analyze the PR holistically and produce a structured review in a form of highly readable HTML page. Do not print HTML in chat. Save it as a temp file, and print abs path.
+With all data gathered, analyze the PR holistically and publish the review as a Claude Artifact.
 
-Use the following exact format:
+Delivery rules:
 
-```
-(h1) Summary of Changes
+- **Do not load the `artifact-design` skill.** The page style is fixed by `theme.css` in this skill's directory. Read that file and inline it verbatim inside a `<style>` block, and emit the Google Fonts `<link>` its header names. Do not add, rename, or override any rule in it.
+- Build the markup against the contract documented at the top of `theme.css`. Those class names are the only ones styled.
+- Write the page to a file in the session scratchpad directory, then publish it with the `Artifact` tool. The file is only the transport the tool requires; it is not a deliverable.
+- Never print the HTML, the review body, or the scratchpad path in chat. The only chat output is the artifact URL, plus at most two sentences naming the most severe findings.
+- Re-reviewing the same PR in one session: call `Artifact` again with the same file path, which keeps the URL. From a later session, pass the prior URL as `url`.
+- Artifact metadata:
+  - `<title>`: `PR #{pr_number} Review` (keep it stable across redeploys).
+  - `description`: one sentence naming the PR title.
+  - `favicon`: `🔍`.
+- The file is wrapped in a `<!doctype html>` skeleton at publish time. Write page content only, no `<html>`, `<head>`, or `<body>` tags of your own.
 
-{Short summary of what this PR does, max 2 lines of text}
+### Page structure
 
-(h2) Findings
+Follow the `theme.css` contract, with this content in this order. Omit any section with nothing in it.
 
-Each finding uses this block format (if no findings, write None):
-
-`path:line` (link the path to https://github.com/{owner}/{repo}/pull/{pr_number}/changes#diff-{sha256hex}R{line})
-
-<b>{type}: {one-line problem statement}</b>
-
-{Explain the finding fully, in Humanized Writing Style (see below). State the problem, trace the actual mechanism that makes it one, prove it with a concrete case or mutation, and give the fix. The reader should not have to ask "explain this." Short sentences, one idea each, no scaffolding labels — just the prose, with a code block where a snippet is clearer than words.}
-
-(h2) Scope Assessment (issues only — do not list or confirm covered requirements; omit this whole section if there are no scope issues)
-
-(h3) Out-of-Scope (does not map to ticket requirements; drop this section if empty) (omit this section if no out-of-scope items)
-
-- {Change that is not covered by any acceptance criterion. Flag whether it is a reasonable adjacent change or a concern.}
-
-(h3) Missing from Ticket (omit this section if none missing)
-
-- {Any acceptance criterion from the Jira ticket NOT addressed by this PR.}
-```
-
-Presentation requirements:
-
-- Base font size: 16px
-- Render finding prose as short, scannable paragraphs (one idea each). Render any code snippet in a monospaced, styled `pre`/`code` block.
+1. **Masthead** — eyebrow (`PR #N · TICKET-N · branch`, PR and ticket linked), the PR title as `h1`, a `.lede` of at most two lines on what the PR does, and a `.tally` of counts (findings, blockers, missing requirements, files).
+2. **Findings** (`h2`) — one `article.finding` each, ordered most severe first, `.num` carrying the rank. If there are none, say so in a `.note` instead.
+   - `.rail`: the rank and the severity label, using the matching `type-*` class.
+   - `.where`: `path:line`, linked to the PR diff anchor from Phase 1.
+   - `.finding-body`: a `p.claim` stating the problem in one line, then prose in Humanized Writing Style (below), then a `pre` snippet where code is clearer than words.
+3. **Scope** (`h2`) — issues only. Never list or confirm requirements the PR covers. Use an `h3` per group, each followed by a `ul.plain`:
+   - *Missing from ticket* — an acceptance criterion, or a requirement stated in a ticket comment, that this PR does not address.
+   - *Out of scope* — a change that maps to no requirement. Say whether it is reasonable adjacent work or a concern.
+4. **Addressed since the last round** (`h2`, in a `.note`) — only when the PR has prior review threads. Say which were taken and which are still open, and treat an unresolved thread you can confirm as a finding of its own.
 
 ## Finding Types
 
@@ -125,10 +120,12 @@ Every finding must be tagged with one of:
 
 ## Guidelines
 
-- Be specific: reference file paths and line numbers from the diff.
+- Be specific: reference file paths and line numbers from the PR branch.
 - Be proportional: small PRs get concise reviews, large PRs get thorough reviews.
 - Each finding must be self-contained and fully explained at the depth of an "explain this" answer: include the mechanism trace, a concrete triggering example or mutation, and the fix. Do not ship terse one-liners that require a follow-up question to understand. The non-obvious *why* is the deliverable.
 - If the PR has existing review comments or discussion, acknowledge addressed feedback and flag unresolved threads.
+- Requirements can live in ticket comments, not just the description. Read them as acceptance criteria.
+- When the PR description no longer matches the diff, that is a finding — a reviewer trusting the body will miss what changed.
 - Do not repeat what the diff already makes obvious. Focus on what a reviewer might miss.
 
 ### Writing Style (Humanized)
