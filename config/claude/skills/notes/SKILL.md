@@ -26,7 +26,7 @@ The authoritative frontmatter schema is `SCHEMA.md` in the repository. Reserved 
 
 ## CLI Reference
 
-Most commands that act on a specific note take a numeric ID. To act on "the most recent note of type X" or "the most recent note with slug Y", use `notes ls --limit 1` or `notes resolve` to turn a filter into an ID and shell-substitute.
+Most commands that act on a specific note take a numeric ID — the integer `ID` portion of the UID, **not** the full `YYYYMMDD_ID` string. For example, given UID `20260526_10050`, pass `10050` to the command. To act on "the most recent note of type X" or "the most recent note with slug Y", use `notes ls --limit 1` or `notes resolve` to turn a filter into an ID and shell-substitute.
 
 ### Create
 
