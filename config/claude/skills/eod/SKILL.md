@@ -1,4 +1,5 @@
 ---
+name: eod
 description: "Generate a daily EOD report and save it as a note. Optional arg: date in free format (e.g. 'yesterday', '2d ago', 'last Friday', '2026-03-05')."
 ---
 
@@ -14,25 +15,29 @@ SEARCH_FROM=$(date -v-1d -j -f "%Y-%m-%d" "$LOCAL_DATE" +%Y-%m-%d)
 SEARCH_UNTIL=$(date -v+1d -j -f "%Y-%m-%d" "$LOCAL_DATE" +%Y-%m-%d)
 ```
 
+Resolve `SKILL_DIR` to the directory holding this `SKILL.md`. Claude Code exposes
+it as `CLAUDE_SKILL_DIR`; other harnesses show the absolute skill path at
+discovery time. Do not assume the variable exists.
+
 ## Phase 1: Gather Data (IN PARALLEL)
 
-**CRITICAL**: Phases 1a-1d are independent. Launch ALL FOUR as parallel tool calls in a single message.
+**CRITICAL**: Phases 1a-1e are independent. Launch all collectors as parallel tool calls in a single message.
 
 ### 1a: GitHub Activity (Bash)
 
 ```
-${CLAUDE_SKILL_DIR}/eod_github.sh $LOCAL_DATE
+$SKILL_DIR/eod_github.sh $LOCAL_DATE
 ```
 
 ### 1b: Jira Activity (Bash)
 
 ```
-${CLAUDE_SKILL_DIR}/eod_jira.sh $LOCAL_DATE
+$SKILL_DIR/eod_jira.sh $LOCAL_DATE
 ```
 
 ### 1c: Slack Activity
 
-Use `mcp__claude_ai_Slack__slack_search_public_and_private` to find significant discussions from `$LOCAL_DATE`.
+Use the connected Slack search tool (in Claude Code: `mcp__claude_ai_Slack__slack_search_public_and_private`) to find significant discussions from `$LOCAL_DATE`.
 
 **Important**: Do NOT search for `from:me` — that returns your own EOD posts, which are output, not input.
 
@@ -48,11 +53,27 @@ notes ls --name $LOCAL_DATE
 
 Read matching notes. Include any tasks completed, personal observations, or context that would enrich the EOD report.
 
+### 1e: Agent Sessions (Bash)
+
+```
+python3 $SKILL_DIR/eod_codex.py $LOCAL_DATE
+python3 $SKILL_DIR/eod_claude.py $LOCAL_DATE
+```
+
+Both collectors read local session storage in read-only mode and print the
+requests and outcomes of primary sessions from the target date. Subagents,
+sidechains, and generated messages are filtered out already. A missing store or
+no matching sessions is an empty source, not an error.
+
+Use the output as work context. Summarize only completed work, decisions,
+reviews, planning, or other meaningful activity. Ignore the session generating
+this report, workflow chatter, and proposed actions that never happened.
+
 ## Phase 2: Synthesize the Report
 
 Produce a concise bullet-point EOD report for **$LOCAL_DATE**.
 
-**Deduplicate across sources before writing.** A PR you authored may also appear in reviewed PRs or Slack threads — mention it once, in the most meaningful context.
+**Deduplicate across sources before writing.** A PR you authored may also appear in reviewed PRs, Slack threads, and agent sessions. Mention it once, in the most meaningful context.
 
 Group by **activity or theme**, NOT by data source. Weave all sources into a narrative where each bullet describes what you did and why. A single bullet may reference a Jira ticket, a PR, and a Slack thread together if they're part of the same activity.
 

@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+# eod - Generate the daily EOD report note.
+# Optional arg: date in free format ("yesterday", "2d ago", "2026-03-05").
+
+set -euo pipefail
+
+exec claude --model sonnet "/eod $*"
