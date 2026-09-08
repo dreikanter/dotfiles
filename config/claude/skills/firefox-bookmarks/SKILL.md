@@ -152,6 +152,92 @@ Examples of useful analyses:
 - Bookmark folder depth analysis
 - Duplicate URL detection
 
+## Archiving Project Folders (on request only)
+
+Never run this as part of a normal bookmark query. Only start it when the user
+explicitly asks to archive project folders.
+
+Some bookmarks-toolbar folders group links for a single piece of work (a Jira
+epic, a Confluence page, a Figma file, a related PR). Archiving means renaming
+such a folder to `YYYY-MM-DD <name>` using its own `dateAdded`, then moving it
+into a toolbar folder called `Projects`.
+
+### Flow
+
+1. List toolbar folders that are not yet archived. Toolbar parent id is `3`.
+   Skip folders already named with a `YYYY-MM-DD ` prefix, and skip `Projects`
+   itself. Show a numbered list so the user can answer with numbers:
+
+   ```
+   1. Summaries       2026-04-13   4 items
+   2. Glow Up         2026-04-23   3 items
+   ```
+
+   Include item counts, and briefly note which folders look like utility or
+   reading-list folders rather than projects. The user decides, not the script.
+
+2. Wait for the user to pick numbers. Never archive everything by default.
+
+3. Confirm Firefox is fully closed (`pgrep -fl "Firefox.app/Contents/MacOS/firefox"`).
+   Writing to a live `places.sqlite` risks Firefox overwriting the change or
+   corrupting the file. If Firefox is running, stop and ask the user to quit it.
+
+4. Back up first: `sqlite3 places.sqlite ".backup '<path>'"`. Report the path.
+
+5. Apply the change in one transaction, then verify and run
+   `pragma integrity_check`.
+
+### SQL shape
+
+Create `Projects` only when it is missing. Generate a fresh 12-character guid
+(`openssl rand -base64 9 | tr '+/' '-_' | cut -c1-12`) since the guid index is
+unique.
+
+```sql
+begin;
+-- create Projects only if absent
+insert into moz_bookmarks (type, fk, parent, position, title, dateAdded, lastModified, guid, syncStatus, syncChangeCounter)
+select 2, null, 3, (select coalesce(max(position), -1) + 1 from moz_bookmarks where parent = 3),
+       'Projects', strftime('%s','now')*1000000, strftime('%s','now')*1000000, '<new-guid>', 1, 1
+where not exists (select 1 from moz_bookmarks where parent = 3 and type = 2 and title = 'Projects');
+
+-- rename only folders that lack the date prefix, using their own dateAdded
+update moz_bookmarks
+set title = strftime('%Y-%m-%d', dateAdded/1000000, 'unixepoch') || ' ' || title,
+    lastModified = strftime('%s','now')*1000000,
+    syncChangeCounter = syncChangeCounter + 1
+where id in (<selected ids>)
+  and title not glob '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9] *';
+
+-- move into Projects, appending after whatever is already there
+update moz_bookmarks
+set parent = (select id from moz_bookmarks where parent = 3 and type = 2 and title = 'Projects'),
+    position = (select coalesce(max(position), -1) from moz_bookmarks
+                where parent = (select id from moz_bookmarks where parent = 3 and type = 2 and title = 'Projects'))
+               + 1 + <rank of this folder within the selection, starting at 1>,
+    lastModified = strftime('%s','now')*1000000,
+    syncChangeCounter = syncChangeCounter + 1
+where id in (<selected ids>);
+commit;
+```
+
+After the move, close the position gap left on the toolbar by renumbering the
+remaining `parent = 3` rows sequentially from 0, ordered by their current
+position. Firefox tolerates gaps, but sequential positions keep the toolbar
+order predictable.
+
+### Rules
+
+- Only `UPDATE` titles, `parent`, `position`, `lastModified`, `syncChangeCounter`,
+  and `INSERT` the `Projects` folder. Never `DELETE` from `moz_bookmarks`, and
+  never touch `moz_places`.
+- Idempotent: re-running must not double-prefix a title, create a second
+  `Projects` folder, or reorder folders already inside it.
+- Match `Projects` by `parent = 3 and type = 2 and title = 'Projects'` so an
+  existing folder is reused.
+- Bookmarks inside an archived folder move with it. Nothing is copied or removed.
+- Ask the user to reopen Firefox and confirm the toolbar looks right.
+
 ## Limitations
 
 - Read-only access (cannot modify bookmarks)
