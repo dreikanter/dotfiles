@@ -1,0 +1,102 @@
+#!/usr/bin/env bash
+# Export Honeybadger faults (and optionally notices) as newline-delimited JSON.
+#
+# Usage:
+#   ./hb-export.sh PROJECT_ID [-q 'search'] [--notices] [-o DIR]
+#
+# Examples:
+#   ./hb-export.sh 12345
+#   ./hb-export.sh 12345 -q 'environment:production -is:resolved'
+#   ./hb-export.sh 12345 --notices -o ./hb-dump
+#
+# Requires: curl, jq, HONEYBADGER_AUTH_TOKEN in env.
+
+set -euo pipefail
+
+: "${HONEYBADGER_AUTH_TOKEN:?HONEYBADGER_AUTH_TOKEN is not set}"
+
+API="https://app.honeybadger.io/v2"
+PROJECT_ID="${1:?usage: $0 PROJECT_ID [-q QUERY] [--notices] [-o DIR]}"
+shift
+
+QUERY=""
+WITH_NOTICES=0
+OUT="./hb-export-$PROJECT_ID"
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    -q) QUERY="$2"; shift 2 ;;
+    --notices) WITH_NOTICES=1; shift ;;
+    -o) OUT="$2"; shift 2 ;;
+    *) echo "unknown arg: $1" >&2; exit 1 ;;
+  esac
+done
+
+mkdir -p "$OUT"
+
+# Follow links.next until exhausted; emit one JSON object per line.
+# Rate limit is 360 req/hour, so sleep 10s between pages.
+fetch_all() {
+  local url="$1"
+  while [[ -n "$url" && "$url" != "null" ]]; do
+    local body
+    body=$(curl -sS --fail -u "$HONEYBADGER_AUTH_TOKEN:" "$url")
+    echo "$body" | jq -c '.results[]'
+    url=$(echo "$body" | jq -r '.links.next // empty')
+    if [[ "$url" == /* ]]; then url="https://app.honeybadger.io$url"; fi
+    if [[ -n "$url" ]]; then sleep 10; fi
+  done
+  return 0
+}
+
+urlencode() { jq -rn --arg v "$1" '$v|@uri'; }
+
+faults_url="$API/projects/$PROJECT_ID/faults?limit=25"
+[[ -n "$QUERY" ]] && faults_url+="&q=$(urlencode "$QUERY")"
+
+echo "Fetching faults -> $OUT/faults.jsonl" >&2
+fetch_all "$faults_url" > "$OUT/faults.jsonl"
+echo "$(wc -l < "$OUT/faults.jsonl") faults" >&2
+
+if [[ $WITH_NOTICES -eq 1 ]]; then
+  mkdir -p "$OUT/notices"
+  while read -r fault_id; do
+    echo "Fetching notices for fault $fault_id" >&2
+    fetch_all "$API/projects/$PROJECT_ID/faults/$fault_id/notices?limit=25" \
+      > "$OUT/notices/$fault_id.jsonl"
+    sleep 10
+  done < <(jq -r '.id' "$OUT/faults.jsonl")
+fi
+
+# Compact markdown for LLM consumption.
+write_markdown() {
+  echo "# Honeybadger faults ($(wc -l < "$OUT/faults.jsonl") total)"
+  echo
+  jq -s 'sort_by(-.notices_count)[]' -c "$OUT/faults.jsonl" | while read -r fault; do
+    id=$(jq -r '.id' <<<"$fault")
+    jq -r '
+      "## [\(.id)] \(.klass): \(.message | .[0:200])",
+      "- env: \(.environment) | \(.component // "-")#\(.action // "-")",
+      "- count: \(.notices_count) | first: \(.created_at[0:10]) | last: \(.last_notice_at[0:10])",
+      "- resolved: \(.resolved) | ignored: \(.ignored) | tags: \(.tags | join(", "))"
+    ' <<<"$fault"
+    notices="$OUT/notices/$id.jsonl"
+    if [[ -s "$notices" ]]; then
+      head -n1 "$notices" | jq -r '
+        "- url: \(.request.url // "-")",
+        "",
+        "```",
+        ((.application_trace // .backtrace)[0:6][] | "\(.file):\(.number) in \(.method)"),
+        "```",
+        (if .request.context then "context: \(.request.context | tojson | .[0:300])" else empty end),
+        (if .request.params then "params: \(.request.params | del(.authenticity_token, .controller, .action) | tojson | .[0:300])" else empty end)
+      '
+    fi
+    echo
+  done
+}
+
+echo "Writing $OUT/faults.md" >&2
+write_markdown > "$OUT/faults.md"
+
+echo "Done." >&2
