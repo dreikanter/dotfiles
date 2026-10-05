@@ -1,9 +1,9 @@
 {
+  "cleanupPeriodDays": 365,
   "env": {
     "CLAUDE_CODE_DISABLE_FEEDBACK_SURVEY": "1",
     "DISABLE_NON_ESSENTIAL_MODEL_CALLS": "1"
   },
-  "cleanupPeriodDays": 365,
   "attribution": {
     "commit": "",
     "pr": ""
@@ -95,5 +95,5 @@
   "skipWorkflowUsageWarning": true,
   "agentPushNotifEnabled": true,
   "skipAutoPermissionPrompt": true,
-  "model": "opus[1m]"
+  "model": "claude-fable-5-1[1m]"
 }

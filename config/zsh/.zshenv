@@ -1,3 +1,7 @@
+if [[ -o interactive && -t 0 ]]; then
+  stty -echo
+fi
+
 #
 # Path
 #

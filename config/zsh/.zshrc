@@ -167,3 +167,7 @@ unsetopt correct_all
 if command -v mkexp &>/dev/null; then
   mkx() { cd "$(mkexp new "$@")" }
 fi
+
+if [[ -o interactive && -t 0 ]]; then
+  stty echo
+fi
