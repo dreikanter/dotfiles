@@ -1,13 +1,11 @@
 ---
 name: eod
-description: "Generate a daily EOD report and save it as a note. Optional arg: date in free format (e.g. 'yesterday', '2d ago', 'last Friday', '2026-03-05')."
+description: Generate an EOD report for today or requested dates and save it as a note.
 ---
 
-Generate a daily EOD report and save it as a note.
+## Phase 0: Resolve the Target Dates
 
-## Phase 0: Resolve the Target Date
-
-If an argument was provided (e.g. "yesterday", "2d ago", "last Friday", a specific date), resolve it to a concrete calendar date in local timezone using `date`. If no argument was given, use today's local date.
+Resolve requested dates in the local timezone using `date`; default to today. For multiple dates, gather data for each date and combine it into one report.
 
 ```
 LOCAL_DATE=<resolved date in %Y-%m-%d format>
@@ -19,9 +17,9 @@ Resolve `SKILL_DIR` to the directory holding this `SKILL.md`. Claude Code expose
 it as `CLAUDE_SKILL_DIR`; other harnesses show the absolute skill path at
 discovery time. Do not assume the variable exists.
 
-## Phase 1: Gather Data (IN PARALLEL)
+## Phase 1: Gather Data
 
-**CRITICAL**: Phases 1a-1e are independent. Launch all collectors as parallel tool calls in a single message.
+Run the independent collectors in phases 1a-1e in parallel for each target date.
 
 ### 1a: GitHub Activity (Bash)
 
@@ -39,7 +37,7 @@ $SKILL_DIR/eod_jira.sh $LOCAL_DATE
 
 Use the connected Slack search tool (in Claude Code: `mcp__claude_ai_Slack__slack_search_public_and_private`) to find significant discussions from `$LOCAL_DATE`.
 
-**Important**: Do NOT search for `from:me` — that returns your own EOD posts, which are output, not input.
+Do not search for `from:me`; it returns your own EOD posts.
 
 Run this search: `to:me after:$SEARCH_FROM before:$SEARCH_UNTIL`
 
@@ -71,35 +69,17 @@ this report, workflow chatter, and proposed actions that never happened.
 
 ## Phase 2: Synthesize the Report
 
-Produce a concise bullet-point EOD report for **$LOCAL_DATE**.
+Start with exactly `EOD Report:` on its own plain-text line, followed by a blank line. The title is fixed: no date, date range, markup, or heading syntax, including for reports covering multiple dates.
 
-**Deduplicate across sources before writing.** A PR you authored may also appear in reviewed PRs, Slack threads, and agent sessions. Mention it once, in the most meaningful context.
+Write concise bullets starting with a past-tense action, such as "Completed", "Reviewed", or "Clarified". Do not use "I", "my", or "we". Keep the report suitable for Slack: describe outcomes and decisions at a high level, without implementation details or test counts. Deduplicate across sources and group by activity or theme. Include meaningful non-code work such as meetings, discussions, and planning; omit routine noise and uncompleted proposals.
 
-Group by **activity or theme**, NOT by data source. Weave all sources into a narrative where each bullet describes what you did and why. A single bullet may reference a Jira ticket, a PR, and a Slack thread together if they're part of the same activity.
+For reviews, use "Reviewed <PR link> for <first name>, <very short description>". Example: "Reviewed [123](https://github.com/retailzipline/zipline-app/pull/123) for <first name>, sign-in page updates."
 
-**Example** (for structure/tone only):
-
-```
-EOD Report:
-
-- Created ticket with a plan to evaluate vector search upgrade: [PROJ-123](...). I'd appreciate some [feedback](slack_permalink).
-- Reviewed [123](...) for Luis
-- Reviewed [124](...) for Luis
-- Reviewed [125](...) for Becky
-- Watched [New tool intro](video_link)
-- Batching spike is open and needs review: [PROJ-1000](...).
-- Updated backlog note with Q2 capacity estimates
-- Cycle checkin
-```
-
-**Style**:
-- First person, concise but informative
-- Links: PRs as `[123](https://github.com/retailzipline/zipline-app/pull/123)` (no `#` prefix in the anchor text), Jira as `[ZIP-123](https://zipline.atlassian.net/browse/ZIP-123)`. Always link every Jira ID mentioned in the text. Use descriptive anchor text for everything else.
-- One PR or Jira ticket per bullet line. Do not combine multiple PRs or tickets into one bullet (a bullet's PR may still reference its own Jira ticket).
-- People: Use real first names from the GitHub script output (resolved via `gh api`). Never guess or override names — trust the API output.
-- Prefer flat lists with no nesting. But use sub-bullets (4-space indent) if it makes sense to group related items under a theme.
-- Include non-code activities: meetings, checkins, discussions
-- Omit low-value items and routine noise
+- Never use em dashes; semicolons are allowed.
+- Link PRs as `[123](https://github.com/retailzipline/zipline-app/pull/123)` without a `#` prefix. Link every Jira ID as `[ZIP-123](https://zipline.atlassian.net/browse/ZIP-123)`. Use descriptive anchors for other links.
+- Keep separate PRs or tickets on separate bullet lines; a PR may include its own Jira ticket and related discussion.
+- Use first names from the GitHub script's API output; never guess.
+- Prefer flat bullets; use sub-bullets with four-space indentation only when grouping helps.
 
 ## Phase 3: Save as Note
 
