@@ -81,6 +81,14 @@
                         "vendor_id": 1452
                     },
                     "swap_grave_accent_and_non_us_backslash": true
+                },
+                {
+                    "identifiers": {
+                        "is_keyboard": true,
+                        "product_id": 666,
+                        "vendor_id": 76
+                    },
+                    "swap_grave_accent_and_non_us_backslash": true
                 }
             ],
             "name": "Default profile",
