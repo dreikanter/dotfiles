@@ -2,7 +2,7 @@
   "aerospace": ["~/.config/aerospace/aerospace.toml"],
   "atuin": ["~/.config/atuin/config.toml"],
   "claude": ["~/.claude/skills/", "~/.claude/commands/", "~/.claude/hooks/session-end-test.sh", "~/.claude/hooks/session-end-bg.py", "~/.claude/hooks/strip-gh-pr-attribution.py", "~/.claude/settings.json", "~/.claude/statusline.sh", "~/.claude/output-styles/"],
-  "codex": ["~/.codex/prompts/"],
+  "codex": ["~/.codex/prompts/", "~/.codex/skills/web-screenshots/"],
   "editorconfig": ["~/.editorconfig"],
   "gem": ["~/.gemrc"],
   "ghostty": ["~/.config/ghostty/config"],
