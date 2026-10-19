@@ -24,7 +24,7 @@ and scenario data. Keep those details out of this public skill.
    on pages with polling or persistent connections.
 5. Capture a viewport by default. Choose an element crop for component review;
    request full-page capture explicitly for long pages. Use equal viewport,
-   persona, data, and scroll position for before/after comparisons. Preserve
+   pixel density, persona, data, and scroll position for before/after comparisons. Preserve
    ongoing edits when obtaining a baseline.
 6. Inspect the actual PNG with an image-viewing tool. Check framing, loaded
    assets, and the intended UI state. A written file alone is not validation.
@@ -37,11 +37,32 @@ A narrow desktop Chromium viewport checks responsive layout; it is not mobile
 Safari/device validation. Record which browser and viewport were used. Upload
 images only as part of a requested sharing workflow; inspect them first.
 
+## Screenshot resolution
+
+- Capture native PNGs at **2x device pixel ratio (DPR) or higher**, unless the
+  user explicitly requests another density. Keep the intended CSS viewport;
+  increasing its width changes the layout rather than the capture resolution.
+- Set density before loading the page so responsive images load at that density.
+  Reapply it after viewport changes. Ferrum's `resize` resets the device scale
+  override; follow it with `page.set_viewport(width:, height:, scale_factor: 2)`.
+  With other browser tools, set their equivalent device scale factor and use
+  device-pixel screenshot output rather than CSS-pixel output.
+- Verify `window.devicePixelRatio` and the saved PNG's pixel dimensions. At 2x,
+  a 1440x1100 CSS viewport must produce a 2880x2200 PNG. For element crops or
+  full pages, compare against that capture area's CSS dimensions times DPR,
+  allowing one pixel for rounding. Retake a mismatch; do not upscale it.
+- Preserve the original PNG through inspection and upload. Do not downscale,
+  recompress, or enlarge an existing raster to simulate high resolution. A PR
+  may display the image at a smaller width while linking to the original file.
+  A scaled tool preview is not evidence of the saved file's resolution.
+
 ## Ferrum helper
 
 Requires Ruby, the `ferrum` gem, and Chrome/Chromium already available. The helper
 uses Ferrum browser discovery; `BROWSER_PATH` or `--browser` can override it.
 Use the absolute path to this skill's `scripts/capture.rb` from other directories.
+It defaults to native 2x capture, reapplies density on every save, and rejects
+PNGs whose dimensions do not match the capture area and density.
 
 ```sh
 ruby scripts/capture.rb --url 'http://localhost:3000/example' \
@@ -54,8 +75,9 @@ ruby scripts/capture.rb --url 'http://localhost:3000/example' \
 `--selector` crops to an element; `--full-page` captures the document. They are
 mutually exclusive. `--timeout` bounds readiness waits. `--insecure` is only for
 known local development HTTPS. `--keep-animations` preserves motion when that
-is the subject of the review. Outputs include PNG paths, viewport, and horizontal
-overflow in JSON; failures produce a separate `.error.png` when possible.
+is the subject of the review. Outputs include PNG paths, CSS viewport, DPR, PNG
+pixel dimensions, and horizontal overflow in JSON; failures produce a separate
+`.error.png` when possible.
 
 For authentication or multiple states, require the same helper from a **local**
 Ruby script. The block owns application-specific navigation and interactions:
