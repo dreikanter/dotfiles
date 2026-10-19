@@ -7,12 +7,14 @@ require 'timeout'
 
 module WebScreenshots
   class HTTPError < StandardError; end
+  class ResolutionError < StandardError; end
 
   class Session
     attr_reader :browser, :step
 
-    def initialize(width: 1440, height: 1100, timeout: 45, browser_path: ENV['BROWSER_PATH'], insecure: false)
+    def initialize(width: 1440, height: 1100, scale_factor: 2, timeout: 45, browser_path: ENV['BROWSER_PATH'], insecure: false)
       require 'ferrum'
+      @scale_factor = scale_factor
       @timeout = timeout
       @step = 'launch browser'
       options = { headless: true, window_size: [width, height], timeout: timeout }
@@ -20,6 +22,7 @@ module WebScreenshots
       options[:browser_options] = { 'ignore-certificate-errors' => nil } if insecure
       @browser = Ferrum::Browser.new(**options)
       @browser.resize(width: width, height: height)
+      @browser.page.set_viewport(width: width, height: height, scale_factor: @scale_factor)
     end
 
     def wait(label)
@@ -52,6 +55,8 @@ module WebScreenshots
       @step = 'prepare screenshot'
       FileUtils.mkdir_p(File.dirname(path))
       browser.resize(width: width, height: height) if width
+      viewport_width, viewport_height = browser.viewport_size
+      browser.page.set_viewport(width: viewport_width, height: viewport_height, scale_factor: @scale_factor)
       if selector
         wait('visible capture element') { visible?(selector) }
         browser.execute('document.querySelector(arguments[0]).scrollIntoView({block: "center", behavior: "instant"})', selector)
@@ -79,10 +84,29 @@ module WebScreenshots
         JS
       end
       browser.evaluate_async('requestAnimationFrame(() => requestAnimationFrame(() => arguments[0](true)))', @timeout)
+      metrics = browser.evaluate('({width: innerWidth, height: innerHeight, device_pixel_ratio: devicePixelRatio, horizontal_overflow: document.documentElement.scrollWidth > innerWidth})')
+      capture_size = browser.evaluate(<<~JS, selector, full)
+        (() => {
+          if (arguments[0]) {
+            const rect = document.querySelector(arguments[0]).getBoundingClientRect();
+            return [rect.width, rect.height];
+          }
+          if (arguments[1]) return [document.documentElement.scrollWidth, document.documentElement.scrollHeight];
+          return [innerWidth, innerHeight];
+        })()
+      JS
       @step = 'write screenshot'
-      browser.screenshot(path: path, full: full, selector: selector)
-      metrics = browser.evaluate('({width: innerWidth, height: innerHeight, horizontal_overflow: document.documentElement.scrollWidth > innerWidth})')
-      puts JSON.generate(path: File.expand_path(path), viewport: metrics, full_page: full, element: selector)
+      browser.screenshot(path: path, format: 'png', full: full, selector: selector)
+      @step = 'verify screenshot resolution'
+      header = File.binread(path, 24)
+      raise ResolutionError, 'Expected a PNG' unless header.start_with?("\x89PNG\r\n\x1a\n".b) && header.bytesize == 24
+
+      pixels = header.byteslice(16, 8).unpack('NN')
+      expected = capture_size.map { |dimension| dimension * @scale_factor }
+      unless metrics.fetch('device_pixel_ratio') == @scale_factor && pixels.zip(expected).all? { |actual, target| (actual - target).abs <= 1 }
+        raise ResolutionError, "Expected #{expected.inspect} pixels at #{@scale_factor}x, got #{pixels.inspect}"
+      end
+      puts JSON.generate(path: File.expand_path(path), viewport: metrics, pixels: { width: pixels[0], height: pixels[1] }, full_page: full, element: selector)
     ensure
       begin
         browser&.execute('document.getElementById("web-screenshots-stability")?.remove()') if stabilize
