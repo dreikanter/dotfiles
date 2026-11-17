@@ -1,0 +1,380 @@
+/* ============================================================
+   cr report theme. Inline this file verbatim in a <style>
+   block. Do not restyle, rename, or extend it.
+
+   MARKUP CONTRACT — use exactly these elements and class names.
+   Every class below is styled here; nothing else is.
+
+   <div class="page">
+
+     <header class="masthead">
+       <p class="eyebrow">PR #N · TICKET-1 · branch-name</p>
+       <h1>PR title</h1>
+       <p class="lede">Two lines on what the PR does.</p>
+       <p class="tally">
+         <span><strong>7</strong> findings</span>
+         <span><strong>2</strong> blockers</span>
+       </p>
+     </header>
+
+     <section>
+       <h2>Findings</h2>
+       <div class="findings">
+         <article class="finding">
+           <div class="rail">
+             <span class="num">01</span>
+             <span class="type-blocker">Blocker</span>
+           </div>
+           <p class="where"><a href="...">path/to/file.rb:29</a></p>
+           <div class="finding-body">
+             <p class="claim">One-line problem statement.</p>
+             <p>Prose paragraph.</p>
+             <pre><code>code snippet</code></pre>
+           </div>
+         </article>
+       </div>
+     </section>
+
+     <section>
+       <h2>Scope</h2>
+       <h3>Missing from ticket</h3>
+       <ul class="plain"><li>...</li></ul>
+     </section>
+
+     <section>
+       <h2>Addressed since the last round</h2>
+       <div class="note"><p>...</p><p>...</p></div>
+     </section>
+
+   </div>
+
+   NOTES
+   - .rail, .where, and .finding-body are the three direct children
+     of .finding, in that order. The grid rule spans the rail across
+     all three rows, so do not nest .where inside .finding-body.
+   - Severity class on the rail label, one of: type-blocker, type-bug,
+     type-suggestion, type-question, type-nitpick. Findings are ordered
+     most severe first, and .num carries the rank.
+   - Omit any section that has no content. Drop .tally if there is
+     nothing to count.
+   - Inline <code> works in any prose. Wide content belongs in <pre>,
+     which scrolls on its own.
+   ============================================================ */
+
+/* Fonts load from the one host the Artifact CSP admits. Emit this <link>
+   in the page, above the <style> block, exactly as written:
+
+   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&family=Public+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+
+   Every font-family below carries a real fallback stack, so the page
+   still holds if the request is blocked. */
+
+:root {
+  --ground: #f4f6f8;
+  --surface: #ffffff;
+  --ink: #16202b;
+  --ink-soft: #4a5866;
+  --ink-faint: #7b8894;
+  --rule: #dde3e9;
+  --accent: #2f5d8a;
+  --blocker: #a8232f;
+  --bug: #9a6410;
+  --suggestion: #2f5d8a;
+  --question: #5f4a95;
+  --nitpick: #66727e;
+  --code-bg: #eef1f4;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --ground: #11161b;
+    --surface: #171d24;
+    --ink: #e4eaf0;
+    --ink-soft: #a3b0bc;
+    --ink-faint: #79868f;
+    --rule: #2a333d;
+    --accent: #8ab4dd;
+    --blocker: #ef8b93;
+    --bug: #e0aa5c;
+    --suggestion: #8ab4dd;
+    --question: #b6a2e6;
+    --nitpick: #96a2ad;
+    --code-bg: #1e252d;
+  }
+}
+
+:root[data-theme='dark'] {
+  --ground: #11161b;
+  --surface: #171d24;
+  --ink: #e4eaf0;
+  --ink-soft: #a3b0bc;
+  --ink-faint: #79868f;
+  --rule: #2a333d;
+  --accent: #8ab4dd;
+  --blocker: #ef8b93;
+  --bug: #e0aa5c;
+  --suggestion: #8ab4dd;
+  --question: #b6a2e6;
+  --nitpick: #96a2ad;
+  --code-bg: #1e252d;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--ground);
+  color: var(--ink);
+  font-family: 'Public Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+.page {
+  max-width: 60rem;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+/* --- masthead --- */
+
+.masthead {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding-bottom: 2rem;
+  border-bottom: 2px solid var(--ink);
+}
+
+.eyebrow {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.eyebrow a {
+  color: inherit;
+}
+
+h1 {
+  margin: 0;
+  font-family: Newsreader, Georgia, serif;
+  font-size: clamp(1.9rem, 4.5vw, 2.8rem);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+
+.lede {
+  margin: 0;
+  max-width: 62ch;
+  font-size: 1.0625rem;
+  color: var(--ink-soft);
+}
+
+.tally {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+  margin: 0.5rem 0 0;
+  font-size: 0.8125rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-soft);
+}
+
+.tally strong {
+  color: var(--ink);
+}
+
+/* --- section headings --- */
+
+section {
+  display: flex;
+  flex-direction: column;
+}
+
+h2 {
+  margin: 0 0 1.5rem;
+  font-family: Newsreader, Georgia, serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+h3 {
+  margin: 0 0 0.75rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+/* --- findings --- */
+
+.findings {
+  display: flex;
+  flex-direction: column;
+}
+
+.finding {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.875rem;
+  padding: 2rem 0;
+  border-top: 1px solid var(--rule);
+}
+
+.finding:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+
+@media (min-width: 52rem) {
+  .finding {
+    grid-template-columns: 8.5rem 1fr;
+    column-gap: 2rem;
+  }
+
+  .finding > .rail {
+    grid-row: 1 / span 3;
+  }
+}
+
+.rail {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.rail .num {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-faint);
+}
+
+.type-blocker { color: var(--blocker); }
+.type-bug { color: var(--bug); }
+.type-suggestion { color: var(--suggestion); }
+.type-question { color: var(--question); }
+.type-nitpick { color: var(--nitpick); }
+
+.where {
+  margin: 0;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.8125rem;
+  overflow-wrap: anywhere;
+}
+
+.where a {
+  color: var(--accent);
+  text-underline-offset: 0.2em;
+}
+
+.finding-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+  min-width: 0;
+}
+
+.claim {
+  margin: 0;
+  font-family: Newsreader, Georgia, serif;
+  font-size: 1.3125rem;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+
+.finding-body p {
+  margin: 0;
+  max-width: 66ch;
+}
+
+/* --- code --- */
+
+pre {
+  margin: 0;
+  padding: 0.875rem 1rem;
+  overflow-x: auto;
+  background: var(--code-bg);
+  border-left: 2px solid var(--rule);
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.8125rem;
+  line-height: 1.55;
+}
+
+code {
+  padding: 0.1em 0.3em;
+  background: var(--code-bg);
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.875em;
+}
+
+pre code {
+  padding: 0;
+  background: none;
+  font-size: 1em;
+}
+
+/* --- prose blocks --- */
+
+.note {
+  padding: 1.25rem 1.5rem;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+}
+
+.note p {
+  margin: 0;
+  max-width: 66ch;
+  color: var(--ink-soft);
+}
+
+.note p + p {
+  margin-top: 0.625rem;
+}
+
+ul.plain {
+  margin: 0;
+  padding-left: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+}
+
+ul.plain li {
+  max-width: 66ch;
+}
+
+/* --- links --- */
+
+a {
+  color: var(--accent);
+  text-underline-offset: 0.15em;
+}
+
+a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
