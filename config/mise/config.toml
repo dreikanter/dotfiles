@@ -1,7 +1,7 @@
 [tools]
 fnox = "1.20"
 node = "24.14.1"
-ruby = "3.4"
+ruby = "3.4.13"
 
 [settings]
 idiomatic_version_file_enable_tools = ["ruby"]
