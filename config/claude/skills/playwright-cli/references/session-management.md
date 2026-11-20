@@ -1,225 +1,63 @@
-# Browser Session Management
+# Browser sessions
 
-Run multiple isolated browser sessions concurrently with state persistence.
-
-## Named Browser Sessions
-
-Use `-s` flag to isolate browser contexts:
+Use a distinct session name per task or persona, and keep it on every command.
+Each new session has separate cookies, storage, and tabs unless deliberately
+configured to share an external browser or profile.
 
 ```bash
-# Browser 1: Authentication flow
-playwright-cli -s=auth open https://app.example.com/login
-
-# Browser 2: Public browsing (separate cookies, storage)
-playwright-cli -s=public open https://example.com
-
-# Commands are isolated by browser session
-playwright-cli -s=auth fill e1 "user@example.com"
-playwright-cli -s=public snapshot
+playwright-cli -s=auth-review open https://app.example.com/login
+playwright-cli -s=public-review open https://example.com
+playwright-cli -s=auth-review fill '#email' user@example.com
+playwright-cli -s=public-review snapshot
+playwright-cli -s=auth-review goto https://app.example.com/dashboard
 ```
 
-## Browser Session Isolation Properties
+`goto` retains the browser and authentication. `open` starts a browser; do not
+use it for ordinary navigation after login. Inspect sessions with
+`playwright-cli list` before choosing a name that might already be in use.
 
-Each browser session has independent:
-- Cookies
-- LocalStorage / SessionStorage
-- IndexedDB
-- Cache
-- Browsing history
-- Open tabs
+## Profiles and configuration
 
-## Browser Session Commands
+Default profiles are in memory. Use `--persistent` only when authentication
+must survive browser restarts. A custom `--profile` directory should belong to
+the task; do not reuse someone else's active profile.
 
 ```bash
-# List all browser sessions
-playwright-cli list
-
-# Stop a browser session (close the browser)
-playwright-cli close                # stop the default browser
-playwright-cli -s=mysession close   # stop a named browser
-
-# Stop all browser sessions
-playwright-cli close-all
-
-# Forcefully kill all daemon processes (for stale/zombie processes)
-playwright-cli kill-all
-
-# Delete browser session user data (profile directory)
-playwright-cli delete-data                # delete default browser data
-playwright-cli -s=mysession delete-data   # delete named browser data
+playwright-cli -s=auth-review open https://example.com --persistent
+# Alternatives when starting a session:
+playwright-cli -s=auth-review open https://example.com --profile=/path/to/profile
+playwright-cli -s=auth-review open https://example.com --config=my-cli.json
+playwright-cli -s=auth-review open https://example.com --browser=firefox
 ```
 
-## Environment Variable
+`PLAYWRIGHT_CLI_SESSION` sets a default session name for commands without `-s`.
+An explicit `-s` makes ownership clearer in shared environments. For transferring
+login state, see [storage state](storage-state.md).
 
-Set a default browser session name via environment variable:
+## Attaching to an existing browser
+
+Use `attach` only for the intended browser. CDP attachment requires remote
+debugging to be enabled; extension attachment requires the Playwright extension.
+Check `playwright-cli --help attach` for supported channels and options.
 
 ```bash
-export PLAYWRIGHT_CLI_SESSION="mysession"
-playwright-cli open example.com  # Uses "mysession" automatically
+playwright-cli -s=browser-review attach --cdp=chrome
+# Alternatives:
+playwright-cli -s=browser-review attach --cdp=http://localhost:9222
+playwright-cli -s=browser-review attach --extension=chrome
 ```
 
-## Common Patterns
+## Cleanup
 
-### Concurrent Scraping
+Close sessions you created; detach from externally owned browsers:
 
 ```bash
-#!/bin/bash
-# Scrape multiple sites concurrently
-
-# Start all browsers
-playwright-cli -s=site1 open https://site1.com &
-playwright-cli -s=site2 open https://site2.com &
-playwright-cli -s=site3 open https://site3.com &
-wait
-
-# Take snapshots from each
-playwright-cli -s=site1 snapshot
-playwright-cli -s=site2 snapshot
-playwright-cli -s=site3 snapshot
-
-# Cleanup
-playwright-cli close-all
+playwright-cli -s=auth-review close
+playwright-cli -s=public-review close
+playwright-cli -s=browser-review detach
 ```
 
-### A/B Testing Sessions
-
-```bash
-# Test different user experiences
-playwright-cli -s=variant-a open "https://app.com?variant=a"
-playwright-cli -s=variant-b open "https://app.com?variant=b"
-
-# Compare
-playwright-cli -s=variant-a screenshot
-playwright-cli -s=variant-b screenshot
-```
-
-### Persistent Profile
-
-By default, browser profile is kept in memory only. Use `--persistent` flag on `open` to persist the browser profile to disk:
-
-```bash
-# Use persistent profile (auto-generated location)
-playwright-cli open https://example.com --persistent
-
-# Use persistent profile with custom directory
-playwright-cli open https://example.com --profile=/path/to/profile
-```
-
-## Attaching to a Running Browser
-
-Use `attach` to connect to a browser that is already running, instead of launching a new one.
-
-### Attach by channel name
-
-Connect to a running Chrome or Edge instance by its channel name. The browser must have remote debugging enabled — navigate to `chrome://inspect/#remote-debugging` in the target browser and check "Allow remote debugging for this browser instance".
-
-```bash
-# Attach to Chrome
-playwright-cli attach --cdp=chrome
-
-# Attach to Chrome Canary
-playwright-cli attach --cdp=chrome-canary
-
-# Attach to Microsoft Edge
-playwright-cli attach --cdp=msedge
-
-# Attach to Edge Dev
-playwright-cli attach --cdp=msedge-dev
-```
-
-Supported channels: `chrome`, `chrome-beta`, `chrome-dev`, `chrome-canary`, `msedge`, `msedge-beta`, `msedge-dev`, `msedge-canary`.
-
-When `--session` is not provided, the session is named after the channel (e.g. `--cdp=msedge` creates a session called `msedge`), so parallel attaches to Chrome and Edge don't collide on `default`. Pass `--session=<name>` to override.
-
-### Attach via CDP endpoint
-
-Connect to a browser that exposes a Chrome DevTools Protocol endpoint:
-
-```bash
-playwright-cli attach --cdp=http://localhost:9222
-```
-
-### Attach via browser extension
-
-Connect to a browser with the Playwright extension installed:
-
-```bash
-playwright-cli attach --extension
-```
-
-### Detach
-
-Tear down an attached session without affecting the external browser:
-
-```bash
-# Detach the default attached session
-playwright-cli detach
-
-# Detach a specific attached session
-playwright-cli -s=msedge detach
-```
-
-`detach` only works on sessions created via `attach`. For sessions created via `open`, use `close`.
-
-## Default Browser Session
-
-When `-s` is omitted, commands use the default browser session:
-
-```bash
-# These use the same default browser session
-playwright-cli open https://example.com
-playwright-cli snapshot
-playwright-cli close  # Stops default browser
-```
-
-## Browser Session Configuration
-
-Configure a browser session with specific settings when opening:
-
-```bash
-# Open with config file
-playwright-cli open https://example.com --config=.playwright/my-cli.json
-
-# Open with specific browser
-playwright-cli open https://example.com --browser=firefox
-
-# Open in headed mode
-playwright-cli open https://example.com --headed
-
-# Open with persistent profile
-playwright-cli open https://example.com --persistent
-```
-
-## Best Practices
-
-### 1. Name Browser Sessions Semantically
-
-```bash
-# GOOD: Clear purpose
-playwright-cli -s=github-auth open https://github.com
-playwright-cli -s=docs-scrape open https://docs.example.com
-
-# AVOID: Generic names
-playwright-cli -s=s1 open https://github.com
-```
-
-### 2. Always Clean Up
-
-```bash
-# Stop browsers when done
-playwright-cli -s=auth close
-playwright-cli -s=scrape close
-
-# Or stop all at once
-playwright-cli close-all
-
-# If browsers become unresponsive or zombie processes remain
-playwright-cli kill-all
-```
-
-### 3. Delete Stale Browser Data
-
-```bash
-# Remove old browser data to free disk space
-playwright-cli -s=oldsession delete-data
-```
+`detach` applies to attached sessions and leaves the browser running. Delete a
+persistent profile with `-s=<name> delete-data` only when its stored data is no
+longer needed. `close-all` and `kill-all` affect other tasks too; reserve them for
+explicitly requested cleanup of all affected sessions.

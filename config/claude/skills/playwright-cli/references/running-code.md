@@ -89,15 +89,13 @@ playwright-cli run-code "async page => {
 
 ## Wait Strategies
 
-```bash
-# Wait for network idle
-playwright-cli run-code "async page => {
-  await page.waitForLoadState('networkidle');
-}"
+Wait for the intended state with an explicit timeout. Network idle does not
+prove readiness and may never occur on pages with ongoing requests.
 
-# Wait for specific element
+```bash
+# Wait for a loading indicator to disappear
 playwright-cli run-code "async page => {
-  await page.locator('.loading').waitFor({ state: 'hidden' });
+  await page.locator('.loading').waitFor({ state: 'hidden', timeout: 10000 });
 }"
 
 # Wait for function to return true

@@ -24,8 +24,8 @@ and scenario data. Keep those details out of this public skill.
    on pages with polling or persistent connections.
 5. Capture a viewport by default. Choose an element crop for component review;
    request full-page capture explicitly for long pages. Use equal viewport,
-   pixel density, persona, data, and scroll position for before/after comparisons. Preserve
-   ongoing edits when obtaining a baseline.
+   pixel density, persona, data, and scroll position for before/after comparisons.
+   Use a separate checkout for a code baseline so ongoing edits remain intact.
 6. Inspect the actual PNG with an image-viewing tool. Check framing, loaded
    assets, and the intended UI state. A written file alone is not validation.
 
@@ -61,8 +61,7 @@ images only as part of a requested sharing workflow; inspect them first.
 Requires Ruby, the `ferrum` gem, and Chrome/Chromium already available. The helper
 uses Ferrum browser discovery; `BROWSER_PATH` or `--browser` can override it.
 Use the absolute path to this skill's `scripts/capture.rb` from other directories.
-It defaults to native 2x capture, reapplies density on every save, and rejects
-PNGs whose dimensions do not match the capture area and density.
+The helper enforces the resolution requirements above on every save.
 
 ```sh
 ruby scripts/capture.rb --url 'http://localhost:3000/example' \
@@ -99,5 +98,5 @@ and interactions. `session.browser` exposes Ferrum. `save` also accepts
 `selector:`, `full:`, and `stabilize:`. Recheck responsive content after resizing
 when it loads different data. For a full-page capture with lazy images, scroll
 through the relevant content first to trigger loading. The helper closes only
-its own browser and does not persist cookies or print page bodies. Failure output names the step and
-error class; inspect the failure image and relevant local logs for diagnosis.
+its own browser and does not persist cookies or print page bodies. Failure output
+names the step and error class; inspect the failure image and relevant local logs for diagnosis.
